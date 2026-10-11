@@ -1,3 +1,24 @@
+# Notebook Navigator 单文件记录修改版
+
+本项目基于 [Johan Sanneblad](https://github.com/johansan) 开发的
+[Notebook Navigator](https://github.com/johansan/notebook-navigator) 3.4.3，由
+[424wan](https://github.com/424wan) 维护个人修改版。修改日期：2026-10-10 至 2026-10-11。本仓库为非官方修改版。
+
+上游基准提交：`2fcb1200febd3765e288ba8fb0ebdcbc14cb17be`。
+
+在原版基础上增加了以下功能：
+
+- 在一个 Markdown 文件中使用一级日期标题记录，日期及正文自动按时间排序。
+- 左侧按日期显示摘要，支持搜索、正序或倒序排列及跳转到对应日期。
+- 支持搜索并选择仓库中已有的 Markdown 文件作为记录目标，也可手动指定新文件路径。
+
+修改版的安装、构建和使用方法见 [LOCAL-JOURNAL.md](LOCAL-JOURNAL.md)。
+保留原作者版权与署名，继续遵循原项目的 GNU GPL v3 许可证，完整条款见 [LICENSE](LICENSE)。
+
+以下保留原项目说明；本修改版的功能和安装方式以以上链接中的说明为准。
+
+---
+
 # ![Notebook Navigator](https://github.com/johansan/notebook-navigator/blob/main/images/notebook-navigator.png?raw=true)
 
 Read in your language: [English](https://notebooknavigator.com/docs.html) • [العربية](https://notebooknavigator.com/ar/docs.html) • [Deutsch](https://notebooknavigator.com/de/docs.html) • [Español](https://notebooknavigator.com/es/docs.html) • [فارسی](https://notebooknavigator.com/fa/docs.html) • [Français](https://notebooknavigator.com/fr/docs.html) • [Bahasa Indonesia](https://notebooknavigator.com/id/docs.html) • [Italiano](https://notebooknavigator.com/it/docs.html) • [Nederlands](https://notebooknavigator.com/nl/docs.html) • [Polski](https://notebooknavigator.com/pl/docs.html) • [Português](https://notebooknavigator.com/pt/docs.html) • [Português (Brasil)](https://notebooknavigator.com/pt-br/docs.html) • [Русский](https://notebooknavigator.com/ru/docs.html) • [ไทย](https://notebooknavigator.com/th/docs.html) • [Türkçe](https://notebooknavigator.com/tr/docs.html) • [Українська](https://notebooknavigator.com/uk/docs.html) • [Tiếng Việt](https://notebooknavigator.com/vi/docs.html) • [日本語](https://notebooknavigator.com/ja/docs.html) • [한국어](https://notebooknavigator.com/ko/docs.html) • [中文简体](https://notebooknavigator.com/zh-cn/docs.html) • [中文繁體](https://notebooknavigator.com/zh-tw/docs.html)
