@@ -43,3 +43,6 @@ release-notes.md
 
 # Generated release language pack
 languages.json
+
+# Local plugin packages and source archives
+/dist/

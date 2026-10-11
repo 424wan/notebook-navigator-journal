@@ -17,8 +17,9 @@
  */
 
 import { DropdownComponent, Setting } from 'obsidian';
-import type { SettingDefinitionItem } from 'obsidian';
+import type { SettingDefinitionItem, TextComponent } from 'obsidian';
 import { getCurrentLanguage, strings } from '../../i18n';
+import { SingleFileJournalModal } from '../../modals/SingleFileJournalModal';
 import {
     getMomentApi,
     resolveCalendarLocales,
@@ -114,17 +115,27 @@ function renderCalendarIntegrationModeSetting(setting: Setting, context: Setting
 
 function renderSingleFilePathSetting(setting: Setting, context: SettingsTabContext): void {
     const { plugin } = context;
+    let pathInput: TextComponent | undefined;
     setting
         .setName(strings.settings.items.singleFileDailyNotes.name)
         .setDesc(strings.settings.items.singleFileDailyNotes.desc)
-        .addText(text =>
-            text
-                .setPlaceholder(strings.settings.items.singleFileDailyNotes.placeholder)
+        .addText(text => {
+            pathInput = text;
+            text.setPlaceholder(strings.settings.items.singleFileDailyNotes.placeholder)
                 .setValue(plugin.settings.calendarSingleFilePath)
                 .onChange(async value => {
                     plugin.settings.calendarSingleFilePath = value;
                     await plugin.saveSettingsAndUpdate();
-                })
+                });
+        })
+        .addButton(button =>
+            button.setButtonText(strings.settings.items.singleFileDailyNotes.chooseFile).onClick(() => {
+                new SingleFileJournalModal(context.app, async file => {
+                    plugin.settings.calendarSingleFilePath = file.path;
+                    pathInput?.setValue(file.path);
+                    await plugin.saveSettingsAndUpdate();
+                }).open();
+            })
         );
 }
 

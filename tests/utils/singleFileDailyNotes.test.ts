@@ -216,6 +216,30 @@ describe('single-file journal storage and navigation', () => {
         expect(vault.contents.get('Journal/日记.md')).toBe('# 2026-10-10\n\n');
     });
 
+    it('records in an existing selected Markdown file without changing the previous journal', async () => {
+        const previousContent = '# 2026-10-09\nPrevious journal\n';
+        const vault = createVault(previousContent);
+        const selectedPath = '记录/工作记录.md';
+        vault.objects.set(selectedPath, createTestTFile(selectedPath));
+        vault.contents.set(selectedPath, '# 工作记录\n\nExisting introduction\n\n# 2026-10-11\nExisting entry\n');
+
+        const result = await ensureSingleFileDailyNote(vault.app, moment('2026-10-10'), {
+            ...settings,
+            calendarSingleFilePath: selectedPath
+        });
+
+        expect(result.file.path).toBe(selectedPath);
+        const selectedContent = vault.contents.get(selectedPath) ?? '';
+        expect(selectedContent.startsWith('# 工作记录\n\nExisting introduction\n\n')).toBe(true);
+        expect(getSingleFileDailyNoteEntries(selectedContent).map(entry => [entry.iso, entry.content.trim()])).toEqual([
+            ['2026-10-10', ''],
+            ['2026-10-11', 'Existing entry']
+        ]);
+        expect(vault.contents.get(settings.calendarSingleFilePath)).toBe(previousContent);
+        expect(vault.contents.size).toBe(2);
+        expect(vault.create).not.toHaveBeenCalled();
+    });
+
     it('serializes rapid clicks so no file or date is duplicated and no entry is lost', async () => {
         const vault = createVault();
         const dates = ['2026-10-10', '2026-10-11', '2026-10-10', '2026-10-09', '2026-10-11'];

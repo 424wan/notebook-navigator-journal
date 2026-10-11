@@ -1729,6 +1729,8 @@ export const STRINGS_ZH_CN = {
                 }
             },
             singleFileDailyNotes: {
+                chooseFile: '选择文件',
+                fileSearchPlaceholder: '搜索 Markdown 文件名或路径…',
                 backToFiles: '返回文件列表',
                 searchEntries: '搜索日期或日记内容',
                 noEntryContent: '这一天还没有内容',
@@ -1738,7 +1740,7 @@ export const STRINGS_ZH_CN = {
                 emptyEntries: '点击日历日期，开始记录。',
                 noSearchResults: '没有匹配的日记。',
                 name: '单文件日记路径',
-                desc: '填写仓库内的 Markdown 文件路径。每天使用一级日期标题；日期标题按从早到晚排列，左侧按天显示内容预览。',
+                desc: '选择仓库内任意已有的 Markdown 文件，或填写新文件路径。每天使用一级日期标题；日期标题按从早到晚排列，左侧按天显示内容预览。',
                 placeholder: '日记.md',
                 createTitle: '添加日记日期',
                 createMessage: '在「{path}」中添加一级标题 # {date}？已有记录会保留。',

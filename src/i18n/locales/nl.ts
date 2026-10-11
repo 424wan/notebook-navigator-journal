@@ -1748,6 +1748,8 @@ export const STRINGS_NL = {
                 }
             },
             singleFileDailyNotes: {
+                chooseFile: 'Choose file',
+                fileSearchPlaceholder: 'Search Markdown files by name or path...',
                 backToFiles: 'Back to files',
                 searchEntries: 'Search dates or journal content',
                 noEntryContent: 'No content yet',
@@ -1757,7 +1759,7 @@ export const STRINGS_NL = {
                 emptyEntries: 'Click a calendar date to start writing.',
                 noSearchResults: 'No matching journal entries.',
                 name: 'Single journal file',
-                desc: 'Vault-relative Markdown path. Every day is a level-one date heading in this file; date sections are sorted from oldest to newest, with per-day previews in the sidebar.',
+                desc: 'Choose any existing Markdown file in this vault, or enter a vault-relative path to create one. Each date uses a level-one heading; date sections are sorted from oldest to newest, with per-day sidebar previews.',
                 placeholder: 'Journal/Diary.md',
                 createTitle: 'Add journal date',
                 createMessage: 'Add # {date} to {path}? Existing entries are kept.',
