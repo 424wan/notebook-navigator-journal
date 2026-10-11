@@ -24,6 +24,7 @@ main.js
 .cursorignore
 .github/copilot-instructions.md
 AGENTS.md
+!/AGENTS.md
 CLAUDE.md
 GEMINI.md
 
