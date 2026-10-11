@@ -1,0 +1,249 @@
+/*
+ * Notebook Navigator - Plugin for Obsidian
+ * Copyright (c) 2025-2026 Johan Sanneblad
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import type { SettingDefinitionGroup } from 'obsidian';
+import { SUPPORT_BUY_ME_A_COFFEE_URL, SUPPORT_SPONSOR_URL, WELCOME_VIDEO_URL } from '../../constants/urls';
+import { strings } from '../../i18n';
+import { runAsyncAction } from '../../utils/async';
+import { createSettingGroupFactory } from '../settingGroups';
+import { setElementVisible } from '../dependentSettings';
+import { createGroupDefinition, createRenderDefinition, createToggleDefinition } from '../nativeSettingControls';
+import type { SettingsTabContext } from './SettingsTabContext';
+
+/** Renders release notes, support links, and onboarding resources in the About group. */
+export function renderStartResourcesSection(context: SettingsTabContext): void {
+    const { containerEl, plugin } = context;
+    const pluginVersion = plugin.manifest.version;
+    const createGroup = createSettingGroupFactory(containerEl);
+    const aboutGroup = createGroup(strings.settings.index.groups.about);
+
+    let updateStatusEl: HTMLDivElement | null = null;
+
+    const renderUpdateStatus = (version: string | null) => {
+        if (!updateStatusEl) {
+            return;
+        }
+        const hasVersion = Boolean(version);
+        updateStatusEl.setText(
+            hasVersion ? strings.settings.items.checkForNewVersionOnStart.status.replace('{version}', version ?? '') : ''
+        );
+        setElementVisible(updateStatusEl, hasVersion);
+    };
+
+    const applyCurrentNotice = () => {
+        const notice = plugin.getPendingUpdateNotice();
+        renderUpdateStatus(notice?.version ?? null);
+    };
+
+    const updateStatusListenerId = 'general-update-status';
+    plugin.unregisterUpdateNoticeListener(updateStatusListenerId);
+
+    const whatsNewSetting = aboutGroup.addSetting(setting => {
+        setting
+            .setName(strings.settings.items.whatsNew.name.replace('{version}', pluginVersion))
+            .setDesc(strings.settings.items.whatsNew.desc)
+            .addButton(button =>
+                button.setButtonText(strings.settings.items.whatsNew.buttonText).onClick(() => {
+                    runAsyncAction(async () => {
+                        const { WhatsNewModal } = await import('../../modals/WhatsNewModal');
+                        const { getLatestReleaseNotes } = await import('../../releaseNotes');
+                        const latestNotes = getLatestReleaseNotes();
+                        new WhatsNewModal(context.app, latestNotes, () => {
+                            window.setTimeout(() => {
+                                runAsyncAction(async () => {
+                                    await plugin.advanceLastShownVersion(pluginVersion);
+                                });
+                            }, 1000);
+                        }).open();
+                    });
+                })
+            );
+    });
+
+    updateStatusEl = whatsNewSetting.descEl.createDiv({ cls: 'setting-item-description nn-update-status nn-setting-hidden' });
+
+    applyCurrentNotice();
+
+    plugin.registerUpdateNoticeListener(updateStatusListenerId, notice => {
+        renderUpdateStatus(notice?.version ?? null);
+    });
+    context.registerSettingsRenderCleanup(() => {
+        plugin.unregisterUpdateNoticeListener(updateStatusListenerId);
+    });
+
+    aboutGroup.addSetting(setting => {
+        setting
+            .setName(strings.settings.items.showReleaseNotes.name)
+            .setDesc(strings.settings.items.showReleaseNotes.desc)
+            .addToggle(toggle =>
+                toggle.setValue(plugin.settings.showReleaseNotes).onChange(async value => {
+                    plugin.settings.showReleaseNotes = value;
+                    await plugin.saveSettingsAndUpdate();
+                })
+            );
+    });
+
+    aboutGroup.addSetting(setting => {
+        setting
+            .setName(strings.settings.items.masteringVideo.name)
+            .setDesc(strings.settings.items.masteringVideo.desc)
+            .addButton(button => {
+                button
+                    .setIcon('lucide-play')
+                    .setTooltip(strings.modals.welcome.openVideoButton)
+                    .onClick(() => {
+                        window.open(WELCOME_VIDEO_URL);
+                    });
+                button.buttonEl.addClass('nn-youtube-button');
+                button.buttonEl.setAttr('aria-label', strings.modals.welcome.openVideoButton);
+            });
+    });
+
+    const supportSetting = aboutGroup.addSetting(setting => {
+        setting.setName(strings.settings.items.supportDevelopment.name).setDesc(strings.settings.items.supportDevelopment.desc);
+    });
+
+    supportSetting.addButton(button => {
+        button.setButtonText(strings.settings.items.supportDevelopment.buttonText).onClick(() => window.open(SUPPORT_SPONSOR_URL));
+        button.buttonEl.addClass('nn-support-button');
+    });
+
+    supportSetting.addButton(button => {
+        button
+            .setButtonText(strings.settings.items.supportDevelopment.coffeeButton)
+            .onClick(() => window.open(SUPPORT_BUY_ME_A_COFFEE_URL));
+        button.buttonEl.addClass('nn-support-button');
+    });
+}
+
+export function createStartResourcesSettingDefinitions(context: SettingsTabContext, onFirstRender?: () => void): SettingDefinitionGroup[] {
+    const { plugin } = context;
+    const pluginVersion = plugin.manifest.version;
+    let hasRendered = false;
+
+    const runOnFirstRender = () => {
+        if (hasRendered) {
+            return;
+        }
+        hasRendered = true;
+        onFirstRender?.();
+    };
+
+    return [
+        createGroupDefinition(strings.settings.index.groups.about, [
+            createRenderDefinition({
+                name: strings.settings.items.whatsNew.name.replace('{version}', pluginVersion),
+                desc: strings.settings.items.whatsNew.desc,
+                render: setting => {
+                    runOnFirstRender();
+                    const updateStatusListenerId = 'general-update-status';
+                    let updateStatusEl: HTMLDivElement | null = null;
+
+                    const renderUpdateStatus = (version: string | null) => {
+                        if (!updateStatusEl) {
+                            return;
+                        }
+                        const hasVersion = Boolean(version);
+                        updateStatusEl.setText(
+                            hasVersion ? strings.settings.items.checkForNewVersionOnStart.status.replace('{version}', version ?? '') : ''
+                        );
+                        setElementVisible(updateStatusEl, hasVersion);
+                    };
+
+                    setting
+                        .setName(strings.settings.items.whatsNew.name.replace('{version}', pluginVersion))
+                        .setDesc(strings.settings.items.whatsNew.desc)
+                        .addButton(button =>
+                            button.setButtonText(strings.settings.items.whatsNew.buttonText).onClick(() => {
+                                runAsyncAction(async () => {
+                                    const { WhatsNewModal } = await import('../../modals/WhatsNewModal');
+                                    const { getLatestReleaseNotes } = await import('../../releaseNotes');
+                                    const latestNotes = getLatestReleaseNotes();
+                                    new WhatsNewModal(context.app, latestNotes, () => {
+                                        window.setTimeout(() => {
+                                            runAsyncAction(async () => {
+                                                await plugin.advanceLastShownVersion(pluginVersion);
+                                            });
+                                        }, 1000);
+                                    }).open();
+                                });
+                            })
+                        );
+
+                    updateStatusEl = setting.descEl.createDiv({
+                        cls: 'setting-item-description nn-update-status nn-setting-hidden'
+                    });
+
+                    renderUpdateStatus(plugin.getPendingUpdateNotice()?.version ?? null);
+                    plugin.unregisterUpdateNoticeListener(updateStatusListenerId);
+                    plugin.registerUpdateNoticeListener(updateStatusListenerId, notice => {
+                        renderUpdateStatus(notice?.version ?? null);
+                    });
+
+                    return () => {
+                        plugin.unregisterUpdateNoticeListener(updateStatusListenerId);
+                    };
+                }
+            }),
+            createToggleDefinition('showReleaseNotes', {
+                name: strings.settings.items.showReleaseNotes.name,
+                desc: strings.settings.items.showReleaseNotes.desc
+            }),
+            createRenderDefinition({
+                name: strings.settings.items.masteringVideo.name,
+                desc: strings.settings.items.masteringVideo.desc,
+                render: setting => {
+                    setting
+                        .setName(strings.settings.items.masteringVideo.name)
+                        .setDesc(strings.settings.items.masteringVideo.desc)
+                        .addButton(button => {
+                            button
+                                .setIcon('lucide-play')
+                                .setTooltip(strings.modals.welcome.openVideoButton)
+                                .onClick(() => {
+                                    window.open(WELCOME_VIDEO_URL);
+                                });
+                            button.buttonEl.addClass('nn-youtube-button');
+                            button.buttonEl.setAttr('aria-label', strings.modals.welcome.openVideoButton);
+                        });
+                }
+            }),
+            createRenderDefinition({
+                name: strings.settings.items.supportDevelopment.name,
+                desc: strings.settings.items.supportDevelopment.desc,
+                render: setting => {
+                    setting.setName(strings.settings.items.supportDevelopment.name).setDesc(strings.settings.items.supportDevelopment.desc);
+
+                    setting.addButton(button => {
+                        button
+                            .setButtonText(strings.settings.items.supportDevelopment.buttonText)
+                            .onClick(() => window.open(SUPPORT_SPONSOR_URL));
+                        button.buttonEl.addClass('nn-support-button');
+                    });
+
+                    setting.addButton(button => {
+                        button
+                            .setButtonText(strings.settings.items.supportDevelopment.coffeeButton)
+                            .onClick(() => window.open(SUPPORT_BUY_ME_A_COFFEE_URL));
+                        button.buttonEl.addClass('nn-support-button');
+                    });
+                }
+            })
+        ])
+    ];
+}

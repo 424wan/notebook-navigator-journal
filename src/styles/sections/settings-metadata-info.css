@@ -1,0 +1,11 @@
+/* Source: src/styles/sections/settings-metadata-info.css */
+
+/* ========================================================================
+   Metadata Info Styles
+   ======================================================================== */
+
+/* Error text styling */
+.nn-metadata-error-text {
+    color: var(--text-error);
+    font-weight: bold;
+}

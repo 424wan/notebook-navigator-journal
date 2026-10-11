@@ -1,0 +1,2743 @@
+/*
+ * Notebook Navigator - Plugin for Obsidian
+ * Copyright (c) 2025-2026 Johan Sanneblad
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/**
+ * Arabic language strings for Notebook Navigator
+ * Organized by feature/component for easy maintenance
+ */
+export const STRINGS_AR = {
+    language: {
+        downloading: 'جارٍ تنزيل اللغات…',
+        continueInEnglish: 'المتابعة بالإنجليزية',
+        downloadFailed: 'تعذّر تنزيل اللغات. يستخدم Notebook Navigator اللغة الإنجليزية.'
+    },
+    // Common UI elements
+    common: {
+        cancel: 'إلغاء', // Button text for canceling dialogs and operations (English: Cancel)
+        delete: 'حذف', // Button text for delete operations in dialogs (English: Delete)
+        clear: 'مسح', // Button text for clearing values (English: Clear)
+        remove: 'إزالة', // Button text for remove operations in dialogs (English: Remove)
+        restoreDefault: 'استعادة الافتراضي', // Button text for restoring values to defaults (English: Restore default)
+        submit: 'إرسال', // Button text for submitting forms and dialogs (English: Submit)
+        save: 'حفظ', // Button text for saving settings and dialogs (English: Save)
+        configure: 'تكوين', // Generic button label used when opening a configuration dialog (English: Configure)
+        lightMode: 'الوضع الفاتح', // Label for light theme mode (English: Light mode)
+        darkMode: 'الوضع الداكن', // Label for dark theme mode (English: Dark mode)
+        noSelection: 'لا يوجد تحديد', // Placeholder text when no folder or tag is selected (English: No selection)
+        untagged: 'بدون وسم', // Label for notes without any tags (English: Untagged)
+        featureImageAlt: 'صورة مميزة', // Alt text for thumbnail/preview images (English: Feature image)
+        unknownError: 'خطأ غير معروف', // Generic fallback when an error has no message (English: Unknown error)
+        clipboardWriteError: 'تعذرت الكتابة إلى الحافظة',
+        updateBannerTitle: 'تحديث Notebook Navigator متاح',
+        updateBannerInstruction: 'قم بالتحديث في الإعدادات -> إضافات المجتمع',
+        previous: 'السابق', // Generic aria label for previous navigation (English: Previous)
+        next: 'التالي' // Generic aria label for next navigation (English: Next)
+    },
+
+    // List pane
+    listPane: {
+        emptyStateNoSelection: 'اختر مجلدًا أو وسمًا لعرض الملاحظات', // Message shown when no folder or tag is selected (English: Select a folder or tag to view notes)
+        emptyStateNoNotes: 'لا توجد ملاحظات', // Message shown when a folder/tag has no notes (English: No notes)
+        pinnedSection: 'مثبت', // Header for the pinned notes section at the top of file list (English: Pinned)
+        notesSection: 'ملاحظات', // Header shown between pinned and regular items when showing documents only (English: Notes)
+        filesSection: 'ملفات', // Header shown between pinned and regular items when showing supported or all files (English: Files)
+        hiddenItemAriaLabel: '{name} (مخفي)', // Accessibility label applied to list items that are normally hidden
+        collapseGroup: 'طي المجموعة',
+        expandGroup: 'توسيع المجموعة',
+        manualSortTitle: 'فرز يدوي: {property}',
+        manualSortHint: 'اسحب لإعادة الترتيب. يتم حفظ الترتيب كقيم رقمية للفهرس في الخاصية "{property}".',
+        manualSortNonMarkdownHint: 'الملفات غير Markdown تظهر في الأسفل ولا يمكن إعادة ترتيبها.',
+        unsortedSection: 'غير مرتبة',
+        propertyGroupNoValue: 'بدون',
+        manualSortDone: 'تم',
+        manualSortMultipleWriteFailure: 'فشل {count} من الملفات؛ الأول: {path}: {message}'
+    },
+
+    // Tag list
+    tagList: {
+        untaggedLabel: 'بدون وسم', // Label for the special item showing notes without tags (English: Untagged)
+        tags: 'وسوم' // Label for the tags virtual folder (English: Tags)
+    },
+
+    // Navigation pane
+    navigationPane: {
+        shortcutsHeader: 'اختصارات', // Header label for shortcuts section in navigation pane (English: Shortcuts)
+        recentFilesHeader: 'ملفات حديثة', // Header label for recent files section in navigation pane (English: Recent files)
+        properties: 'الخصائص',
+        folders: 'مجلدات',
+        tags: 'وسوم',
+        calendar: 'التقويم',
+        reorderRootFoldersTitle: 'إعادة ترتيب التنقل',
+        reorderRootFoldersHint: 'استخدم الأسهم أو اسحب لإعادة الترتيب',
+        vaultRootLabel: 'الخزنة',
+        resetRootToAlpha: 'إعادة الترتيب الأبجدي',
+        resetRootToFrequency: 'إعادة الترتيب حسب التكرار',
+        pinShortcuts: 'تثبيت الاختصارات',
+        pinShortcutsAndRecentFiles: 'تثبيت الاختصارات والملفات الحديثة',
+        unpinShortcuts: 'إلغاء تثبيت الاختصارات',
+        unpinShortcutsAndRecentFiles: 'إلغاء تثبيت الاختصارات والملفات الحديثة',
+        resizePinnedShortcuts: 'تغيير حجم الاختصارات المثبتة',
+        profileMenuAria: 'تغيير ملف تعريف الخزنة'
+    },
+
+    navigationCalendar: {
+        ariaLabel: 'التقويم',
+        dailyNotesNotEnabled: 'إضافة الملاحظات اليومية غير مفعلة.',
+        noteHiddenByProfile: 'ملاحظة التقويم مخفية بواسطة ملف تعريف الخزنة الحالي.',
+        createDailyNote: {
+            title: 'ملاحظة يومية جديدة',
+            message: 'الملف {filename} غير موجود. هل تريد إنشاءه؟',
+            confirmButton: 'إنشاء'
+        },
+        helpModal: {
+            title: 'اختصارات التقويم',
+            items: [
+                'انقر على أي يوم لفتح أو إنشاء ملاحظة يومية. الأسابيع والأشهر والأرباع والسنوات تعمل بنفس الطريقة.',
+                'نقطة ممتلئة أسفل اليوم تعني أنه يحتوي على ملاحظة. نقطة مفرغة تعني أنه يحتوي على مهام غير مكتملة.',
+                'إذا كانت الملاحظة تحتوي على صورة مميزة، فإنها تظهر كخلفية لليوم.'
+            ],
+            dateFilterCmdCtrl: '`Cmd/Ctrl`+انقر على تاريخ للتصفية حسب ذلك التاريخ في قائمة الملفات.',
+            dateFilterOptionAlt: '`Option/Alt`+انقر على تاريخ للتصفية حسب ذلك التاريخ في قائمة الملفات.'
+        }
+    },
+
+    dailyNotes: {
+        createFailed: 'تعذر إنشاء الملاحظة اليومية.'
+    },
+
+    templates: {
+        invalidTokens: 'القالب "{name}" يحتوي على رموز غير صالحة: {tokens}',
+        invalidFileNameTokens: 'تنسيق اسم الملف للأمر "{name}" يحتوي على رموز غير صالحة: {tokens}',
+        readFailed: 'تعذّر قراءة القالب "{name}". تم إنشاء الملاحظة بدونه.',
+        folderNotSet: 'اضبط مجلد القوالب في عمليات الملفات والقوالب > قوالب قبل إنشاء ملاحظات من القوالب.',
+        templateNotFound: 'لم يتم العثور على القالب "{name}".',
+        folderNotFound: 'لم يتم العثور على المجلد "{name}".',
+        templaterMissing: 'إضافة Templater غير مثبتة. غيّر محرك القوالب في عمليات الملفات والقوالب > قوالب.'
+    },
+
+    shortcuts: {
+        folderExists: 'المجلد موجود بالفعل في الاختصارات',
+        noteExists: 'الملاحظة موجودة بالفعل في الاختصارات',
+        tagExists: 'الوسم موجود بالفعل في الاختصارات',
+        propertyExists: 'الخاصية موجودة بالفعل في الاختصارات',
+        invalidProperty: 'اختصار خاصية غير صالح',
+        searchExists: 'اختصار البحث موجود بالفعل',
+        emptySearchQuery: 'أدخل استعلام بحث قبل حفظه',
+        emptySearchName: 'أدخل اسمًا قبل حفظ البحث',
+        add: 'إضافة إلى الاختصارات',
+        addNotesCount: 'إضافة {count} من الملاحظات إلى الاختصارات',
+        addFilesCount: 'إضافة {count} من الملفات إلى الاختصارات',
+        rename: 'إعادة تسمية الاختصار',
+        remove: 'إزالة من الاختصارات',
+        removeAll: 'إزالة جميع الاختصارات',
+        removeAllConfirm: 'إزالة جميع الاختصارات؟',
+        folderNotesPinned: 'تم تثبيت {count} من ملاحظات المجلدات'
+    },
+
+    // Pane header
+    paneHeader: {
+        collapseAllFolders: 'طي العناصر', // Tooltip for button that collapses expanded items (English: Collapse items)
+        expandAllFolders: 'توسيع جميع العناصر', // Tooltip for button that expands all items (English: Expand all items)
+        collapseAllListGroups: 'طي جميع مجموعات القائمة',
+        expandAllListGroups: 'توسيع جميع مجموعات القائمة',
+        showCalendar: 'عرض التقويم',
+        hideCalendar: 'إخفاء التقويم',
+        newFolder: 'مجلد جديد', // Tooltip for create new folder button (English: New folder)
+        newNote: 'ملاحظة جديدة', // Tooltip for create new note button (English: New note)
+        mobileBackToNavigation: 'العودة للتنقل', // Mobile-only back button text to return to navigation pane (English: Back to navigation)
+        changeChildSortOrder: 'تغيير ترتيب الفرز',
+        changeSortAndGroup: 'تغيير الفرز والتجميع',
+        resetViewToDefaults: 'إعادة تعيين العرض إلى الإعدادات الافتراضية',
+        manualSort: 'فرز يدوي',
+        editSortOrder: 'تحرير ترتيب الفرز...',
+        removeSortProperty: 'إزالة خاصية الفرز',
+        descendants: 'العناصر الفرعية',
+        subfolders: 'المجلدات الفرعية',
+        subtags: 'الوسوم الفرعية',
+        childValues: 'القيم الفرعية',
+        applySortAndGroupToDescendants: (target: string) => `تطبيق الفرز والتجميع على ${target}`,
+        applyAppearanceToDescendants: (target: string) => `تطبيق المظهر على ${target}`,
+        resetAppearanceInDescendants: (target: string) => `إعادة تعيين المظهر في ${target}`,
+        showFolders: 'إظهار التنقل', // Tooltip for button to show the navigation pane (English: Show navigation)
+        reorderRootFolders: 'إعادة ترتيب التنقل',
+        finishRootFolderReorder: 'تم',
+        showExcludedItems: 'إظهار المجلدات والوسوم والملاحظات المخفية', // Tooltip for button to show hidden items (English: Show hidden items)
+        hideExcludedItems: 'إخفاء المجلدات والوسوم والملاحظات المخفية', // Tooltip for button to hide hidden items (English: Hide hidden items)
+        showDualPane: 'إظهار لوحتين', // Tooltip for button to show dual-pane layout (English: Show dual panes)
+        showSinglePane: 'إظهار لوحة واحدة', // Tooltip for button to show single-pane layout (English: Show single pane)
+        dualPaneAutoFallbackNotice:
+            'لا تتوفر اللوحتان عندما يكون الشريط الجانبي ضيقًا جدًا. لتغيير ذلك، اضبط "عندما يكون الشريط الجانبي ضيقًا جدًا" على "عدم فعل شيء" في الإعدادات > المظهر والسلوك.',
+        changeAppearance: 'تغيير المظهر', // Tooltip for button to change folder appearance settings (English: Change appearance)
+        changeAppearanceCustomized: 'تغيير المظهر، مخصص',
+        showNotesFromSubfolders: 'إظهار الملاحظات من المجلدات الفرعية',
+        showFilesFromSubfolders: 'إظهار الملفات من المجلدات الفرعية',
+        showNotesFromDescendants: 'إظهار الملاحظات من الفروع',
+        showFilesFromDescendants: 'إظهار الملفات من الفروع',
+        search: 'بحث' // Tooltip for search button (English: Search)
+    },
+    // Search input
+    searchInput: {
+        placeholder: 'بحث...', // Placeholder text for search input (English: Search...)
+        placeholderVault: 'البحث في الخزنة...',
+        placeholderOmnisearch: 'Omnisearch...', // Placeholder text when Omnisearch provider is active (English: Omnisearch...)
+        clearSearch: 'مسح البحث', // Tooltip for clear search button (English: Clear search)
+        switchToFilterSearch: 'التبديل إلى البحث بالتصفية',
+        switchToOmnisearch: 'التبديل إلى Omnisearch',
+        saveSearchShortcut: 'حفظ اختصار البحث',
+        removeSearchShortcut: 'إزالة اختصار البحث',
+        shortcutModalTitle: 'حفظ اختصار البحث',
+        shortcutNamePlaceholder: 'أدخل اسم الاختصار',
+        shortcutStartIn: 'البدء دائمًا في: {path}',
+        searchHelp: 'صيغة البحث',
+        searchHelpTitle: 'صيغة البحث',
+        searchHelpModal: {
+            intro: 'يعثر البحث بالتصفية على الملاحظات حسب أسماء العرض والأسماء المستعارة والخصائص والوسوم والتواريخ والمرشحات، مدمجة في استعلام واحد (مثال: `meeting .status=active #work @thisweek`). انقر على أيقونة النجمة لحفظ البحث كاختصار.',
+            introInstallOmnisearch: 'يتطلب البحث في النص الكامل لمحتوى الملاحظات إضافة Omnisearch.',
+            introSwitching: 'التبديل بين البحث بالتصفية و Omnisearch باستخدام مفاتيح الأسهم لأعلى/لأسفل أو بالنقر على أيقونة البحث.',
+            activeFilterSearch: 'البحث بالتصفية نشط.',
+            activeOmnisearch: 'Omnisearch نشط.',
+            omnisearchIntro:
+                'يجري Omnisearch بحثًا في النص الكامل لمحتوى الملاحظات عبر الخزنة. يعرض Notebook Navigator المطابقات التي تنتمي إلى المجلد أو الوسم أو التحديد الحالي.',
+            sections: {
+                fileNames: {
+                    title: 'أسماء الملفات والأسماء المستعارة',
+                    items: [
+                        '`word` البحث عن ملاحظات تحتوي على "word" في اسم العرض أو أحد الأسماء المستعارة.',
+                        '`word1 word2` يجب أن تتطابق كل كلمة عبر اسم العرض والأسماء المستعارة.',
+                        '`-word` استبعاد الملاحظات التي تحتوي على "word" في اسم العرض أو أحد الأسماء المستعارة.',
+                        '`"text"` مطابقة النص حرفيًا؛ المصطلح الذي يبدأ بعلامة اقتباس مزدوجة لا يُفسَّر أبدًا كوسم أو خاصية أو تاريخ أو مرشح (على سبيل المثال: `".F"`).',
+                        '`-"text"` استبعاد الملاحظات التي تحتوي على النص الحرفي في اسم العرض أو أحد الأسماء المستعارة.'
+                    ]
+                },
+                tags: {
+                    title: 'الوسوم',
+                    items: [
+                        '`#tag` تضمين الملاحظات ذات الوسم (يشمل أيضًا الوسوم الفرعية مثل `#tag/subtag`).',
+                        '`#` تضمين الملاحظات ذات الوسوم فقط.',
+                        '`-#tag` استبعاد الملاحظات ذات الوسم.',
+                        '`-#` تضمين الملاحظات بدون وسوم فقط.',
+                        '`#tag1 #tag2` مطابقة كلا الوسمين (AND ضمني).',
+                        '`#tag1 AND #tag2` مطابقة كلا الوسمين (AND صريح).',
+                        '`#tag1 OR #tag2` مطابقة أي من الوسمين.',
+                        '`#a OR #b AND #c` AND له أولوية أعلى: يطابق `#a`، أو كلاً من `#b` و `#c`.',
+                        'انقر على وسم مع Cmd/Ctrl لإضافته بـ AND، ومع Cmd/Ctrl+Shift لإضافته بـ OR.'
+                    ]
+                },
+                properties: {
+                    title: 'الخصائص',
+                    items: [
+                        '`.key` تضمين الملاحظات التي يبدأ مفتاح الخاصية فيها بـ `key`.',
+                        '`.key=value` تضمين الملاحظات التي تحتوي قيمة الخاصية فيها على `value`.',
+                        '`."Reading Status"` تضمين الملاحظات التي تحتوي على مفتاح خاصية يتضمن مسافات.',
+                        '`."Reading Status"="In Progress"` المفاتيح والقيم التي تحتوي على مسافات يجب وضعها بين علامات اقتباس مزدوجة.',
+                        '`-.key` استبعاد الملاحظات التي يبدأ مفتاح الخاصية فيها بـ `key`.',
+                        '`-.key=value` استبعاد الملاحظات التي تحتوي قيمة الخاصية فيها على `value`.',
+                        'انقر على خاصية مع Cmd/Ctrl لإضافتها بـ AND، ومع Cmd/Ctrl+Shift لإضافتها بـ OR.'
+                    ]
+                },
+                tasks: {
+                    title: 'المرشحات',
+                    items: [
+                        '`has:task` تضمين الملاحظات التي تحتوي على مهام غير مكتملة.',
+                        '`-has:task` استبعاد الملاحظات التي تحتوي على مهام غير مكتملة.',
+                        '`folder:meetings` تضمين الملاحظات حيث يحتوي اسم مجلد على `meetings`.',
+                        '`folder:/work/meetings` تضمين الملاحظات فقط في `work/meetings` (بدون المجلدات الفرعية).',
+                        '`folder:/` تضمين الملاحظات فقط في جذر الخزنة.',
+                        '`-folder:archive` استبعاد الملاحظات حيث يحتوي اسم مجلد على `archive`.',
+                        '`-folder:/archive` استبعاد الملاحظات فقط في `archive` (بدون المجلدات الفرعية).',
+                        '`ext:md` تضمين الملاحظات ذات الامتداد `md` (`ext:.md` مدعوم أيضًا).',
+                        '`-ext:pdf` استبعاد الملاحظات ذات الامتداد `pdf`.',
+                        'دمج مع الوسوم والأسماء والتواريخ (على سبيل المثال: `folder:/work/meetings ext:md @thisweek`).'
+                    ]
+                },
+                connectors: {
+                    title: 'سلوك AND/OR',
+                    items: [
+                        '`AND` و `OR` هما عوامل تشغيل فقط في استعلامات الوسوم/الخصائص الحصرية.',
+                        'استعلامات الوسوم/الخصائص الحصرية تحتوي فقط على مرشحات الوسوم والخصائص: `#tag`، `-#tag`، `#`، `-#`، `.key`، `-.key`، `.key=value`، `-.key=value`.',
+                        'إذا تضمن الاستعلام أسماء أو تواريخ (`@...`) أو مرشحات مهام (`has:task`) أو مرشحات مجلدات (`folder:...`) أو مرشحات امتدادات (`ext:...`)، يتم مطابقة `AND` و `OR` ككلمات.',
+                        'مثال على استعلام بعوامل تشغيل: `#work OR .status=started`.',
+                        'مثال على استعلام مختلط: `#work OR ext:md` (يتم مطابقة `OR` في أسماء الملفات).'
+                    ]
+                },
+                dates: {
+                    title: 'التواريخ',
+                    items: [
+                        '`@today` البحث عن ملاحظات اليوم باستخدام حقل التاريخ الافتراضي.',
+                        '`@yesterday`، `@last7d`، `@last30d`، `@thisweek`، `@thismonth` نطاقات تاريخ نسبية.',
+                        '`@2026-02-07` البحث عن يوم محدد (يدعم أيضًا `@20260207`).',
+                        '`@2026` البحث عن سنة تقويمية.',
+                        '`@2026-02` أو `@202602` البحث عن شهر تقويمي.',
+                        '`@2026-W05` أو `@2026W05` البحث عن أسبوع ISO.',
+                        '`@2026-Q2` أو `@2026Q2` البحث عن ربع تقويمي.',
+                        '`@13/02/2026` صيغ رقمية مع فواصل (`@07022026` يتبع إعدادات منطقتك عند الغموض).',
+                        '`@2026-02-01..2026-02-07` البحث عن نطاق أيام شامل (النهايات المفتوحة مدعومة).',
+                        '`@c:...` أو `@m:...` استهداف تاريخ الإنشاء أو التعديل.',
+                        '`-@...` استبعاد مطابقة التاريخ.'
+                    ]
+                },
+                omnisearch: {
+                    title: 'Omnisearch',
+                    items: [
+                        'يُرسل الاستعلام إلى إضافة Omnisearch ويتبع صيغة استعلامات Omnisearch. رموز البحث بالتصفية مثل `#tag` و `.property` و `@date` ليس لها معنى خاص.',
+                        'عند تحديد مجلد، يُضاف `path:"<folder>/"` إلى الاستعلام حتى يطابق Omnisearch داخل ذلك المجلد ومجلداته الفرعية. الاستعلامات التي تحتوي بالفعل على `path:` تُرسل دون تغيير.',
+                        'يعيد Omnisearch 50 نتيجة كحد أقصى مرتبة حسب الصلة. عندما يكون للبحث مطابقات أكثر من ذلك، لا تظهر الملاحظات الأقل ترتيبًا.',
+                        'يتطلب تقييد النطاق بمسارات مجلدات تحتوي على أحرف غير ASCII إضافة Omnisearch 1.30.0 أو أحدث. تبحث الإصدارات الأقدم في الخزنة بأكملها، ثم تتم تصفية النتائج حسب المجلد.',
+                        'الاستعلامات التي تحتوي على أقل من 3 أحرف قد تكون بطيئة في الخزن الكبيرة.',
+                        'تعرض معاينات الملاحظات مقتطفات Omnisearch بدلاً من نص المعاينة الافتراضي.'
+                    ]
+                }
+            }
+        }
+    },
+
+    // Context menus
+    contextMenu: {
+        file: {
+            openInNewTab: 'فتح في علامة تبويب جديدة',
+            openToRight: 'فتح على اليمين',
+            openInNewWindow: 'فتح في نافذة جديدة',
+            openMultipleInNewTabs: 'فتح {count} من الملاحظات في علامات تبويب جديدة',
+            openMultipleFilesInNewTabs: 'فتح {count} من الملفات في علامات تبويب جديدة',
+            openMultipleToRight: 'فتح {count} من الملاحظات على اليمين',
+            openMultipleFilesToRight: 'فتح {count} من الملفات على اليمين',
+            openMultipleInNewWindows: 'فتح {count} من الملاحظات في نوافذ جديدة',
+            openMultipleFilesInNewWindows: 'فتح {count} من الملفات في نوافذ جديدة',
+            pinNote: 'تثبيت الملاحظة',
+            pinFile: 'تثبيت الملف',
+            unpinNote: 'إلغاء تثبيت الملاحظة',
+            unpinFile: 'إلغاء تثبيت الملف',
+            pinMultipleNotes: 'تثبيت {count} من الملاحظات',
+            pinMultipleFiles: 'تثبيت {count} من الملفات',
+            unpinMultipleNotes: 'إلغاء تثبيت {count} من الملاحظات',
+            unpinMultipleFiles: 'إلغاء تثبيت {count} من الملفات',
+            duplicateNote: 'تكرار الملاحظة',
+            duplicateFile: 'تكرار الملف',
+            duplicateMultipleNotes: 'تكرار {count} من الملاحظات',
+            duplicateMultipleFiles: 'تكرار {count} من الملفات',
+            openVersionHistory: 'فتح سجل الإصدارات',
+            revealInFolder: 'الكشف في المجلد',
+            revealInFinder: 'الكشف في Finder',
+            showInExplorer: 'إظهار في مستكشف النظام',
+            openInDefaultApp: 'فتح في التطبيق الافتراضي',
+            renameNote: 'إعادة تسمية الملاحظة',
+            renameFile: 'إعادة تسمية الملف',
+            deleteNote: 'حذف الملاحظة',
+            deleteFile: 'حذف الملف',
+            setCalendarHighlight: 'تعيين التمييز',
+            removeCalendarHighlight: 'إزالة التمييز',
+            deleteMultipleNotes: 'حذف {count} من الملاحظات',
+            deleteMultipleFiles: 'حذف {count} من الملفات',
+            moveNoteToFolder: 'نقل الملاحظة إلى...',
+            moveFileToFolder: 'نقل الملف إلى...',
+            moveMultipleNotesToFolder: 'نقل {count} من الملاحظات إلى...',
+            moveMultipleFilesToFolder: 'نقل {count} من الملفات إلى...',
+            mergeNotes: 'دمج {count} من الملاحظات...',
+            mergeNotesInGroup: 'دمج الملاحظات في المجموعة...',
+            setManualSortGroupHeader: 'تعيين عنوان المجموعة',
+            changeManualSortGroupHeader: 'تغيير عنوان المجموعة',
+            manualSortGroupHeader: {
+                title: 'عنوان المجموعة',
+                copyStyle: 'نسخ نمط العنوان',
+                pasteStyle: 'لصق نمط العنوان',
+                remove: 'إزالة عنوان المجموعة'
+            },
+            addTag: 'إضافة وسم',
+            addPropertyKey: 'تعيين خاصية',
+            removeTag: 'إزالة وسم',
+            removeAllTags: 'إزالة جميع الوسوم',
+            changeIcon: 'تغيير الأيقونة',
+            changeColor: 'تغيير اللون'
+        },
+        folder: {
+            newNote: 'ملاحظة جديدة',
+            newNoteFromTemplate: 'ملاحظة جديدة من قالب',
+            newFolder: 'مجلد جديد',
+            newCanvas: 'لوحة بصرية جديدة',
+            newBase: 'قاعدة جديدة',
+            newDrawing: 'رسم جديد',
+            newExcalidrawDrawing: 'رسم Excalidraw جديد',
+            newTldrawDrawing: 'رسم Tldraw جديد',
+            duplicateFolder: 'تكرار المجلد',
+            searchInFolder: 'البحث في المجلد',
+            createFolderNote: 'إنشاء ملاحظة مجلد',
+            setFolderTemplate: 'تعيين قالب المجلد...',
+            changeFolderTemplate: 'تغيير قالب المجلد...',
+            removeFolderTemplate: 'إزالة قالب المجلد',
+            detachFolderNote: 'فصل ملاحظة المجلد',
+            deleteFolderNote: 'حذف ملاحظة المجلد',
+            changeIcon: 'تغيير الأيقونة',
+            changeColor: 'تغيير اللون',
+            changeBackground: 'تغيير الخلفية',
+            excludeFolder: 'إخفاء المجلد',
+            unhideFolder: 'إظهار المجلد',
+            hideRootFolder: 'إخفاء المجلد الجذري',
+            showRootFolder: 'إظهار المجلد الجذري',
+            excludeFromDescendants: 'إخفاء من المجلدات الأصلية',
+            includeInDescendants: 'إظهار في المجلدات الأصلية',
+            hiddenFromParentsIndicator: 'مخفى من قوائم المجلدات الأصلية',
+            moveFolder: 'نقل المجلد إلى...',
+            renameFolder: 'إعادة تسمية المجلد',
+            deleteFolder: 'حذف المجلد'
+        },
+        tag: {
+            changeIcon: 'تغيير الأيقونة',
+            changeColor: 'تغيير اللون',
+            changeBackground: 'تغيير الخلفية',
+            showTag: 'إظهار الوسم',
+            hideTag: 'إخفاء الوسم'
+        },
+        property: {
+            addKey: 'تكوين مفاتيح الخصائص',
+            renameKey: 'إعادة تسمية الخاصية',
+            deleteKey: 'حذف الخاصية'
+        },
+        navigation: {
+            addSeparator: 'إضافة فاصل',
+            removeSeparator: 'إزالة الفاصل'
+        },
+        copy: {
+            title: 'نسخ',
+            noteLink: 'رابط الملاحظة',
+            fileLink: 'رابط الملف',
+            noteLinkAsFootnote: 'رابط الملاحظة كحاشية سفلية',
+            fileLinkAsFootnote: 'رابط الملف كحاشية سفلية',
+            noteEmbed: 'تضمين الملاحظة',
+            fileEmbed: 'تضمين الملف',
+            obsidianUrl: 'رابط Obsidian',
+            pathFromVaultFolder: 'المسار من مجلد الخزنة',
+            pathFromSystemRoot: 'المسار من جذر النظام'
+        },
+        style: {
+            title: 'النمط',
+            copy: 'نسخ النمط',
+            paste: 'لصق النمط',
+            removeIcon: 'إزالة الأيقونة',
+            removeColor: 'إزالة اللون',
+            removeBackground: 'إزالة الخلفية',
+            clear: 'مسح النمط'
+        }
+    },
+
+    // Folder appearance menu
+    folderAppearance: {
+        appearance: 'المظهر',
+        sortBy: 'فرز حسب',
+        standardPreset: 'قياسي',
+        compactPreset: 'مضغوط',
+        defaultSuffix: '(افتراضي)',
+        defaultLabel: 'افتراضي',
+        titleRows: {
+            label: 'صفوف العنوان',
+            option: (rows: number) => (rows === 1 ? 'صف عنوان واحد' : rows === 2 ? 'صفا عنوان' : `${rows} صفوف عنوان`)
+        },
+        previewRows: {
+            label: 'صفوف المعاينة',
+            none: 'لا شيء',
+            option: (rows: number) => (rows === 1 ? 'صف معاينة واحد' : rows === 2 ? 'صفا معاينة' : `${rows} صفوف معاينة`)
+        },
+        groupBy: 'تجميع حسب',
+        tags: 'وسوم',
+        properties: 'الخصائص',
+        tasks: 'المهام',
+        date: 'التاريخ',
+        parentFolder: 'المجلد الأصلي',
+        textCount: {
+            label: 'عدد النص',
+            options: {
+                none: 'لا شيء',
+                words: 'الكلمات',
+                characters: 'الأحرف',
+                both: 'الكلمات والأحرف'
+            }
+        },
+        resetAppearance: 'إعادة تعيين المظهر',
+        openPluginSettings: 'فتح إعدادات الإضافة…'
+    },
+
+    // Modal dialogs
+    modals: {
+        bulkApply: {
+            applyButton: 'تطبيق',
+            applySortAndGroupTitle: (target: string) => `تطبيق الفرز والتجميع على ${target}؟`,
+            applyAppearanceTitle: (target: string) => `تطبيق المظهر على ${target}؟`,
+            resetAppearanceTitle: (target: string) => `إعادة تعيين المظهر في ${target}؟`,
+            applyAppearanceMessage: (count: number, replacedCount: number) =>
+                `سيتغير المظهر لـ ${count} من العناصر. المظاهر المخصصة الحالية التي ستُستبدل: ${replacedCount}. تُنسخ تفضيلات المظهر المحفوظة مرة واحدة؛ ويُحتفظ بالفرز والتجميع. لا ترتبط التغييرات المستقبلية والعناصر الفرعية الجديدة.`,
+            resetAppearanceMessage: (count: number) =>
+                `سيُعاد تعيين المظهر لـ ${count} من العناصر. يُحتفظ بالفرز والتجميع. هذا تغيير لمرة واحدة؛ ولا ترتبط التغييرات المستقبلية والعناصر الفرعية الجديدة.`,
+            affectedCountMessage: (count: number) => `التجاوزات الحالية التي ستتغير: ${count}.`
+        },
+        manualSortConfirm: {
+            propertySortTitle: 'استخدام الفرز اليدوي؟',
+            propertySortMessage: (property: string, count: number) =>
+                `يبدّل العرض الحالي إلى الفرز اليدوي باستخدام "${property}". تحرير الترتيب يكتب قيم فهرس رقمية إلى تلك الخاصية في ${count} من الملاحظات حسب الحاجة.`,
+            propertySortConfirmButton: 'استخدام الفرز اليدوي',
+            removePropertyTitle: 'إزالة خاصية الفرز؟',
+            removePropertyMessage: (property: string, count: number) =>
+                `يؤدي هذا إلى إزالة "${property}" من ${count} من الملاحظات في القائمة الحالية. سيتم مسح ترتيب الفرز اليدوي لتلك الملاحظات.`,
+            removePropertyConfirmButton: 'إزالة الخاصية',
+            compactTitle: 'ضغط قيم الفهرس؟',
+            compactMessage: (count: number) =>
+                `إعادة الترتيب هذه تحتاج إلى مساحة رقمية أكبر. ${count} من الملاحظات ستحصل على قيم فهرس جديدة.`,
+            compactConfirmButton: 'ضغط قيم الفهرس'
+        },
+        manualSortGroupHeader: {
+            title: 'تعيين عنوان المجموعة',
+            titleLabel: 'العنوان',
+            placeholder: 'عنوان المجموعة',
+            icon: 'الأيقونة',
+            color: 'اللون',
+            wordCount: 'إظهار عدد الكلمات',
+            wordCountTarget: 'عدد الكلمات المستهدف',
+            wordCountTargetPlaceholder: '10,000',
+            wordCountTargetDescription:
+                'عندما يكون هذا الحقل فارغًا، يستخدم هدف المجموعة خاصية الهدف المحددة في الإعدادات > عرض الملفات > عدد الكلمات والأحرف. يمكنك تجاوزه بتعيين قيمة هدف لهذه المجموعة.',
+            description: 'خصص عنوان المجموعة لهذه الملاحظة. اترك العنوان فارغًا لإزالة العنوان.'
+        },
+        mergeNotes: {
+            title: 'دمج الملاحظات',
+            summary: 'إنشاء ملاحظة واحدة من {count} من الملاحظات في {folder}.',
+            frontmatterRule: 'يتم الاحتفاظ بالبيانات الأمامية من الملاحظة الأولى. تتم إزالة البيانات الأمامية من الملاحظات الأخرى.',
+            crossFolderWarning: 'الملاحظات المصدر في مجلدات مختلفة. قد تتوقف الروابط والتضمينات النسبية عن العمل في الملاحظة المدمجة.',
+            outputName: 'اسم الناتج',
+            outputNameDesc: 'يتم إنشاء الملاحظة المدمجة في المجلد الموضح أعلاه.',
+            outputNamePlaceholder: 'ملاحظات مدمجة',
+            separator: 'فاصل',
+            separatorDesc: 'يتم إدراجه بين الملاحظات.',
+            separatorOptions: {
+                none: 'لا شيء',
+                blankLine: 'سطر فارغ',
+                horizontalRule: 'خط أفقي',
+                heading: 'عنوان باسم الملاحظة'
+            },
+            moveSourcesToTrash: 'نقل الملاحظات المصدر إلى سلة المهملات بعد الدمج',
+            mergeButton: 'دمج'
+        },
+        navRainbowSection: {
+            title: (section: string) => `ألوان قوس قزح: ${section}`
+        },
+        iconPicker: {
+            searchPlaceholder: 'البحث عن أيقونات...',
+            recentlyUsedHeader: 'المستخدمة مؤخرًا',
+            emptyStateSearch: 'ابدأ الكتابة للبحث عن أيقونات',
+            emptyStateNoResults: 'لم يتم العثور على أيقونات',
+            showingResultsInfo: 'عرض 50 من {count} نتيجة. اكتب المزيد للتضييق.',
+            emojiInstructions: 'اكتب أو الصق أي رمز تعبيري لاستخدامه كأيقونة',
+            removeIcon: 'إزالة الأيقونة',
+            removeFromRecents: 'إزالة من الأيقونات الأخيرة',
+            allTabLabel: 'الكل'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'إضافة قاعدة'
+        },
+        interfaceIcons: {
+            title: 'أيقونات الواجهة',
+            fileItemsSection: 'عناصر الملفات',
+            items: {
+                'nav-shortcuts': 'الاختصارات',
+                'nav-recent-files': 'الملفات الأخيرة',
+                'nav-expand-all': 'توسيع الكل',
+                'nav-collapse-all': 'طي الكل',
+                'nav-calendar': 'التقويم',
+                'nav-tree-expand': 'سهم الشجرة: توسيع',
+                'nav-tree-collapse': 'سهم الشجرة: طي',
+                'nav-hidden-items': 'العناصر المخفية',
+                'nav-root-reorder': 'إعادة ترتيب المجلدات الجذرية',
+                'nav-new-folder': 'مجلد جديد',
+                'nav-show-single-pane': 'إظهار لوحة واحدة',
+                'nav-show-dual-pane': 'إظهار لوحتين',
+                'nav-profile-chevron': 'سهم قائمة ملفات التعريف',
+                'list-search': 'بحث',
+                'list-reveal-file': 'الكشف عن الملف',
+                'list-descendants': 'ملاحظات من المجلدات الفرعية',
+                'list-expand-all': 'توسيع جميع المجموعات',
+                'list-collapse-all': 'طي جميع المجموعات',
+                'list-sort-ascending': 'ترتيب الفرز: تصاعدي',
+                'list-sort-descending': 'ترتيب الفرز: تنازلي',
+                'list-sort-modified': 'الفرز حسب تاريخ التعديل',
+                'list-sort-created': 'الفرز حسب تاريخ الإنشاء',
+                'list-sort-title': 'الفرز حسب العنوان',
+                'list-sort-filename': 'الفرز حسب اسم الملف',
+                'list-sort-property': 'الفرز حسب الخاصية',
+                'list-appearance': 'تغيير المظهر',
+                'list-new-note': 'ملاحظة جديدة',
+                'list-pinned': 'الملاحظات المثبتة',
+                'nav-folder-open': 'مجلد مفتوح',
+                'nav-folder-closed': 'مجلد مغلق',
+                'nav-tags': 'وسوم',
+                'nav-tag': 'وسم',
+                'nav-properties': 'الخصائص',
+                'nav-property': 'خاصية',
+                'nav-property-value': 'قيمة',
+                'file-unfinished-task': 'المهام',
+                'file-word-count': 'عدد الكلمات',
+                'file-character-count': 'عدد الأحرف'
+            }
+        },
+        colorPicker: {
+            currentColor: 'الحالي',
+            newColor: 'جديد',
+            paletteDefault: 'افتراضي',
+            paletteCustom: 'مخصص',
+            copyColors: 'نسخ اللون',
+            colorsCopied: 'تم نسخ اللون إلى الحافظة',
+            pasteColors: 'لصق اللون',
+            pasteClipboardError: 'تعذرت قراءة الحافظة',
+            pasteInvalidFormat: 'يجب إدخال قيمة لون سداسية',
+            colorsPasted: 'تم لصق اللون بنجاح',
+            resetUserColors: 'مسح الألوان المخصصة',
+            clearCustomColorsConfirm: 'إزالة جميع الألوان المخصصة؟',
+            userColorSlot: 'اللون {slot}',
+            recentColors: 'ألوان حديثة',
+            clearRecentColors: 'مسح الألوان الحديثة',
+            removeRecentColor: 'إزالة اللون',
+            apply: 'تطبيق',
+            pickerLabel: 'المنتقي',
+            hexLabel: 'HEX',
+            hexInputLabel: 'قيمة اللون السداسية',
+            saturationValueArea: 'التشبع والسطوع',
+            hueSlider: 'تدرج اللون',
+            alphaSlider: 'الشفافية'
+        },
+        appearance: {
+            tabIcon: 'الأيقونة',
+            tabColor: 'اللون',
+            tabBackground: 'الخلفية',
+            resetIcon: 'إزالة الأيقونة',
+            resetColor: 'إزالة اللون',
+            resetBackground: 'إزالة الخلفية',
+            clear: 'مسح النمط',
+            apply: 'تطبيق'
+        },
+        selectVaultProfile: {
+            title: 'اختر ملف تعريف الخزنة',
+            currentBadge: 'نشط',
+            emptyState: 'لا تتوفر ملفات تعريف للخزنة.'
+        },
+        tagOperation: {
+            renameTitle: 'إعادة تسمية الوسم {tag}',
+            deleteTitle: 'حذف الوسم {tag}',
+            newTagPrompt: 'اسم الوسم الجديد',
+            newTagPlaceholder: 'أدخل اسم الوسم الجديد',
+            renameWarning: 'إعادة تسمية الوسم {oldTag} ستعدل {count} من {files}.',
+            deleteWarning: 'حذف الوسم {tag} سيعدل {count} من {files}.',
+            modificationWarning: 'سيؤدي هذا إلى تحديث تواريخ تعديل الملفات.',
+            affectedFiles: 'الملفات المتأثرة:',
+            andMore: '...و {count} من الملفات الأخرى',
+            confirmRename: 'إعادة تسمية الوسم',
+            renameUnchanged: '{tag} لم يتغير',
+            renameNoChanges: '{oldTag} → {newTag} ({countLabel})',
+            renameBatchNotFinalized:
+                'تمت إعادة تسمية {renamed}/{total}. لم يتم التحديث: {notUpdated}. لم يتم تحديث البيانات الوصفية والاختصارات.',
+            invalidTagName: 'أدخل اسم وسم صالح.',
+            descendantRenameError: 'لا يمكن نقل الوسم إلى نفسه أو إلى فرع منه.',
+            confirmDelete: 'حذف الوسم',
+            deleteBatchNotFinalized:
+                'تمت الإزالة من {removed}/{total}. لم يتم التحديث: {notUpdated}. لم يتم تحديث البيانات الوصفية والاختصارات.',
+            checkConsoleForDetails: 'تحقق من وحدة التحكم للحصول على التفاصيل.',
+            file: 'الملفات',
+            files: 'الملفات',
+            inlineParsingWarning: {
+                title: 'توافق الوسوم المضمّنة',
+                message: 'يحتوي {tag} على أحرف لا يستطيع Obsidian تحليلها في الوسوم المضمّنة. لا تتأثر وسوم البيانات الأمامية.',
+                confirm: 'استخدام على أي حال'
+            }
+        },
+        propertyOperation: {
+            renameTitle: 'إعادة تسمية الخاصية {property}',
+            deleteTitle: 'حذف الخاصية {property}',
+            newKeyPrompt: 'اسم الخاصية الجديد',
+            newKeyPlaceholder: 'أدخل اسم الخاصية الجديد',
+            renameWarning: 'إعادة تسمية الخاصية {property} ستعدّل {count} من {files}.',
+            renameConflictWarning:
+                'الخاصية {newKey} موجودة بالفعل في {count} من {files}. إعادة تسمية {oldKey} ستستبدل القيم الحالية لـ {newKey}.',
+            deleteWarning: 'حذف الخاصية {property} سيعدّل {count} من {files}.',
+            confirmRename: 'إعادة تسمية الخاصية',
+            confirmDelete: 'حذف الخاصية',
+            renameNoChanges: '{oldKey} → {newKey} (بدون تغييرات)',
+            renameSettingsUpdateFailed: 'تمت إعادة تسمية الخاصية {oldKey} → {newKey}. فشل تحديث الإعدادات.',
+            deleteSingleSuccess: 'تم حذف الخاصية {property} من ملاحظة واحدة',
+            deleteMultipleSuccess: 'تم حذف الخاصية {property} من {count} من الملاحظات',
+            deleteSettingsUpdateFailed: 'تم حذف الخاصية {property}. فشل تحديث الإعدادات.',
+            invalidKeyName: 'أدخل اسم خاصية صالح.'
+        },
+        fileSystem: {
+            newFolderTitle: 'مجلد جديد',
+            renameFolderTitle: 'إعادة تسمية المجلد',
+            renameFileTitle: 'إعادة تسمية الملف',
+            deleteFolderTitle: "حذف '{name}'؟",
+            deleteFileTitle: "حذف '{name}'؟",
+            deleteFileAttachmentsTitle: 'حذف مرفقات الملف؟',
+            moveFileConflictTitle: 'تعارض النقل',
+            folderNamePrompt: 'أدخل اسم المجلد:',
+            hideInOtherVaultProfiles: 'إخفاء في ملفات تعريف الخزنة الأخرى',
+            renamePrompt: 'أدخل الاسم الجديد:',
+            renameVaultTitle: 'تغيير اسم عرض الخزنة',
+            renameVaultPrompt: 'أدخل اسم العرض المخصص (اتركه فارغًا لاستخدام الافتراضي):',
+            deleteFolderConfirm: 'هل أنت متأكد من حذف هذا المجلد وكل محتوياته؟',
+            deleteFileConfirm: 'هل أنت متأكد من حذف هذا الملف؟',
+            deleteFileAttachmentsDescriptionSingle: 'هذا المرفق لم يعد مستخدمًا في أي ملاحظات. هل تريد حذفه؟',
+            deleteFileAttachmentsDescriptionMultiple: 'هذه المرفقات لم تعد مستخدمة في أي ملاحظات. هل تريد حذفها؟',
+            deleteFileAttachmentsViewFileTreeAriaLabel: 'شجرة الملفات',
+            deleteFileAttachmentsViewGalleryAriaLabel: 'المعرض',
+            moveFileConflictDescriptionSingle: 'تم العثور على تعارض ملف في "{folder}".',
+            moveFileConflictDescriptionMultiple: 'تم العثور على {count} من تعارضات الملفات في "{folder}".',
+            moveFileConflictAffectedFiles: 'الملفات المتأثرة',
+            moveFileConflictItem: '"{name}" -> "{suggested}"{renameOnly}',
+            moveFileConflictRenameOnly: '(إعادة تسمية فقط)',
+            moveFileConflictRename: 'إعادة التسمية',
+            moveFileConflictOverwrite: 'الكتابة فوق',
+            removeAllTagsTitle: 'إزالة جميع الوسوم',
+            removeAllTagsFromNote: 'هل أنت متأكد من إزالة جميع الوسوم من هذه الملاحظة؟',
+            removeAllTagsFromNotes: 'هل أنت متأكد من إزالة جميع الوسوم من {count} من الملاحظات؟'
+        },
+        folderNoteType: {
+            title: 'اختر نوع ملاحظة المجلد',
+            folderLabel: 'المجلد: {name}'
+        },
+        folderSuggest: {
+            placeholder: (name: string) => `نقل ${name} إلى مجلد...`,
+            multipleFilesLabel: (count: number) => `${count} من الملفات`,
+            navigatePlaceholder: 'الانتقال إلى مجلد...',
+            instructions: {
+                navigate: 'للتنقل',
+                move: 'للنقل',
+                select: 'للتحديد',
+                dismiss: 'للإغلاق'
+            }
+        },
+        homepage: {
+            placeholder: 'البحث عن ملفات...',
+            instructions: {
+                navigate: 'للتنقل',
+                select: 'لتعيين الصفحة الرئيسية',
+                dismiss: 'للإغلاق'
+            }
+        },
+        templateCommand: {
+            titleAdd: 'إضافة أمر',
+            titleEdit: 'تحرير الأمر',
+            name: 'اسم الأمر',
+            namePlaceholder: 'ملاحظة اجتماع جديدة',
+            template: 'القالب',
+            templateDesc: 'اختياري. بدون قالب، يُطبَّق قالب مجلد المجلد الهدف إن كان معيّنًا.',
+            templatePlaceholder: 'Templates/Meeting.md',
+            fileNameFormat: 'صيغة اسم الملف',
+            fileNameFormatDesc:
+                'تُستبدل الرموز مثل {{date:YYYYMMDD}} و{{prompt:Title}} عند تشغيل الأمر. يطلب كل إدخال قيمة، وتحصل التسمية نفسها في القالب على القيمة نفسها. {{number}} أكبر بواحد من أعلى رقم تستخدمه الملاحظات في المجلد بنمط الاسم نفسه، و{{number:00}} يضيف أصفارًا في البداية. يمكن للقالب استخدام {{number}} أيضًا، ويُدرج {{title}} اسم الملف المُنشأ.',
+            fileNameFormatPlaceholder: '{{date:YYYYMMDD}} {{prompt:Title}}',
+            location: 'الموقع',
+            folder: 'المجلد',
+            folderPlaceholder: 'Meetings',
+            icon: 'أيقونة',
+            placement: 'زر',
+            placementNone: 'لا شيء',
+            placementRibbon: 'الشريط',
+            placementTabBar: 'شريط التبويبات'
+        },
+        templateFile: {
+            placeholder: 'البحث عن القوالب...',
+            instructions: {
+                navigate: 'للتنقل',
+                select: 'لتحديد القالب',
+                dismiss: 'للإغلاق'
+            }
+        },
+        navigationBanner: {
+            placeholder: 'البحث عن صور...',
+            svgMissingDimensions: 'ملف SVG المحدد لا يحدد عرضًا أو ارتفاعًا أو viewBox.',
+            instructions: {
+                navigate: 'للتنقل',
+                select: 'لتعيين اللافتة',
+                dismiss: 'للإغلاق'
+            }
+        },
+        tagSuggest: {
+            navigatePlaceholder: 'الانتقال إلى وسم...',
+            addPlaceholder: 'البحث عن وسم لإضافته...',
+            removePlaceholder: 'اختر وسمًا لإزالته...',
+            createNewTag: 'إنشاء وسم جديد: #{tag}',
+            instructions: {
+                navigate: 'للتنقل',
+                select: 'للتحديد',
+                dismiss: 'للإغلاق',
+                add: 'لإضافة وسم',
+                remove: 'لإزالة وسم'
+            }
+        },
+        propertySuggest: {
+            placeholder: 'اختر مفتاح خاصية...',
+            navigatePlaceholder: 'انتقل إلى خاصية...',
+            instructions: {
+                navigate: 'للتنقل',
+                select: 'لإضافة خاصية',
+                dismiss: 'للإغلاق'
+            }
+        },
+        propertyKeyVisibility: {
+            title: 'رؤية مفاتيح الخصائص',
+            description:
+                'التحكم في مكان عرض قيم الخصائص. تتوافق الأعمدة مع لوحة التنقل ولوحة القائمة وقائمة سياق الملف. استخدم الصف السفلي لتبديل جميع الصفوف في عمود.',
+            searchPlaceholder: 'بحث في مفاتيح الخصائص...',
+            propertyColumnLabel: 'خاصية',
+            showInNavigation: 'إظهار في التنقل',
+            showInList: 'إظهار في القائمة',
+            showInFileMenu: 'إظهار في قائمة الملف',
+            toggleAllInNavigation: 'تبديل الكل في التنقل',
+            toggleAllInList: 'تبديل الكل في القائمة',
+            toggleAllInFileMenu: 'تبديل الكل في قائمة الملف',
+            applyButton: 'تطبيق',
+            emptyState: 'لم يتم العثور على مفاتيح خصائص.'
+        },
+        welcome: {
+            title: 'مرحباً بك في {pluginName}',
+            introText:
+                'مرحباً وأهلاً بك في Notebook Navigator، متصفح ملفات وتقويم أفضل لـ Obsidian. قبل أن تبدأ، أوصي حقاً بمشاهدة الفصول الثلاثة الأولى على الأقل من الفيديو أدناه، Mastering Notebook Navigator. ستتعرف من خلالها على كيفية عمل اللوحتين وكيف تبدأ الاستخدام بسرعة.',
+            continueText:
+                'وإذا كان لديك عشر دقائق إضافية، فتابع مشاهدة فصلي الإعداد عند التشغيل الأول وروتين الاستخدام اليومي. سيمنحك ذلك كل ما تحتاج إليه للبدء، ويمكنك العودة لاحقاً لمشاهدة مزيد من التفاصيل. ستجد رابطاً للفيديو في أعلى إعدادات Notebook Navigator.',
+            thanksText: 'استمتع باستخدام Notebook Navigator!',
+            videoAlt: 'إتقان Notebook Navigator 3',
+            openVideoButton: 'تشغيل الفيديو',
+            closeButton: 'ربما لاحقاً'
+        }
+    },
+    // File system operations
+    fileSystem: {
+        errors: {
+            createFolder: 'فشل إنشاء المجلد: {error}',
+            createFile: 'فشل إنشاء الملف: {error}',
+            renameFolder: 'فشل إعادة تسمية المجلد: {error}',
+            renameFolderNoteConflict: 'لا يمكن إعادة التسمية: "{name}" موجود بالفعل في هذا المجلد',
+            renameFile: 'فشل إعادة تسمية الملف: {error}',
+            deleteFolder: 'فشل حذف المجلد: {error}',
+            deleteFile: 'فشل حذف الملف: {error}',
+            deleteAttachments: 'فشل في حذف المرفقات: {error}',
+            mergeNotes: 'فشل في دمج الملاحظات: {error}',
+            mergeNotesOpenOutput: 'تم إنشاء الملاحظة المدمجة باسم {name}، لكن تعذر فتحها: {error}. لم يتم تغيير الملاحظات المصدر.',
+            mergeNotesOpenSkipped: 'أُعطيت الأولوية لطلب آخر لفتح ملف.',
+            mergeNotesTrashSources: 'تم إنشاء الملاحظة المدمجة. فشل نقل {count} من الملاحظات المصدر إلى سلة المهملات.',
+            duplicateNote: 'فشل تكرار الملاحظة: {error}',
+            duplicateFolder: 'فشل تكرار المجلد: {error}',
+            openVersionHistory: 'فشل فتح سجل الإصدارات: {error}',
+            versionHistoryNotFound: 'لم يتم العثور على أمر سجل الإصدارات. تأكد من تمكين Obsidian Sync.',
+            revealInExplorer: 'فشل الكشف عن الملف في مستكشف النظام: {error}',
+            openInDefaultApp: 'فشل الفتح في التطبيق الافتراضي: {error}',
+            openInDefaultAppNotAvailable: 'الفتح في التطبيق الافتراضي غير متاح على هذه المنصة',
+            folderNoteAlreadyExists: 'ملاحظة المجلد موجودة بالفعل',
+            folderAlreadyExists: 'المجلد "{name}" موجود بالفعل',
+            folderNotesDisabled: 'قم بتمكين ملاحظات المجلد في الإعدادات لتحويل الملفات',
+            folderNoteAlreadyLinked: 'هذا الملف يعمل بالفعل كملاحظة مجلد',
+            folderNoteNotFound: 'لا توجد ملاحظة مجلد في المجلد المحدد',
+            folderNoteUnsupportedExtension: 'امتداد ملف غير مدعوم: {extension}',
+            folderNoteMoveFailed: 'فشل نقل الملف أثناء التحويل: {error}',
+            folderNoteRenameConflict: 'ملف باسم "{name}" موجود بالفعل في المجلد',
+            folderNoteConversionFailed: 'فشل تحويل الملف إلى ملاحظة مجلد',
+            folderNoteConversionFailedWithReason: 'فشل تحويل الملف إلى ملاحظة مجلد: {error}',
+            folderNoteOpenFailed: 'تم تحويل الملف لكن فشل فتح ملاحظة المجلد: {error}',
+            failedToDeleteFile: 'فشل حذف {name}: {error}',
+            failedToDeleteMultipleFiles: 'فشل حذف {count} من الملفات',
+            versionHistoryNotAvailable: 'خدمة سجل الإصدارات غير متاحة',
+            drawingAlreadyExists: 'رسم بهذا الاسم موجود بالفعل',
+            failedToCreateDrawing: 'فشل إنشاء الرسم',
+            noFolderSelected: 'لم يتم تحديد مجلد في Notebook Navigator',
+            noFileSelected: 'لم يتم تحديد ملف'
+        },
+        warnings: {
+            linkBreakingNameCharacters: 'يحتوي هذا الاسم على أحرف تكسر روابط Obsidian: #, |, ^, %%, [[, ]].',
+            forbiddenNameCharactersAllPlatforms: 'لا يمكن أن تبدأ الأسماء بنقطة أو تحتوي على : أو /.',
+            forbiddenNameCharactersWindows: 'أحرف Windows المحجوزة غير مسموح بها: <, >, ", \\, |, ?, *.'
+        },
+        notices: {
+            folderExcludedFromDescendants: 'مخفى من قوائم المجلدات الأصلية: {name}',
+            folderIncludedInDescendants: 'ظاهر في قوائم المجلدات الأصلية: {name}',
+            mergeNotes: 'تم دمج {count} من الملاحظات في {name}'
+        },
+        notifications: {
+            deletedMultipleFiles: 'تم حذف {count} من الملفات',
+            movedMultipleFiles: 'تم نقل {count} من الملفات إلى {folder}',
+            folderNoteConversionSuccess: 'تم تحويل الملف إلى ملاحظة مجلد في "{name}"',
+            folderMoved: 'تم نقل المجلد "{name}"',
+            deepLinkCopied: 'تم نسخ رابط Obsidian إلى الحافظة',
+            pathCopied: 'تم نسخ المسار إلى الحافظة',
+            relativePathCopied: 'تم نسخ المسار النسبي إلى الحافظة',
+            linkCopied: 'تم نسخ الرابط إلى الحافظة',
+            footnoteLinkCopied: 'تم نسخ رابط الحاشية السفلية إلى الحافظة',
+            embedLinkCopied: 'تم نسخ رابط التضمين إلى الحافظة',
+            tagAddedToNote: 'تمت إضافة الوسم إلى ملاحظة واحدة',
+            tagAddedToNotes: 'تمت إضافة الوسم إلى {count} من الملاحظات',
+            tagRemovedFromNote: 'تمت إزالة الوسم من ملاحظة واحدة',
+            tagRemovedFromNotes: 'تمت إزالة الوسم من {count} من الملاحظات',
+            tagsClearedFromNote: 'تم مسح جميع الوسوم من ملاحظة واحدة',
+            tagsClearedFromNotes: 'تم مسح جميع الوسوم من {count} من الملاحظات',
+            noTagsToRemove: 'لا توجد وسوم لإزالتها',
+            noFilesSelected: 'لم يتم تحديد ملفات',
+            mergeNotesRequireMultipleMarkdown: 'حدد ملاحظتي Markdown على الأقل للدمج',
+            tagOperationsNotAvailable: 'عمليات الوسوم غير متاحة',
+            propertyOperationsNotAvailable: 'عمليات الخصائص غير متاحة',
+            tagsRequireMarkdown: 'الوسوم مدعومة فقط على ملاحظات Markdown',
+            propertiesRequireMarkdown: 'الخصائص مدعومة فقط في ملاحظات Markdown',
+            propertySetOnNote: 'تم تحديث الخاصية في ملاحظة واحدة',
+            propertySetOnNotes: 'تم تحديث الخاصية في {count} من الملاحظات',
+            manualSortPropertyRemovedFromNote: 'تمت إزالة خاصية الفرز من ملاحظة واحدة',
+            manualSortPropertyRemovedFromNotes: 'تمت إزالة خاصية الفرز من {count} من الملاحظات',
+            iconPackDownloaded: 'تم تنزيل {provider}',
+            iconPackUpdated: 'تم تحديث {provider} ({version})',
+            iconPackRemoved: 'تمت إزالة {provider}',
+            iconPackLoadFailed: 'فشل تحميل {provider}',
+            hiddenFileReveal: 'الملف مخفي. قم بتمكين "إظهار العناصر المخفية" لعرضه'
+        },
+        confirmations: {
+            deleteMultipleFiles: 'هل أنت متأكد من حذف {count} من الملفات؟',
+            deleteConfirmation: 'لا يمكن التراجع عن هذا الإجراء.'
+        },
+        defaultNames: {
+            untitled: 'بدون عنوان'
+        }
+    },
+
+    // Drag and drop operations
+    dragDrop: {
+        errors: {
+            cannotMoveIntoSelf: 'لا يمكن نقل مجلد إلى نفسه أو إلى مجلد فرعي.',
+            itemAlreadyExists: 'عنصر باسم "{name}" موجود بالفعل في هذا الموقع.',
+            failedToMove: 'فشل النقل: {error}',
+            failedToAddTag: 'فشل إضافة الوسم "{tag}"',
+            failedToSetProperty: 'فشل في تحديث الخاصية: {error}',
+            failedToClearTags: 'فشل مسح الوسوم',
+            failedToMoveFolder: 'فشل نقل المجلد "{name}"',
+            failedToImportFiles: 'فشل الاستيراد: {names}'
+        },
+        notifications: {
+            filesAlreadyExist: '{count} من الملفات موجودة بالفعل في الوجهة',
+            filesAlreadyHaveTag: '{count} من الملفات تحتوي بالفعل على هذا الوسم أو وسم أكثر تحديدًا',
+            filesAlreadyHaveProperty: '{count} من الملفات تحتوي بالفعل على هذه الخاصية',
+            noTagsToClear: 'لا توجد وسوم لمسحها',
+            fileImported: 'تم استيراد ملف واحد',
+            filesImported: 'تم استيراد {count} من الملفات'
+        }
+    },
+
+    // Date grouping
+    dateGroups: {
+        future: 'المستقبل',
+        today: 'اليوم',
+        yesterday: 'أمس',
+        previous7Days: 'آخر 7 أيام',
+        previous30Days: 'آخر 30 يومًا'
+    },
+
+    // Plugin commands
+    commands: {
+        open: 'فتح', // Command palette: Opens the Notebook Navigator view (English: Open)
+        toggleLeftSidebar: 'تبديل الشريط الجانبي الأيسر', // Command palette: Toggles left sidebar, opening Notebook Navigator when uncollapsing (English: Toggle left sidebar)
+        openHomepage: 'فتح الصفحة الرئيسية', // Command palette: Opens the Notebook Navigator view and loads the homepage file (English: Open homepage)
+        openDailyNote: 'فتح الملاحظة اليومية',
+        openWeeklyNote: 'فتح الملاحظة الأسبوعية',
+        openMonthlyNote: 'فتح الملاحظة الشهرية',
+        openQuarterlyNote: 'فتح الملاحظة الفصلية',
+        openYearlyNote: 'فتح الملاحظة السنوية',
+        openNextPeriodicNote: 'فتح الملاحظة الدورية التالية',
+        openPreviousPeriodicNote: 'فتح الملاحظة الدورية السابقة',
+        openParentPeriodicNote: 'فتح الملاحظة الدورية الأعلى',
+        revealFile: 'الكشف عن الملف', // Command palette: Reveals and selects the currently active file in the navigator (English: Reveal file)
+        search: 'بحث', // Command palette: Toggle search in the file list (English: Search)
+        searchVaultRoot: 'البحث في الخزنة بالكامل', // Command palette: Selects the vault root folder and focuses search with subfolders included (English: Search whole vault)
+        toggleDualPane: 'تبديل تخطيط اللوحتين', // Command palette: Toggles between single-pane and dual-pane layout (English: Toggle dual pane layout)
+        toggleDualPaneOrientation: 'تبديل اتجاه اللوحتين', // Command palette: Toggles dual-pane orientation between horizontal and vertical (English: Toggle dual pane orientation)
+        toggleCalendar: 'تبديل التقويم', // Command palette: Toggles showing the calendar overlay in the navigation pane (English: Toggle calendar)
+        selectVaultProfile: 'اختيار ملف تعريف الخزنة', // Command palette: Opens a modal to choose a different vault profile (English: Select vault profile)
+        selectVaultProfile1: 'اختيار ملف تعريف الخزنة 1', // Command palette: Activates the first vault profile without opening the modal (English: Select vault profile 1)
+        selectVaultProfile2: 'اختيار ملف تعريف الخزنة 2', // Command palette: Activates the second vault profile without opening the modal (English: Select vault profile 2)
+        selectVaultProfile3: 'اختيار ملف تعريف الخزنة 3', // Command palette: Activates the third vault profile without opening the modal (English: Select vault profile 3)
+        deleteFile: 'حذف الملفات', // Command palette: Deletes the currently active file (English: Delete file)
+        createNewNote: 'إنشاء ملاحظة جديدة', // Command palette: Creates a new note in the currently selected folder (English: Create new note)
+        createNewNoteFromTemplate: 'إنشاء ملاحظة جديدة من قالب', // Command palette: Creates a new note from a template in the currently selected folder (English: Create new note from template)
+        moveFiles: 'نقل الملفات', // Command palette: Move selected files to another folder (English: Move files)
+        mergeNotes: 'دمج الملاحظات', // Command palette: Creates one note from selected Markdown notes (English: Merge notes)
+        selectNextFile: 'تحديد الملف التالي', // Command palette: Selects the next file in the current view (English: Select next file)
+        selectPreviousFile: 'تحديد الملف السابق', // Command palette: Selects the previous file in the current view (English: Select previous file)
+        navigateBack: 'الانتقال للخلف',
+        navigateForward: 'الانتقال للأمام',
+        convertToFolderNote: 'تحويل إلى ملاحظة مجلد', // Command palette: Converts the active file into a folder note with a new folder (English: Convert to folder note)
+        setAsFolderNote: 'تعيين كملاحظة مجلد', // Command palette: Renames the active file to its folder note name (English: Set as folder note)
+        detachFolderNote: 'فصل ملاحظة المجلد', // Command palette: Renames the active folder note to a new name (English: Detach folder note)
+        pinAllFolderNotes: 'تثبيت جميع ملاحظات المجلدات', // Command palette: Pins all folder notes to shortcuts (English: Pin all folder notes)
+        navigateToFolder: 'الانتقال إلى مجلد', // Command palette: Navigate to a folder using fuzzy search (English: Navigate to folder)
+        navigateToTag: 'الانتقال إلى وسم', // Command palette: Navigate to a tag using fuzzy search (English: Navigate to tag)
+        navigateToProperty: 'الانتقال إلى خاصية', // Command palette: Navigate to a property key or value using fuzzy search (English: Navigate to property)
+        addShortcut: 'إضافة إلى الاختصارات', // Command palette: Adds or removes the current file, folder, tag, or property from shortcuts (English: Add to shortcuts)
+        openShortcut: 'فتح الاختصار {number}',
+        toggleDescendants: 'تبديل الفروع', // Command palette: Toggles showing notes from descendants (English: Toggle descendants)
+        toggleHidden: 'تبديل المجلدات والوسوم والملاحظات المخفية', // Command palette: Toggles showing hidden items (English: Toggle hidden items)
+        toggleTagSort: 'تبديل ترتيب فرز الوسوم', // Command palette: Toggles between alphabetical and frequency tag sorting (English: Toggle tag sort order)
+        toggleTagsBySelection: 'تبديل الوسوم حسب التحديد',
+        togglePropertiesBySelection: 'تبديل الخصائص حسب التحديد',
+        toggleCompactMode: 'تبديل الوضع المضغوط', // Command palette: Toggles list mode between standard and compact (English: Toggle compact mode)
+        togglePinnedSection: 'تبديل قسم المثبتة',
+        collapseExpand: 'طي / توسيع جميع عناصر التنقل', // Command palette: Collapse or expand all folders and tags (English: Collapse / expand all navigation items)
+        collapseExpandListGroups: 'طي / توسيع جميع مجموعات القائمة',
+        collapseExpandSelectedItem: 'طي / توسيع العنصر المحدد',
+        addTag: 'إضافة وسم للملفات المحددة', // Command palette: Opens a dialog to add a tag to selected files (English: Add tag to selected files)
+        setProperty: 'تعيين خاصية على الملفات المحددة', // Command palette: Opens a fuzzy dialog to set a property on selected files (English: Set property on selected files)
+        removeTag: 'إزالة وسم من الملفات المحددة', // Command palette: Opens a dialog to remove a tag from selected files (English: Remove tag from selected files)
+        removeAllTags: 'إزالة جميع الوسوم من الملفات المحددة', // Command palette: Removes all tags from selected files (English: Remove all tags from selected files)
+        openAllFiles: 'فتح جميع الملفات', // Command palette: Opens all files in the current folder or tag (English: Open all files)
+        rebuildCache: 'إعادة بناء الذاكرة المؤقتة', // Command palette: Rebuilds the local Notebook Navigator cache (English: Rebuild cache)
+        restoreDefaultSettings: 'استعادة الإعدادات الافتراضية' // Command palette: Replaces the settings file with defaults after startup was aborted (English: Restore default settings)
+    },
+
+    // Plugin UI
+    plugin: {
+        viewName: 'Notebook Navigator', // Name shown in the view header/tab (English: Notebook Navigator)
+        calendarViewName: 'تقويم', // Name shown in the view header/tab (English: Calendar)
+        folderNoteSidebarViewName: 'ملاحظة المجلد', // Name shown in the folder note sidebar tab (English: Folder note)
+        ribbonTooltip: 'Notebook Navigator', // Tooltip for the ribbon icon in the left sidebar (English: Notebook Navigator)
+        revealInNavigator: 'الكشف في Notebook Navigator', // Context menu item to reveal a file in the navigator (English: Reveal in Notebook Navigator)
+        settingsUnavailableNotice:
+            'تعذر على Notebook Navigator قراءة إعداداته ولم يبدأ التشغيل. إذا كانت الخزنة قيد المزامنة، أعد تشغيل Obsidian بعد اكتمال المزامنة. للبدء من جديد بالإعدادات الافتراضية، شغّل الأمر "استعادة الإعدادات الافتراضية".', // Notice shown when startup is aborted because the settings file is missing or cannot be read (English: Notebook Navigator could not read its settings and did not start. If your vault is syncing, restart Obsidian after the sync completes. To start over with default settings, run the command "Restore default settings".)
+        settingsMissingConfirm: {
+            title: 'البدء بالإعدادات الافتراضية؟', // Title of the dialog shown when the plugin is enabled while its settings file is missing (English: Start with default settings?)
+            messageRecentInstall:
+                'تم تثبيت Notebook Navigator للتو ولا يوجد ملف إعدادات. إذا كان هذا تثبيتًا جديدًا أو إعادة تثبيت، فتابع بالإعدادات الافتراضية. إذا كانت إعداداتك تأتي من خدمة مزامنة، فألغِ العملية وانتظر اكتمال المزامنة ثم أعد تشغيل Obsidian.', // Dialog message when the plugin folder was written recently (English: Notebook Navigator was just installed and has no settings file. If this is a new install or a reinstall, continue with default settings. If your settings come from a sync service, cancel, wait for the sync to complete, and restart Obsidian.)
+            messageExistingInstall:
+                'Notebook Navigator مثبت على هذا الجهاز منذ فترة، لكن ملف الإعدادات مفقود. إذا كانت الخزنة لا تزال قيد المزامنة، فألغِ العملية وانتظر اكتمال المزامنة ثم أعد تشغيل Obsidian للاحتفاظ بإعداداتك الحالية. تابع فقط إذا أردت البدء من جديد بالإعدادات الافتراضية.', // Dialog message when the plugin folder has existed for a while (English: Notebook Navigator has been installed on this device for a while, but its settings file is missing. If your vault is still syncing, cancel, wait for the sync to complete, and restart Obsidian to keep your existing settings. Continue only to start over with default settings.)
+            confirmButton: 'استخدام الإعدادات الافتراضية' // Confirm button label in the missing-settings dialog (English: Use default settings)
+        },
+        settingsRecovery: {
+            confirmTitle: 'استعادة الإعدادات الافتراضية', // Title of the confirmation dialog for the settings recovery command (English: Restore default settings)
+            confirmMessage:
+                'يستبدل هذا ملف إعدادات Notebook Navigator بالإعدادات الافتراضية. إذا كانت الخزنة لا تزال قيد المزامنة، فقد تحل الإعدادات الافتراضية المستعادة محل الإعدادات المخزنة على أجهزتك الأخرى. يتم أولاً نسخ ملف الإعدادات القابل للقراءة إلى نسخة احتياطية مؤرخة في مجلد الإضافة.', // Body of the confirmation dialog for the settings recovery command
+            confirmButton: 'استعادة الافتراضية', // Confirm button label in the settings recovery dialog (English: Restore defaults)
+            failedNotice: 'تعذر إكمال استعادة الإعدادات. تم الاحتفاظ بالتفضيلات المحلية.', // Notice shown when settings recovery cannot be completed (English: Could not complete settings recovery. Local preferences were kept.)
+            completedNotice: 'تمت استعادة الإعدادات الافتراضية. أعد تشغيل Obsidian للإنهاء.' // Notice shown after the settings file was replaced with defaults (English: Default settings restored. Restart Obsidian to finish.)
+        }
+    },
+
+    // Tooltips
+    tooltips: {
+        lastModifiedAt: 'آخر تعديل في',
+        createdAt: 'تاريخ الإنشاء',
+        file: 'ملف',
+        files: 'ملفات',
+        folder: 'مجلد',
+        folders: 'مجلدات',
+        wordCount: 'عدد الكلمات',
+        unfinishedTasks: 'مهام غير مكتملة'
+    },
+
+    fileCounts: {
+        words: '{count} من الكلمات',
+        characters: '{count} من الأحرف',
+        separator: ' · '
+    },
+
+    // Settings
+    settings: {
+        changeDefaultSettings: 'تغيير الإعدادات الافتراضية',
+        metadataReport: {
+            exportSuccess: 'تم تصدير تقرير البيانات الوصفية الفاشلة إلى: {filename}',
+            exportFailed: 'فشل تصدير تقرير البيانات الوصفية'
+        },
+        index: {
+            label: 'عام',
+            description: 'ملاحظات الإصدار والدعم وملف تعريف الخزنة وأنواع الملفات ومفاتيح الخصائص.',
+            groups: {
+                about: 'حول'
+            }
+        },
+        pageGroups: {
+            configuration: 'التكوين',
+            navigationPane: 'لوحة التنقل',
+            listPane: 'لوحة القائمة',
+            calendarAndTools: 'التقويم والأدوات'
+        },
+        pages: {
+            displayFilters: {
+                label: 'مرشحات العرض',
+                description: 'المجلدات والوسوم والملفات ووسوم الملفات وقواعد الخصائص المخفية.'
+            },
+            appearanceAndBehavior: {
+                label: 'المظهر والسلوك',
+                description: 'السلوك والتنقل بلوحة المفاتيح وأزرار الفأرة والمظهر والتنسيق.',
+                groups: {
+                    startup: 'بدء التشغيل',
+                    keyboardNavigation: 'التنقل بلوحة المفاتيح',
+                    mouseButtons: 'أزرار الفأرة',
+                    desktopAppearance: 'مظهر سطح المكتب',
+                    mobileAppearance: 'مظهر الهاتف المحمول',
+                    appearance: 'المظهر',
+                    icons: 'الأيقونات',
+                    formatting: 'التنسيق'
+                }
+            },
+            navigationPane: {
+                label: 'لوحة التنقل',
+                description: 'التخطيط والمظهر وعدد الملفات وسلوك الطي وألوان قوس قزح.',
+                groups: {
+                    appearance: 'المظهر',
+                    banner: 'اللافتة',
+                    collapseItems: 'طي العناصر',
+                    dragAndDrop: 'السحب والإفلات',
+                    fileCounts: 'عدد الملفات',
+                    rainbowColors: 'ألوان قوس قزح'
+                }
+            },
+            shortcutsAndRecentFiles: {
+                label: 'الاختصارات والملفات الأخيرة',
+                description: 'رؤية الاختصارات والشارات والملفات الأخيرة والعناصر المثبتة.',
+                groups: {
+                    shortcuts: 'اختصارات',
+                    recentFiles: 'ملفات حديثة'
+                }
+            },
+            foldersAndFolderNotes: {
+                label: 'المجلدات وملاحظات المجلد',
+                description: 'عرض المجلدات وملاحظات المجلد وقوالب ملاحظات المجلد وسلوك ملاحظات المجلد.',
+                groups: {
+                    folders: 'مجلدات',
+                    folderNotes: 'ملاحظات المجلد',
+                    folderNoteFiles: 'ملفات ملاحظات المجلد'
+                }
+            },
+            tagsAndProperties: {
+                label: 'الوسوم والخصائص',
+                description: 'أقسام الوسوم والخصائص والأيقونات والفرز والنطاق والوراثة.',
+                groups: {
+                    tags: 'وسوم',
+                    properties: 'الخصائص'
+                }
+            },
+            listPane: {
+                label: 'لوحة القائمة',
+                description: 'الفرز والتجميع وأوضاع القائمة والملاحظات المثبتة ومعاينات الرسومات.',
+                groups: {
+                    appearance: 'المظهر',
+                    sortAndGroup: 'الفرز والتجميع',
+                    groupHeaders: 'رؤوس المجموعات',
+                    manualSort: 'الفرز اليدوي',
+                    pinnedNotes: 'الملاحظات المثبتة',
+                    behavior: 'السلوك',
+                    drawingPreviews: 'معاينات الرسومات'
+                }
+            },
+            fileOperations: {
+                label: 'عمليات الملفات والقوالب',
+                description: 'القوالب وأوامر إنشاء الملاحظات وتأكيدات الحذف والمرفقات وسلوك تعارض نقل الملفات.',
+                groups: {
+                    templates: 'قوالب',
+                    templateCommands: 'أوامر إنشاء الملاحظات'
+                }
+            },
+            frontmatterFields: {
+                label: 'حقول البيانات الأمامية',
+                description: 'حقول البيانات الأمامية لأسماء العرض والطوابع الزمنية والأيقونات والألوان.'
+            },
+            fileDisplay: {
+                label: 'عرض الملفات',
+                description: 'العناوين ونص المعاينة والصور المميزة والوسوم والخصائص والتواريخ وعدد الكلمات وعدد الأحرف.',
+                groups: {
+                    icon: 'الأيقونة',
+                    title: 'العنوان',
+                    previewText: 'نص المعاينة',
+                    featureImage: 'الصورة المميزة',
+                    tags: 'الوسوم',
+                    properties: 'الخصائص',
+                    tasks: 'المهام',
+                    date: 'التاريخ',
+                    parentFolder: 'المجلد الأصلي',
+                    wordAndCharacterCount: 'عدد الكلمات والأحرف'
+                }
+            },
+            calendar: {
+                label: 'التقويم',
+                description: 'عرض التقويم وملاحظات التاريخ والقوالب والإعدادات المحلية وموضع الشريط الجانبي.',
+                groups: {
+                    appearance: 'المظهر',
+                    leftSidebar: 'الشريط الجانبي الأيسر',
+                    calendarIntegration: 'تكامل التقويم',
+                    rightSidebar: 'الشريط الجانبي الأيمن'
+                }
+            },
+            iconPacks: {
+                label: 'حزم الأيقونات',
+                description: 'أيقونات الواجهة وأيقونات الملفات وإدارة حزم الأيقونات.'
+            },
+            advanced: {
+                label: 'متقدم',
+                description: 'التشخيص وتنظيف البيانات الوصفية والاستيراد/التصدير وإعادة التعيين.',
+                groups: {
+                    maintenance: 'الصيانة',
+                    resetSettings: 'إعادة ضبط الإعدادات'
+                }
+            }
+        },
+        syncMode: {
+            notSynced: '(غير متزامن)',
+            enableSync: 'تفعيل المزامنة',
+            disableSync: 'تعطيل المزامنة'
+        },
+        items: {
+            listPaneTitle: {
+                name: 'عنوان لوحة القائمة',
+                desc: 'اختر مكان عرض عنوان لوحة القائمة.',
+                options: {
+                    header: 'إظهار في الرأس',
+                    listPane: 'إظهار في لوحة القائمة',
+                    hidden: 'عدم الإظهار'
+                }
+            },
+            colorListPaneTitle: {
+                name: 'تلوين عنوان لوحة القائمة',
+                desc: 'تطبيق لون المجلد أو الوسم أو الخاصية المحددة على عنوان لوحة القائمة.'
+            },
+            defaultSortOrder: {
+                name: 'ترتيب الفرز الافتراضي',
+                desc: 'اختر ترتيب الفرز الافتراضي للملاحظات. تظهر الخصائص من “خصائص الفرز” كخيارات فرز إضافية.',
+                directions: {
+                    asc: 'تصاعدي',
+                    desc: 'تنازلي'
+                },
+                dateDirections: {
+                    newestOnTop: 'الأحدث في الأعلى',
+                    oldestOnTop: 'الأقدم في الأعلى'
+                },
+                textDirections: {
+                    aOnTop: 'أ في الأعلى',
+                    zOnTop: 'ي في الأعلى'
+                },
+                fields: {
+                    dateEdited: 'تاريخ التعديل',
+                    dateCreated: 'تاريخ الإنشاء',
+                    title: 'العنوان',
+                    fileName: 'اسم الملف',
+                    property: 'الخاصية'
+                }
+            },
+            defaultSortDirection: {
+                name: 'اتجاه الفرز'
+            },
+            defaultGroupingDirection: {
+                name: 'اتجاه التجميع',
+                options: {
+                    follow: 'اتباع ترتيب الفرز'
+                }
+            },
+            sortingProperties: {
+                name: 'خصائص الفرز',
+                desc: 'خصائص البيانات الأمامية مفصولة بفواصل. تظهر كل خاصية كخيار فرز في إعداد ترتيب الفرز الافتراضي وفي قائمة الفرز في لوحة القائمة. لا يتم تغيير هذه الخصائص.',
+                placeholder: 'published, author',
+                defaultsResetNotices: {
+                    sort: 'تمت إعادة تعيين ترتيب الفرز الافتراضي لأن خاصيته لم تعد متوفرة.',
+                    grouping: 'تمت إعادة تعيين التجميع الافتراضي لأن خاصيته لم تعد متوفرة.',
+                    both: 'تمت إعادة تعيين ترتيب الفرز الافتراضي والتجميع الافتراضي لأن خصائصهما لم تعد متوفرة.'
+                }
+            },
+            propertySecondarySort: {
+                name: 'الترتيب الثانوي',
+                desc: 'يُستخدم مع ترتيب الخاصية عندما تكون للملاحظات نفس قيمة الخاصية أو بدون قيمة خاصية.',
+                options: {
+                    title: 'العنوان',
+                    fileName: 'اسم الملف',
+                    dateCreated: 'تاريخ الإنشاء',
+                    dateEdited: 'تاريخ التعديل'
+                }
+            },
+            propertySortInstructions: {
+                intro: 'كيفية عمل الفرز والتجميع حسب خاصية:',
+                items: [
+                    '**الفرز:** يؤدي اختيار خاصية مثل الأولوية إلى فرز الملاحظات حسب قيم الأولوية فيها.',
+                    '**التجميع:** يؤدي اختيار خاصية مثل الحالة إلى إنشاء عنوان لكل قيمة من قيم الحالة. تظهر الملاحظات ذات الحالة نفسها تحت العنوان نفسه.',
+                    '**القيم المتعددة:** إذا احتوت خاصية على قائمة، يستخدم Notebook Navigator القائمة كاملة. على سبيل المثال، إذا احتوت الموضوعات على الكتب والتاريخ، يفرز الملاحظة أو يجمعها باستخدام «الكتب، التاريخ»، وليس حسب كل موضوع على حدة.',
+                    '**القيم المفقودة:** عند التجميع، تظهر الملاحظات التي لا تحتوي على الخاصية تحت **بدون** في النهاية.',
+                    '**عروض الوسوم والخصائص:** عند تحديد التجميع حسب **المجلد**، تظهر عناوين التواريخ بدلاً من ذلك.'
+                ]
+            },
+            groupingProperties: {
+                name: 'خصائص التجميع',
+                desc: 'خصائص البيانات الأمامية مفصولة بفواصل. تظهر كل خاصية كخيار تجميع في إعداد التجميع الافتراضي وفي قائمة الفرز في لوحة القائمة. لا يتم تغيير هذه الخصائص.',
+                placeholder: 'status, genre'
+            },
+            manualSortProperty: {
+                name: 'خاصية الفرز اليدوي',
+                desc: 'خاصية البيانات الأمامية المستخدمة لتخزين قيم الفهرس الرقمية للفرز اليدوي.'
+            },
+            groupHeaderProperty: {
+                name: 'خاصية عنوان المجموعة',
+                desc: 'خاصية البيانات الأمامية المستخدمة لتخزين رؤوس المجموعات المخصصة.'
+            },
+            groupHeadersInstructions: {
+                intro: 'تظهر رؤوس المجموعات المخصصة أعلى الملاحظات في لوحة القائمة.',
+                items: [
+                    'من قائمة الفرز في لوحة القائمة، اضبط التجميع على **مخصص**.',
+                    'انقر بزر الفأرة الأيمن على ملاحظة واختر **تعيين عنوان المجموعة** لإضافة عنوان فوقها.'
+                ]
+            },
+            manualSortNewNotePlacement: {
+                name: 'موضع الملاحظة الجديدة',
+                desc: 'اختر مكان وضع الملاحظات الجديدة عندما تستخدم القائمة الحالية الفرز اليدوي.',
+                options: {
+                    top: 'الأعلى',
+                    bottom: 'الأسفل',
+                    belowSelectedNote: 'أسفل الملاحظة المحددة',
+                    unsorted: 'غير مرتبة'
+                }
+            },
+            confirmBeforeManualSort: {
+                name: 'تأكيد قبل الفرز اليدوي',
+                desc: 'إظهار تحذير قبل كتابة خاصية الفرز اليدوي في الملاحظات للمرة الأولى. عند التعطيل، تتلقى الملاحظات الخاصية دون تحذير.'
+            },
+            manualSortInstructions: {
+                intro: 'يكتب الفرز اليدوي قيمة فهرس رقمية إلى خاصية في البيانات الأمامية على كل ملاحظة. تظهر الملاحظات بدون فهرس ضمن "غير مرتبة".',
+                items: [
+                    'فعّل الفرز اليدوي باختيار **فرز يدوي** من قائمة الفرز. بعد ذلك، توجد طريقتان لإعادة ترتيب الملاحظات.',
+                    'اختر **تحرير ترتيب الفرز...** من قائمة الفرز لفتح عرض إعادة الترتيب. اسحب الملاحظات بالفأرة، أو باللمس على الجوال. على سطح المكتب، النقر مع **Cmd/Ctrl** أو **Shift** يحدد عدة ملاحظات، ثم سحب أي منها ينقل المجموعة بأكملها.',
+                    'في لوحة القائمة، حدد ملاحظة واحدة أو حدد عدة ملاحظات، ثم اضغط **Cmd/Ctrl + Arrow Up/Down** لنقل التحديد لأعلى أو لأسفل.'
+                ]
+            },
+            scrollToSelectedFileOnListChanges: {
+                name: 'التمرير إلى الملف المحدد عند تغيير القائمة',
+                desc: 'التمرير إلى الملف المحدد عند تثبيت الملاحظات، أو إظهار ملاحظات الفروع، أو تغيير مظهر المجلد، أو تنفيذ عمليات الملفات.'
+            },
+            includeDescendantNotes: {
+                name: 'إظهار ملاحظات المجلدات الفرعية / الفروع',
+                desc: 'تضمين الملاحظات من المجلدات الفرعية المتداخلة وفروع الوسوم والخصائص عند عرض مجلد أو وسم أو خاصية.'
+            },
+            filterPinnedNotesByFolder: {
+                name: 'تثبيت الملاحظات في مجلدها فقط',
+                desc: 'تظهر الملاحظات المثبتة كمثبتة فقط في مجلدها الخاص. مفيد لملاحظات المجلدات أو إذا كان لديك العديد من الملاحظات المثبتة. لا يؤثر على عروض الوسوم أو الخصائص.'
+            },
+            separateFileCounts: {
+                name: 'إظهار عدد الملفات الحالية والفرعية بشكل منفصل',
+                desc: 'عرض عدد الملفات بتنسيق "الحالي ▾ الفروع" في المجلدات والوسوم والخصائص.'
+            },
+            defaultGrouping: {
+                name: 'التجميع الافتراضي',
+                desc: 'يُبقي خيار "بدون تجميع" القائمة المرتبة دون تقسيمها إلى مجموعات. تضيف **العناوين** توضيحات إلى القائمة المرتبة دون تغيير ترتيبها: يعرض "مخصص" العناوين المعرفة في البيانات الأمامية، ويدرج "التاريخ" عناوين التواريخ. تعيد **المجموعات** ترتيب القائمة: تُرتب مجموعات المجلدات والخصائص بشكل مستقل، وتتبع الملاحظات داخل كل مجموعة ترتيب الفرز.',
+                families: {
+                    headers: 'العناوين',
+                    groups: 'المجموعات'
+                },
+                options: {
+                    none: 'بدون تجميع',
+                    custom: 'مخصص',
+                    date: 'التاريخ',
+                    folder: 'المجلد'
+                }
+            },
+            alwaysShowAllTagAndPropertyPills: {
+                name: 'إظهار جميع شارات الوسوم والخصائص دائمًا',
+                desc: 'عند التعطيل، يتم إخفاء الشارات التي تتطابق مع اختيار التنقل الحالي (مثلاً، يتم إخفاء شارة وسم "وصفات" عند تصفح وسم "وصفات"). قم بالتفعيل لإبقاء جميع الشارات مرئية.'
+            },
+            stickyGroupHeaders: {
+                name: 'تثبيت رؤوس المجموعات',
+                desc: 'إبقاء رأس قسم التاريخ أو المجلد أو الخاصية أو القسم المثبت الحالي مرئيًا أثناء التمرير.'
+            },
+            showSubfolderPaths: {
+                name: 'إظهار مسارات المجلدات الفرعية',
+                desc: 'عند التجميع حسب المجلد في لوحة القائمة، اعرض مسارات المجلدات الفرعية بدلاً من أسماء المجلدات فقط.'
+            },
+            showGroupHeaderItemCounts: {
+                name: 'إظهار عدد العناصر',
+                desc: 'عرض عدد العناصر في كل رأس مجموعة في لوحة القائمة.'
+            },
+            showCurrentFolderFilesAtBottom: {
+                name: 'تجميع المجلدات: ملفات المجلد الحالي في الأسفل',
+                desc: 'عندما يكون التجميع الافتراضي هو المجلد، انقل الملفات الموجودة مباشرة في المجلد المحدد أسفل مجموعات المجلدات الفرعية.'
+            },
+            defaultListMode: {
+                name: 'وضع القائمة الافتراضي',
+                desc: 'اختر تخطيط القائمة الافتراضي. القياسي يعرض العنوان والتاريخ والوصف ونص المعاينة. المضغوط يعرض العنوان فقط. تجاوز المظهر لكل مجلد.',
+                options: {
+                    standard: 'قياسي',
+                    compact: 'مضغوط'
+                }
+            },
+            showFileIcons: {
+                name: 'إظهار أيقونات الملفات',
+                desc: 'عرض أيقونات الملفات مع مسافة محاذاة لليسار. التعطيل يزيل الأيقونات والمسافة البادئة. الأولوية: أيقونة المهام غير المكتملة > أيقونة مخصصة > أيقونة المجلد > أيقونة اسم الملف > أيقونة نوع الملف > أيقونة افتراضية.'
+            },
+            unfinishedTaskIcon: {
+                name: 'أيقونة المهام غير المكتملة',
+                desc: 'استبدال أيقونة الملف عندما تحتوي الملاحظة على مهام غير مكتملة.',
+                options: {
+                    disabled: 'معطّل',
+                    compact: 'الوضع المضغوط',
+                    standardAndCompact: 'الوضع القياسي والمضغوط'
+                }
+            },
+            useFolderIcon: {
+                name: 'استخدام أيقونة المجلد',
+                desc: 'عرض أيقونة المجلد الأصلي عند عدم تعيين أيقونة ملف مخصصة. يُستخدم لون المجلد عند عدم تعيين لون ملف مخصص.'
+            },
+            showFileTaskProgress: {
+                name: 'تقدم المهام',
+                desc: 'عرض حالة المهام مع شريط تقدم وعدد مهام اختياريين. يمكن تعيين ألوان المهام غير المكتملة والمهام المكتملة بشكل منفصل باستخدام إضافة Style Settings.'
+            },
+            showFileTaskProgressBar: {
+                name: 'تقدم المهام: شريط التقدم',
+                desc: 'عرض شريط تقدم بجانب أيقونة المهمة.'
+            },
+            showFileTaskProgressCount: {
+                name: 'تقدم المهام: عدد المهام',
+                desc: 'عرض عدد المهام المكتملة وإجمالي المهام، على سبيل المثال 3/7.'
+            },
+            hideFileTaskProgressWhenComplete: {
+                name: 'تقدم المهام: إخفاء عند الاكتمال',
+                desc: 'إخفاء تقدم المهام عندما تكتمل جميع المهام في الملاحظة.'
+            },
+            unfinishedTaskBackground: {
+                name: 'خلفية المهام غير المكتملة',
+                desc: 'تطبيق لون خلفية عندما تحتوي الملاحظة على مهام غير مكتملة.'
+            },
+            unfinishedTaskBackgroundColor: {
+                name: 'لون خلفية المهام غير المكتملة',
+                desc: 'تعيين لون الخلفية المستخدم عندما تحتوي الملاحظة على مهام غير مكتملة.'
+            },
+            showFileNameIcons: {
+                name: 'أيقونات حسب اسم الملف',
+                desc: 'تعيين أيقونات للملفات بناءً على النص في أسمائها.'
+            },
+            fileNameIconMap: {
+                name: 'خريطة أيقونات اسم الملف',
+                desc: 'الملفات التي تحتوي على النص تحصل على الأيقونة المحددة. تعيين واحد لكل سطر: نص=أيقونة',
+                placeholder: '# نص=أيقونة\nاجتماع=ph-calendar\nفاتورة=ph-receipt',
+                editTooltip: 'تعديل التعيينات'
+            },
+            showFileTypeIcons: {
+                name: 'أيقونات حسب نوع الملف',
+                desc: 'تعيين أيقونات للملفات بناءً على امتدادها.'
+            },
+            fileTypeIconPreset: {
+                name: 'إعداد أيقونات الملفات المسبق',
+                desc: 'اختر الأيقونات المدمجة أو إعدادًا مسبقًا لحزمة أيقونات. تتجاوز قواعد الامتدادات المخصصة هذا الإعداد المسبق.',
+                options: {
+                    builtIn: 'الأيقونات المدمجة'
+                },
+                notInstalledWarning: 'حزمة الأيقونات هذه غير مثبتة. تُعرض الأيقونات المدمجة بدلاً منها.'
+            },
+            fileTypeIconMap: {
+                name: 'خريطة أيقونات نوع الملف',
+                desc: 'الملفات ذات الامتداد تحصل على الأيقونة المحددة. تعيين واحد لكل سطر: امتداد=أيقونة',
+                placeholder: '# Extension=icon\ncpp=ph-file-code\npdf=ph-file-pdf',
+                editTooltip: 'تعديل التعيينات'
+            },
+            compactItemHeight: {
+                name: 'ارتفاع العنصر المضغوط',
+                desc: 'تعيين ارتفاع عناصر القائمة المضغوطة على سطح المكتب والجوال (بالبكسل).',
+                resetTooltip: 'استعادة إلى الافتراضي (28 بكسل)'
+            },
+            compactItemHeightScaleText: {
+                name: 'تحجيم النص مع ارتفاع العنصر المضغوط',
+                desc: 'تحجيم نص القائمة المضغوطة عند تقليل ارتفاع العنصر.'
+            },
+            showParentFolder: {
+                name: 'إظهار المجلد الأصلي',
+                desc: 'عرض اسم المجلد الأصلي للملاحظات في المجلدات الفرعية أو الوسوم أو الخصائص.'
+            },
+            showFolderPath: {
+                name: 'إظهار مسار المجلد',
+                desc: 'اعرض المسار نسبةً إلى المجلد المحدد بدلاً من اسم المجلد فقط. تعرض الوسوم والخصائص المسار الكامل.'
+            },
+            parentFolderClickOpensFolder: {
+                name: 'النقر على المجلد الأصلي يفتح المجلد',
+                desc: 'النقر على تسمية المجلد الأصلي يفتح المجلد في لوحة القائمة.'
+            },
+            showParentFolderColor: {
+                name: 'إظهار لون المجلد الأصلي',
+                desc: 'استخدام ألوان المجلدات على تسميات المجلد الأصلي.'
+            },
+            showParentFolderIcon: {
+                name: 'إظهار أيقونة المجلد الأصلي',
+                desc: 'إظهار أيقونات المجلدات بجانب تسميات المجلد الأصلي.'
+            },
+            showQuickActions: {
+                name: 'إظهار الإجراءات السريعة',
+                desc: 'إظهار أزرار الإجراءات عند التمرير فوق الملفات. أدوات التحكم في الأزرار تحدد الإجراءات التي تظهر.'
+            },
+            dualPane: {
+                name: 'تخطيط اللوحتين',
+                desc: 'إظهار لوحة التنقل ولوحة القائمة جنبًا إلى جنب.'
+            },
+            dualPaneOrientation: {
+                name: 'اتجاه اللوحتين',
+                desc: 'اختر التخطيط الأفقي أو الرأسي عند تنشيط اللوحتين.',
+                options: {
+                    horizontal: 'تقسيم أفقي',
+                    vertical: 'تقسيم رأسي'
+                }
+            },
+            narrowSidebarBehavior: {
+                name: 'عندما يكون الشريط الجانبي ضيقًا جدًا',
+                desc: 'اختر ما يحدث عندما لا تتسع لوحة التنقل ولوحة القائمة جنبًا إلى جنب.',
+                options: {
+                    none: 'عدم فعل شيء',
+                    singlePane: 'التبديل إلى لوحة واحدة',
+                    vertical: 'التبديل إلى تقسيم عمودي'
+                }
+            },
+            narrowSidebarThresholdMode: {
+                name: 'حد الشريط الجانبي الضيق',
+                desc: 'اختر كيفية حساب حد عرض الشريط الجانبي.',
+                options: {
+                    fitPanes: 'ملاءمة اللوحات',
+                    customWidth: 'عرض مخصص'
+                }
+            },
+            narrowSidebarThresholdWidth: {
+                name: 'عرض حد الشريط الجانبي الضيق',
+                desc: 'يتم التبديل عندما يكون الشريط الجانبي أضيق من هذا العرض.',
+                resetTooltip: 'إعادة التعيين إلى العرض الافتراضي'
+            },
+            paneBackgroundColor: {
+                name: 'لون الخلفية',
+                desc: 'اختر ألوان الخلفية للوحة التنقل ولوحة القائمة.',
+                options: {
+                    separate: 'خلفيات منفصلة',
+                    listBackground: 'استخدام خلفية القائمة',
+                    navigationBackground: 'استخدام خلفية التنقل'
+                }
+            },
+            zoomLevel: {
+                name: 'مستوى التكبير',
+                desc: 'التحكم في مستوى التكبير العام لـ Notebook Navigator (بالنسبة المئوية).'
+            },
+            useFloatingToolbarsOnIOS: {
+                name: 'استخدام أشرطة الأدوات العائمة على iOS',
+                desc: 'ينطبق فقط على iOS.'
+            },
+            defaultStartupView: {
+                name: 'عرض بدء اللوحة الواحدة',
+                desc: 'اختر اللوحة التي تظهر عند فتح Notebook Navigator في تخطيط اللوحة الواحدة.',
+                options: {
+                    navigation: 'لوحة التنقل',
+                    listPane: 'لوحة القائمة'
+                }
+            },
+            toolbarButtons: {
+                name: 'أزرار شريط الأدوات',
+                desc: 'اختر الأزرار التي تظهر في شريط الأدوات. الأزرار المخفية تبقى قابلة للوصول عبر الأوامر والقوائم.'
+            },
+            openNewNotesInNewTab: {
+                name: 'فتح الملاحظات الجديدة في علامة تبويب جديدة',
+                desc: 'عند التفعيل، يفتح أمر إنشاء ملاحظة جديدة الملاحظات في علامة تبويب جديدة. عند التعطيل، تحل الملاحظات محل علامة التبويب الحالية.'
+            },
+            autoRevealActiveNote: {
+                name: 'الكشف التلقائي عن الملاحظة النشطة',
+                desc: 'الكشف تلقائيًا عن الملاحظات عند فتحها من المبدل السريع أو الروابط أو البحث.'
+            },
+            autoRevealShortestPath: {
+                name: 'الكشف التلقائي: استخدام أقصر مسار',
+                desc: 'مفعّل: يختار الكشف التلقائي أقرب مجلد أصل أو وسم مرئي. معطّل: يختار الكشف التلقائي المجلد الفعلي للملف والوسم الدقيق.'
+            },
+            autoRevealIgnoreRightSidebar: {
+                name: 'الكشف التلقائي: تجاهل الأحداث من الشريط الجانبي الأيمن',
+                desc: 'عدم تغيير الملاحظة النشطة عند النقر أو تغيير الملاحظات في الشريط الجانبي الأيمن.'
+            },
+            autoRevealIgnoreOtherWindows: {
+                name: 'الكشف التلقائي: تجاهل الأحداث من النوافذ الأخرى',
+                desc: 'عدم تغيير الملاحظة النشطة عند العمل مع الملاحظات في نافذة أخرى.'
+            },
+            singlePaneAnimation: {
+                name: 'تحريك اللوحة المفردة',
+                desc: 'مدة الانتقال عند التبديل بين اللوحات في وضع اللوحة المفردة (ملي ثانية).',
+                resetTooltip: 'إعادة تعيين إلى الافتراضي'
+            },
+            autoSelectFirstNote: {
+                name: 'التحديد التلقائي لأول ملاحظة',
+                desc: 'فتح أول ملاحظة تلقائيًا عند تبديل المجلدات أو الوسوم أو الخصائص.'
+            },
+            disableShortcutAutoScroll: {
+                name: 'تعطيل التمرير التلقائي للاختصارات',
+                desc: 'عدم تمرير لوحة التنقل عند النقر على عناصر في الاختصارات.'
+            },
+            expandOnSelection: {
+                name: 'التوسيع عند التحديد',
+                desc: 'توسيع المجلدات والوسوم والخصائص عند تحديدها. في وضع اللوحة الواحدة، التحديد الأول يوسع، والتحديد الثاني يعرض الملفات.'
+            },
+            collapseOtherBranchesOnExpand: {
+                name: 'فرع واحد موسّع',
+                desc: 'طي الفروع الأخرى في نفس الشجرة عند توسيع مجلد أو وسم أو خاصية.'
+            },
+            springLoadedFolders: {
+                name: 'التوسيع أثناء السحب',
+                desc: 'توسيع المجلدات والوسوم عند التمرير فوقها أثناء السحب.'
+            },
+            springLoadedFoldersInitialDelay: {
+                name: 'التوسيع أثناء السحب: تأخير التوسيع الأول',
+                desc: 'التأخير قبل توسيع أول مجلد أو وسم أثناء السحب (بالثواني).'
+            },
+            springLoadedFoldersSubsequentDelay: {
+                name: 'التوسيع أثناء السحب: تأخير التوسيع اللاحق',
+                desc: 'التأخير قبل توسيع مجلدات أو وسوم إضافية أثناء نفس عملية السحب (بالثواني).'
+            },
+            navigationBanner: {
+                name: 'لافتة التنقل (ملف تعريف الخزنة)',
+                desc: 'عرض صورة فوق لوحة التنقل. يتغير مع ملف تعريف الخزنة المحدد.',
+                current: 'اللافتة الحالية: {path}',
+                chooseButton: 'اختيار صورة'
+            },
+            pinNavigationBanner: {
+                name: 'تثبيت اللافتة',
+                desc: 'تثبيت لافتة التنقل فوق شجرة التنقل.'
+            },
+            showShortcuts: {
+                name: 'إظهار الاختصارات',
+                desc: 'عرض قسم الاختصارات في لوحة التنقل.'
+            },
+            shortcutBadgeDisplay: {
+                name: 'شارة الاختصار',
+                desc: "ما يتم عرضه بجانب الاختصارات. استخدم أوامر 'فتح الاختصار 1-9' لفتح الاختصارات مباشرة.",
+                options: {
+                    position: 'الموضع (1-9)',
+                    count: 'عدد العناصر',
+                    none: 'لا شيء'
+                }
+            },
+            showRecentFiles: {
+                name: 'إظهار الملفات الحديثة',
+                desc: 'عرض قسم الملفات الحديثة في لوحة التنقل.'
+            },
+            hideFileTypesFromRecentFiles: {
+                name: 'إخفاء أنواع الملفات من الملفات الحديثة',
+                desc: 'اختر أنواع الملفات المراد إخفاؤها في قسم الملفات الحديثة.',
+                options: {
+                    none: 'لا شيء',
+                    folderNotes: 'ملاحظات المجلدات'
+                }
+            },
+            recentFilesCount: {
+                name: 'عدد الملفات الحديثة',
+                desc: 'عدد الملفات الحديثة المعروضة.'
+            },
+            pinRecentFilesWithShortcuts: {
+                name: 'تثبيت الملفات الحديثة مع الاختصارات',
+                desc: 'تضمين الملفات الحديثة عند تثبيت الاختصارات.'
+            },
+            enableCalendar: {
+                name: 'تفعيل التقويم',
+                desc: 'تفعيل ميزات التقويم في Notebook Navigator.'
+            },
+            calendarPlacement: {
+                name: 'موضع التقويم',
+                desc: 'العرض في الشريط الجانبي الأيمن أو الأيسر.',
+                options: {
+                    leftSidebar: 'الشريط الجانبي الأيسر',
+                    rightSidebar: 'الشريط الجانبي الأيمن'
+                }
+            },
+            calendarSinglePanePlacement: {
+                name: 'موضع اللوحة الواحدة',
+                desc: 'مكان عرض التقويم في وضع اللوحة الواحدة.',
+                options: {
+                    navigationPane: 'لوحة التنقل',
+                    belowPanes: 'أسفل اللوحات'
+                }
+            },
+            calendarLocale: {
+                name: 'اللغة',
+                desc: 'التحكم في تنسيق تواريخ التقويم وترقيم الأسابيع واليوم الأول من الأسبوع.',
+                weekPathMismatchWarning: 'التقويم المرئي ومسارات الملاحظات الأسبوعية تستخدم بدايات أسابيع أو ترقيم أسابيع مختلفة.',
+                options: {
+                    systemDefault: 'افتراضي'
+                }
+            },
+            calendarWeekendDays: {
+                name: 'أيام عطلة نهاية الأسبوع',
+                desc: 'عرض أيام عطلة نهاية الأسبوع بلون خلفية مختلف.',
+                options: {
+                    none: 'لا شيء',
+                    satSun: 'السبت والأحد',
+                    friSat: 'الجمعة والسبت',
+                    thuFri: 'الخميس والجمعة'
+                }
+            },
+            calendarMonthNameFormat: {
+                name: 'تنسيق اسم الشهر',
+                desc: 'اسم الشهر الكامل (يناير) أو المختصر (يناير).',
+                options: {
+                    full: 'يناير (كامل)',
+                    short: 'يناير (مختصر)'
+                }
+            },
+            showInfoButtons: {
+                name: 'إظهار أزرار المعلومات',
+                desc: 'عرض أزرار المعلومات في شريط البحث ورأس التقويم.'
+            },
+            calendarLeftSidebarWeeksToShow: {
+                name: 'الأسابيع المعروضة في الشريط الجانبي الأيسر',
+                desc: 'التقويم في الشريط الجانبي الأيمن يعرض الشهر كاملاً دائمًا.',
+                options: {
+                    fullMonth: 'شهر كامل',
+                    oneWeek: 'أسبوع واحد',
+                    weeksCount: '{count} من الأسابيع'
+                }
+            },
+            calendarHighlightToday: {
+                name: 'تمييز تاريخ اليوم',
+                desc: 'تمييز تاريخ اليوم بلون خلفية ونص غامق.'
+            },
+            calendarShowFeatureImage: {
+                name: 'إظهار الصورة المميزة',
+                desc: 'عرض الصور المميزة للملاحظات في التقويم.'
+            },
+            calendarShowTasks: {
+                name: 'إظهار المهام',
+                desc: 'عرض مؤشر على الأيام والأسابيع والأشهر التي تحتوي على مهام غير مكتملة.'
+            },
+            calendarShowWeekNumber: {
+                name: 'عرض رقم الأسبوع',
+                desc: 'إضافة عمود برقم الأسبوع.'
+            },
+            calendarShowQuarter: {
+                name: 'عرض الربع',
+                desc: 'إضافة تسمية الربع في رأس التقويم.'
+            },
+            calendarShowOutsideMonthDays: {
+                name: 'عرض أيام الأشهر الأخرى',
+                desc: 'عرض أيام الشهر السابق والشهر التالي عندما يعرض التقويم شهرًا كاملاً.'
+            },
+            calendarShowYearCalendar: {
+                name: 'عرض تقويم السنة',
+                desc: 'عرض التنقل بين السنوات وشبكة الأشهر في الشريط الجانبي الأيمن.'
+            },
+            calendarConfirmBeforeCreate: {
+                name: 'تأكيد قبل الإنشاء',
+                desc: 'عرض مربع حوار تأكيد عند إنشاء ملاحظة يومية جديدة.'
+            },
+            calendarShowHiddenItems: {
+                name: 'إظهار العناصر المخفية',
+                desc: 'عند التمكين، يعرض التقويم دائمًا جميع ملاحظات التقويم، بما في ذلك الملاحظات المخفية بواسطة مرشحات ملف تعريف الخزنة.'
+            },
+            dailyNoteSource: {
+                name: 'مصدر الملاحظات اليومية',
+                desc: 'مصدر ملاحظات التقويم.',
+                options: {
+                    dailyNotes: 'الملاحظات اليومية (المكوّن الإضافي الأساسي)',
+                    notebookNavigator: 'Notebook Navigator'
+                },
+                info: {
+                    dailyNotes: 'يتم تكوين المجلد وتنسيق التاريخ في إضافة الملاحظات اليومية الأساسية.'
+                }
+            },
+            calendarPeriodicNotesLocale: {
+                name: 'لغة الملاحظات الدورية',
+                desc: 'يتحكم في أسماء الأشهر والأيام المحلية وأرقام الأسابيع وبدايات الأسابيع في مسارات الملاحظات الدورية في Notebook Navigator.',
+                options: {
+                    calendar: 'التقويم',
+                    obsidian: 'Obsidian'
+                }
+            },
+
+            periodicNotesRootFolder: {
+                name: 'المجلد الجذر (ملف تعريف الخزنة)',
+                desc: 'المجلد الأساسي للملاحظات الدورية. يمكن أن تتضمن أنماط التاريخ مجلدات فرعية. يتغير مع ملف تعريف الخزنة المحدد.',
+                placeholder: 'شخصي/يوميات'
+            },
+            templateFolderLocation: {
+                name: 'موقع مجلد القوالب',
+                desc: 'يعرض منتقي ملفات القوالب الملاحظات من هذا المجلد.',
+                placeholder: 'قوالب',
+                usage: 'تُستخدم القوالب الموجودة في مجلد القوالب بواسطة ملاحظات التقويم وملاحظات المجلد وقوالب المجلدات وملاحظة جديدة من قالب. اضبط قوالب التقويم في التقويم > تكامل التقويم وقوالب ملاحظات المجلد في المجلدات وملاحظات المجلد > ملفات ملاحظات المجلد.'
+            },
+            calendarDailyNotePattern: {
+                name: 'الملاحظات اليومية',
+                desc: 'تنسيق المسار باستخدام تنسيق تاريخ Moment. ضع أسماء المجلدات الفرعية بين أقواس معقوفة، مثال [Work]/YYYY. انقر على أيقونة القالب لتعيين قالب. حدد موقع مجلد القوالب في عمليات الملفات والقوالب > قوالب.',
+                placeholder: 'YYYY/YYYYMMDD',
+                parsingError: 'يجب أن يقوم النمط بتنسيق التاريخ ثم تحليله مرة أخرى كتاريخ كامل (السنة، الشهر، اليوم).'
+            },
+            calendarPeriodicNotePatterns: {
+                momentDescPrefix: 'تنسيق المسار باستخدام ',
+                momentLinkText: 'تنسيق تاريخ Moment',
+                momentDescSuffix:
+                    '. ضع أسماء المجلدات الفرعية بين أقواس معقوفة، مثال [Work]/YYYY. انقر على أيقونة القالب لتعيين قالب. حدد موقع مجلد القوالب في عمليات الملفات والقوالب > قوالب.',
+                example: 'الصيغة الحالية: {path}'
+            },
+            templateEngine: {
+                name: 'محرك القوالب',
+                desc: 'المحرك الذي يعالج ملفات القوالب عندما ينشئ Notebook Navigator الملاحظات. يستخدم الوضع التلقائي Templater للقوالب التي تحتوي على <% عندما تكون إضافة Templater مثبتة. تستخدم بقية القوالب المحرك المدمج.',
+                options: {
+                    automatic: 'تلقائي',
+                    builtin: 'Notebook Navigator',
+                    templater: 'Templater'
+                },
+                templaterInstalled: 'إضافة Templater: مثبتة',
+                templaterNotInstalled: 'إضافة Templater: غير مثبتة',
+                templaterAutomatic:
+                    'تتم معالجة القوالب التي تحتوي على أوامر Templater (<%) بواسطة Templater. تتم معالجة بقية القوالب بواسطة المحرك المدمج.',
+                templaterUsage: 'تتم معالجة جميع القوالب بواسطة Templater. لا يتم استبدال الرموز المدمجة في ملفات القوالب.',
+                templaterMissingWarning:
+                    'لا يمكن إنشاء الملاحظات من القوالب. غيّر {setting} إلى {automatic} أو {builtin} في {location}، أو ثبّت إضافة Templater وفعّلها.',
+                tokens: 'الرموز المدمجة: {{title}}, {{folder}}, {{path}}, {{date}}, {{date:FORMAT}}, {{date+1d}}, {{time}}, {{today}}, {{now}}, {{yesterday}}, {{tomorrow}}, {{monday}} إلى {{sunday}}, {{cursor}}. اكتب {{!date}} للإبقاء على {{date}} كنص.',
+                usage: 'تُستبدل رموز القالب مثل {{title}} و{{date}} عند إنشاء الملاحظة. اضبط محرك القوالب في عمليات الملفات والقوالب > قوالب.'
+            },
+            showFolderTemplateIcons: {
+                name: 'إظهار أيقونات قوالب المجلدات',
+                desc: 'يميّز المجلدات التي لها قالب خاص بأيقونة في لوحة التنقل.'
+            },
+            templateCommands: {
+                name: 'الأوامر',
+                desc: 'ينشئ كل أمر ملاحظة باسم ملف مُولَّد من قالبه الخاص أو من قالب المجلد. شغّله من لوحة الأوامر أو اربطه باختصار أو زر.',
+                empty: 'لم تتم إضافة أوامر.',
+                add: 'إضافة أمر',
+                edit: 'تحرير',
+                unnamed: 'أمر بلا اسم',
+                locationCurrent: 'المجلد الحالي',
+                locationFolder: 'مجلد محدد'
+            },
+            folderTemplates: {
+                name: 'قوالب المجلدات',
+                desc: 'تستخدم الملاحظات الجديدة قالب مجلدها أو أقرب مجلد أصل. عيّن القوالب من قائمة سياق المجلد. قوالب التقويم والملاحظات اليومية وملاحظات المجلد لها الأولوية.',
+                empty: 'لم يتم تعيين قوالب مجلدات.',
+                scopeSubfolders: 'المجلد والمجلدات الفرعية',
+                scopeFolder: 'هذا المجلد فقط'
+            },
+            calendarWeeklyNotePattern: {
+                name: 'الملاحظات الأسبوعية',
+                parsingError: 'يجب أن يقوم النمط بتنسيق الأسبوع ثم تحليله مرة أخرى كأسبوع كامل (سنة الأسبوع، رقم الأسبوع).',
+                weekPathMismatchWarning:
+                    'تستخدم مسارات الملاحظات الأسبوعية لغة الملاحظات الدورية. استخدم لغات متطابقة، أو استخدم "GGGG" مع "WW" للأسابيع المستندة إلى الإثنين.',
+                mixedWeekTokensWarning:
+                    'هذا النمط يخلط رموز الأسبوع المستندة إلى الإثنين ("W" أو "G") مع رموز الأسبوع المستندة إلى اللغة ("w" أو "g"). استخدم مجموعة واحدة باستمرار: "GGGG" مع "WW" للأسابيع المستندة إلى الإثنين، أو "gggg" مع "ww" إذا كانت الملاحظات الأسبوعية يجب أن تتبع اللغة المحددة.'
+            },
+            calendarMonthlyNotePattern: {
+                name: 'الملاحظات الشهرية',
+                parsingError: 'يجب أن يقوم النمط بتنسيق الشهر ثم تحليله مرة أخرى كشهر كامل (السنة، الشهر).'
+            },
+            calendarQuarterlyNotePattern: {
+                name: 'الملاحظات الفصلية',
+                parsingError: 'يجب أن يقوم النمط بتنسيق الفصل ثم تحليله مرة أخرى كفصل كامل (السنة، الفصل).'
+            },
+            calendarYearlyNotePattern: {
+                name: 'الملاحظات السنوية',
+                parsingError: 'يجب أن يقوم النمط بتنسيق السنة ثم تحليلها مرة أخرى كسنة كاملة (السنة).'
+            },
+            periodicNoteTemplateFile: {
+                current: 'ملف القالب: {name}'
+            },
+            showTooltips: {
+                name: 'إظهار التلميحات',
+                desc: 'عرض تلميحات التمرير مع معلومات إضافية للملاحظات والمجلدات.'
+            },
+            showTooltipPath: {
+                name: 'إظهار المسار في التلميحات',
+                desc: 'عرض مسار المجلد أسفل أسماء الملاحظات في التلميحات.'
+            },
+            showTooltipTags: {
+                name: 'إظهار الوسوم في التلميحات',
+                desc: 'عرض وسوم الملاحظات في التلميحات عند تفعيل قسم الوسوم.'
+            },
+            showTooltipWordCount: {
+                name: 'إظهار عدد الكلمات في التلميحات',
+                desc: 'عرض عدد الكلمات في التلميحات عند تفعيل عدد الكلمات.'
+            },
+            resetPaneSeparator: {
+                name: 'إعادة تعيين موضع فاصل اللوحة',
+                desc: 'إعادة تعيين الفاصل القابل للسحب بين لوحة التنقل ولوحة القائمة إلى الموضع الافتراضي.',
+                buttonText: 'إعادة تعيين الفاصل',
+                notice: 'تم إعادة تعيين موضع الفاصل. أعد تشغيل Obsidian أو أعد فتح Notebook Navigator للتطبيق.'
+            },
+            importAndExportSettings: {
+                name: 'استيراد وتصدير الإعدادات',
+                desc: 'تصدير أو استيراد إعدادات Notebook Navigator بصيغة JSON. يؤدي الاستيراد إلى استبدال جميع الإعدادات.',
+                importButtonText: 'استيراد',
+                exportButtonText: 'تصدير',
+                import: {
+                    modalTitle: 'استيراد الإعدادات',
+                    fileButtonName: 'استيراد من ملف',
+                    fileButtonDesc: 'تحميل ملف JSON من القرص.',
+                    fileButtonText: 'استيراد من ملف',
+                    editorName: 'JSON',
+                    editorDesc: 'الصق أو عدّل JSON أدناه. الإعدادات غير المضمنة تُعاد إلى القيم الافتراضية.',
+                    placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
+                    confirmButtonText: 'استيراد',
+                    confirmTitle: 'استيراد الإعدادات؟',
+                    confirmMessage: 'سيؤدي الاستيراد إلى استبدال إعدادات Notebook Navigator الحالية.',
+                    backupToggleName: 'حفظ الإعدادات الحالية في جذر الخزنة قبل الاستيراد',
+                    backupToggleDesc: 'ينشئ ملف JSON مختومًا بالوقت في جذر الخزنة.',
+                    successWithBackupNotice: 'تم استيراد الإعدادات. حُفظت الإعدادات السابقة في {path}.',
+                    backupError: 'تعذّر حفظ الإعدادات الحالية: {message}',
+                    successNotice: 'تم استيراد الإعدادات.',
+                    errorNotice: 'فشل استيراد الإعدادات: {message}',
+                    fileReadError: 'تعذّر قراءة الملف: {message}'
+                },
+                export: {
+                    modalTitle: 'تصدير الإعدادات',
+                    editorName: 'JSON',
+                    editorDesc: 'يتم تضمين الإعدادات المختلفة عن القيم الافتراضية فقط.',
+                    placeholder: '{}',
+                    copyButtonText: 'نسخ إلى الحافظة',
+                    downloadButtonText: 'تنزيل',
+                    copyNotice: 'تم نسخ الإعدادات إلى الحافظة.',
+                    downloadNotice: 'تم تصدير الإعدادات.',
+                    downloadError: 'فشل تنزيل الإعدادات: {message}'
+                }
+            },
+            resetAllSettings: {
+                name: 'إعادة تعيين جميع الإعدادات',
+                desc: 'إعادة تعيين جميع إعدادات Notebook Navigator إلى القيم الافتراضية.',
+                buttonText: 'إعادة تعيين جميع الإعدادات',
+                confirmTitle: 'إعادة تعيين جميع الإعدادات؟',
+                confirmMessage: 'سيؤدي هذا إلى إعادة تعيين جميع إعدادات Notebook Navigator إلى القيم الافتراضية. لا يمكن التراجع عن ذلك.',
+                confirmButtonText: 'إعادة تعيين جميع الإعدادات',
+                notice: 'تمت إعادة تعيين جميع الإعدادات. أعد تشغيل Obsidian أو أعد فتح Notebook Navigator للتطبيق.',
+                error: 'فشل إعادة تعيين الإعدادات.'
+            },
+            multiSelectModifier: {
+                name: 'معدل التحديد المتعدد',
+                desc: 'اختر مفتاح التعديل الذي يبدل التحديد المتعدد. عند اختيار Option/Alt، النقر مع Cmd/Ctrl يفتح الملاحظات في علامة تبويب جديدة.',
+                options: {
+                    cmdCtrl: 'النقر مع Cmd/Ctrl',
+                    optionAlt: 'النقر مع Option/Alt'
+                }
+            },
+            enterToOpenFiles: {
+                name: 'اضغط Enter لفتح الملفات',
+                desc: 'فتح الملفات فقط عند الضغط على Enter أثناء التنقل بلوحة المفاتيح في القائمة. على macOS، يمنع ذلك Enter من إعادة تسمية الملفات.'
+            },
+            shiftEnterAction: {
+                name: 'Shift+Enter',
+                desc: 'اختر ما إذا كان Shift+Enter يفتح الملف المحدد أو يعيد تسميته.'
+            },
+            cmdEnterAction: {
+                name: 'Cmd+Enter',
+                desc: 'اختر ما إذا كان Cmd+Enter يفتح الملف المحدد أو يعيد تسميته.'
+            },
+            ctrlEnterAction: {
+                name: 'Ctrl+Enter',
+                desc: 'اختر ما إذا كان Ctrl+Enter يفتح الملف المحدد أو يعيد تسميته.'
+            },
+            mouseBackForwardAction: {
+                name: 'أزرار الرجوع/التقدم في الفأرة',
+                desc: 'الإجراء لأزرار الرجوع والتقدم في الفأرة على سطح المكتب.',
+                options: {
+                    systemDefault: 'استخدام الإعداد الافتراضي للنظام',
+                    singlePaneSwitch: 'تبديل اللوحات (لوحة واحدة)',
+                    history: 'التنقل في السجل'
+                }
+            },
+            showFileTypes: {
+                name: 'إظهار أنواع الملفات (ملف تعريف الخزنة)',
+                desc: 'تصفية أنواع الملفات المعروضة في المتصفح. أنواع الملفات غير المدعومة من Obsidian قد تفتح في تطبيقات خارجية.',
+                options: {
+                    documents: 'مستندات (.md, .canvas, .base)',
+                    supported: 'مدعومة (تفتح في Obsidian)',
+                    all: 'الكل (قد تفتح خارجيًا)'
+                }
+            },
+            homepage: {
+                name: 'الصفحة الرئيسية',
+                desc: 'اختر ما يفتحه Notebook Navigator تلقائيًا عند بدء التشغيل.',
+                current: 'الحالي: {path}',
+                chooseButton: 'اختيار ملف',
+                options: {
+                    none: 'لا شيء',
+                    file: 'ملف',
+                    dailyNote: 'ملاحظة يومية',
+                    weeklyNote: 'ملاحظة أسبوعية',
+                    monthlyNote: 'ملاحظة شهرية',
+                    quarterlyNote: 'ملاحظة ربع سنوية',
+                    yearlyNote: 'ملاحظة سنوية'
+                },
+                file: {
+                    name: 'الصفحة الرئيسية: ملف بدء التشغيل',
+                    empty: 'لم يتم اختيار ملف'
+                },
+                createMissing: {
+                    name: 'الصفحة الرئيسية: إنشاء ملاحظة إذا كانت مفقودة',
+                    desc: 'إنشاء الملاحظة الدورية عند بدء التشغيل أو عبر الأمر إذا لم تكن موجودة.'
+                }
+            },
+            hideNotesWithPropertyRules: {
+                name: 'إخفاء الملاحظات بقواعد الخصائص (ملف تعريف الخزنة)',
+                desc: 'قائمة مفصولة بفاصلة من قواعد خصائص البيانات الأمامية. استخدم إدخالات `key` أو `key=value` (مثل status=done, published=true, archived).',
+                placeholder: 'status=done, published=true, archived'
+            },
+            hideFiles: {
+                name: 'إخفاء الملفات (ملف تعريف الخزنة)',
+                desc: 'قائمة أنماط أسماء الملفات مفصولة بفاصلة للإخفاء. يدعم أحرف البدل * والمسارات / (مثل temp-*, *.png, /assets/*).',
+                placeholder: 'مؤقت-*, *.png, /assets/*'
+            },
+            vaultProfiles: {
+                name: 'ملف تعريف الخزنة',
+                desc: 'تخزن ملفات التعريف رؤية أنواع الملفات والملفات المخفية والمجلدات المخفية والوسوم المخفية وقواعد الخصائص للملاحظات المخفية والاختصارات ولافتة التنقل. بدّل ملفات التعريف من هنا أو من مبدّل ملف تعريف الخزنة في لوحة التنقل.',
+                defaultName: 'افتراضي',
+                addButton: 'إضافة ملف تعريف',
+                editProfilesButton: 'تحرير ملفات التعريف',
+                addProfileOption: 'إضافة ملف تعريف...',
+                applyButton: 'تطبيق',
+                deleteButton: 'حذف ملف التعريف',
+                addModalTitle: 'إضافة ملف تعريف',
+                editProfilesModalTitle: 'تحرير ملفات التعريف',
+                addModalPlaceholder: 'اسم ملف التعريف',
+                deleteModalTitle: 'حذف {name}',
+                deleteModalMessage:
+                    'إزالة {name}؟ سيتم حذف مرشحات الملفات والمجلدات والوسوم والملاحظات المستندة إلى الخصائص المحفوظة في ملف التعريف هذا.',
+                moveUp: 'تحريك لأعلى',
+                moveDown: 'تحريك لأسفل',
+                errors: {
+                    emptyName: 'أدخل اسم ملف التعريف',
+                    duplicateName: 'اسم ملف التعريف موجود بالفعل'
+                }
+            },
+            vaultProfileSwitcher: {
+                name: 'مبدّل ملف تعريف الخزنة',
+                desc: 'اختر مكان عرض مبدّل ملف تعريف الخزنة.',
+                options: {
+                    header: 'عرض في الرأس',
+                    navigation: 'عرض في لوحة التنقل'
+                }
+            },
+            hideFolders: {
+                name: 'إخفاء المجلدات (ملف تعريف الخزنة)',
+                desc: 'قائمة مفصولة بفاصلة من المجلدات لإخفائها. أنماط الاسم: assets* (المجلدات التي تبدأ بـ assets)، *_temp (التي تنتهي بـ _temp). أنماط المسار: /archive (الأرشيف الجذري فقط)، /res* (المجلدات الجذرية التي تبدأ بـ res)، /*/temp (مجلدات temp بمستوى واحد)، /projects/* (جميع المجلدات داخل projects).',
+                placeholder: 'قوالب, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'استبعاد المجلدات من ملاحظات المجلدات الفرعية (ملف تعريف الخزنة)',
+                desc: 'قائمة مفصولة بفواصل للمجلدات التي يتم تجاهلها عند جمع الملاحظات من المجلدات الفرعية. تبقى المجلدات مرئية، ويظل تحديدها يعرض ملاحظاتها. تستخدم نفس أنماط إخفاء المجلدات.',
+                placeholder: 'يوميات, موارد, /archive'
+            },
+            showFileDate: {
+                name: 'إظهار التاريخ',
+                desc: 'عرض التاريخ أسفل أسماء الملاحظات.'
+            },
+            dateWhenSortingByName: {
+                name: 'عند الترتيب حسب الاسم',
+                desc: 'التاريخ المعروض عند ترتيب الملاحظات أبجديًا.',
+                options: {
+                    created: 'تاريخ الإنشاء',
+                    modified: 'تاريخ التعديل'
+                }
+            },
+            showFileTags: {
+                name: 'إظهار وسوم الملفات',
+                desc: 'عرض وسوم قابلة للنقر في عناصر الملفات.'
+            },
+            showFullTagPaths: {
+                name: 'إظهار مسارات الوسوم الكاملة',
+                desc: "عرض مسارات تسلسل الوسوم الكاملة. عند التمكين: 'ai/openai'، 'work/projects/2024'. عند التعطيل: 'openai'، '2024'."
+            },
+            colorFileTags: {
+                name: 'تلوين وسوم الملفات',
+                desc: 'تطبيق ألوان الوسوم على شارات الوسوم في عناصر الملفات.'
+            },
+            showColoredTagsFirst: {
+                name: 'إظهار الوسوم الملونة أولاً',
+                desc: 'ترتيب الوسوم الملونة قبل الوسوم الأخرى في عناصر الملفات.'
+            },
+            showFileTagsInCompactMode: {
+                name: 'إظهار وسوم الملفات في الوضع المضغوط',
+                desc: 'عرض الوسوم عند إخفاء التاريخ والمعاينة والصورة.'
+            },
+            showFileProperties: {
+                name: 'إظهار خصائص الملفات',
+                desc: 'عرض الخصائص في عناصر الملفات. استخدم نافذة رؤية مفاتيح الخصائص لاختيار الخصائص المعروضة.'
+            },
+            colorFileProperties: {
+                name: 'تلوين خصائص الملفات',
+                desc: 'تطبيق ألوان الخصائص على شارات الخصائص في عناصر الملفات.'
+            },
+            showColoredPropertiesFirst: {
+                name: 'إظهار الخصائص الملونة أولاً',
+                desc: 'ترتيب الخصائص الملونة قبل الخصائص الأخرى في عناصر الملفات.'
+            },
+            showFilePropertiesInCompactMode: {
+                name: 'إظهار الخصائص في الوضع المضغوط',
+                desc: 'عرض الخصائص عند تفعيل الوضع المضغوط.'
+            },
+            textCountType: {
+                name: 'نوع العدد',
+                desc: 'اختر أي أعداد نصية تظهر في عناصر الملفات.',
+                options: {
+                    none: 'لا شيء',
+                    words: 'عدد الكلمات',
+                    characters: 'عدد الأحرف',
+                    both: 'عدد الكلمات والأحرف'
+                }
+            },
+            textCountPlacement: {
+                name: 'الموضع',
+                desc: 'اختر مكان ظهور الأعداد النصية.',
+                options: {
+                    title: 'في العنوان',
+                    property: 'كخاصية'
+                }
+            },
+            characterCountSpaces: {
+                name: 'عدد الأحرف',
+                desc: 'اختر ما إذا كانت المسافات تُحتسب ضمن عدد الأحرف.',
+                options: {
+                    include: 'مع المسافات',
+                    exclude: 'بدون المسافات'
+                }
+            },
+            wordCountTargetProperty: {
+                name: 'خاصية الهدف',
+                desc: 'مفتاح خاصية البيانات الأمامية الذي يحتوي على عدد الكلمات المستهدف. اتركه فارغًا لإخفاء الأهداف.'
+            },
+            showTargetPercentage: {
+                name: 'إظهار نسبة الهدف',
+                desc: 'عرض نسبة التقدم فقط عند توفر عدد كلمات مستهدف.'
+            },
+            textCountActiveNotice: {
+                title: 'العدّ لا يزال مفعّلًا',
+                summary: 'لا يزال عدد الكلمات أو الأحرف يُحسب لجميع الملاحظات لأن العناصر التالية تستخدمه:',
+                more: 'و{count} أخرى',
+                reasons: {
+                    appearance: 'مظهر الملفات',
+                    'group-header': 'رأس مجموعة'
+                },
+                scopes: {
+                    folder: 'المجلد: {name}',
+                    tag: 'الوسم: #{name}',
+                    property: 'الخاصية: {name}'
+                }
+            },
+            propertyKeys: {
+                name: 'مفاتيح الخصائص (ملف تعريف الخزنة)',
+                desc: 'مفاتيح خصائص البيانات الأمامية، مع إمكانية التحكم في رؤية كل مفتاح للتنقل وقائمة الملفات.',
+                addButtonTooltip: 'تكوين مفاتيح الخصائص',
+                noneConfigured: 'لم يتم تكوين أي خصائص',
+                singleConfigured: 'خاصية واحدة مكوّنة: {properties}',
+                multipleConfigured: '{count} من الخصائص مكوّنة: {properties}'
+            },
+            showPropertiesOnSeparateRows: {
+                name: 'إظهار الخصائص في صفوف منفصلة',
+                desc: 'عرض كل خاصية في صف منفصل.'
+            },
+            linkPropertyPillsToNotes: {
+                name: 'ربط شارات الخصائص بالملاحظات',
+                desc: 'انقر على شارة خاصية لفتح الملاحظة المرتبطة.'
+            },
+            linkPropertyPillsToUrls: {
+                name: 'ربط شارات الخصائص بالروابط',
+                desc: 'انقر على شارة خاصية لفتح الرابط المرتبط.'
+            },
+            dateFormat: {
+                name: 'تنسيق التاريخ',
+                desc: 'تنسيق عرض التواريخ (يستخدم تنسيق Moment).',
+                placeholder: 'D MMM YYYY',
+                help: 'التنسيقات الشائعة:\nD MMM YYYY = 25 مايو 2022\nDD/MM/YYYY = 25/05/2022\nYYYY-MM-DD = 2022-05-25\n\nالرموز:\nYYYY/YY = السنة\nMMMM/MMM/MM = الشهر\nDD/D = اليوم\ndddd/ddd = يوم الأسبوع',
+                helpTooltip: 'تنسيق باستخدام Moment',
+                momentLinkText: 'تنسيق Moment'
+            },
+            timeFormat: {
+                name: 'تنسيق الوقت',
+                desc: 'تنسيق عرض الأوقات (يستخدم تنسيق Moment).',
+                placeholder: 'h:mm a',
+                help: 'التنسيقات الشائعة:\nh:mm a = 2:30 م (12 ساعة)\nHH:mm = 14:30 (24 ساعة)\nh:mm:ss a = 2:30:45 م\nHH:mm:ss = 14:30:45\n\nالرموز:\nHH/H = 24 ساعة\nhh/h = 12 ساعة\nmm = الدقائق\nss = الثواني\na = ص/م',
+                helpTooltip: 'تنسيق باستخدام Moment',
+                momentLinkText: 'تنسيق Moment'
+            },
+            showNotePreview: {
+                name: 'إظهار معاينة الملاحظة',
+                desc: 'عرض نص المعاينة أسفل أسماء الملاحظات.'
+            },
+            skipHeadingsInPreview: {
+                name: 'تخطي العناوين في المعاينة',
+                desc: 'تخطي سطور العناوين عند إنشاء نص المعاينة.'
+            },
+            skipCodeBlocksInPreview: {
+                name: 'تخطي كتل الكود في المعاينة',
+                desc: 'تخطي كتل الكود عند إنشاء نص المعاينة.'
+            },
+            skipCalloutsInPreview: {
+                name: 'تخطي التنبيهات في المعاينة',
+                desc: 'تخطي كتل التنبيه عند إنشاء نص المعاينة.'
+            },
+            stripHtmlInPreview: {
+                name: 'إزالة HTML من المعاينات',
+                desc: 'إزالة علامات HTML من نص المعاينة. قد يؤثر على الأداء في الملاحظات الكبيرة.'
+            },
+            stripLatexInPreview: {
+                name: 'إزالة LaTeX من المعاينات',
+                desc: 'إزالة تعبيرات LaTeX المضمنة والكتلية من نص المعاينة.'
+            },
+            previewProperties: {
+                name: 'خصائص المعاينة',
+                desc: 'قائمة مفصولة بفاصلة من خصائص البيانات الأمامية للتحقق من نص المعاينة. سيتم استخدام أول خاصية تحتوي على نص.',
+                placeholder: 'summary, description, abstract'
+            },
+            fallbackToNoteContent: {
+                name: 'الرجوع إلى محتوى الملاحظة',
+                desc: 'عرض محتوى الملاحظة كمعاينة عندما لا تحتوي أي من الخصائص المحددة على نص.'
+            },
+            previewRows: {
+                name: 'صفوف المعاينة',
+                desc: 'عدد الصفوف المعروضة لنص المعاينة.',
+                options: {
+                    '1': 'صف واحد',
+                    '2': 'صفان',
+                    '3': '3 صفوف',
+                    '4': '4 صفوف',
+                    '5': '5 صفوف'
+                }
+            },
+            titleRows: {
+                name: 'صفوف العنوان',
+                desc: 'عدد الصفوف المعروضة لعناوين الملاحظات.',
+                options: {
+                    '1': 'صف واحد',
+                    '2': 'صفان',
+                    '3': '3 صفوف'
+                }
+            },
+            useFolderColor: {
+                name: 'استخدام لون المجلد',
+                desc: 'تلوين عناوين الملاحظات وأيقونات الملفات بلون المجلد الأصلي عند عدم تعيين لون ملف مخصص. الأولوية: لون الملف المخصص > لون المجلد > اللون الافتراضي.'
+            },
+            showFeatureImage: {
+                name: 'إظهار الصورة المميزة',
+                desc: 'عرض صورة مصغرة لأول صورة موجودة في الملاحظة.'
+            },
+            forceSquareFeatureImage: {
+                name: 'فرض صورة مميزة مربعة',
+                desc: 'عرض الصور المميزة كصور مصغرة مربعة.'
+            },
+            featureImageProperties: {
+                name: 'خصائص الصورة',
+                desc: 'قائمة مفصولة بفاصلة من خصائص البيانات الأمامية للتحقق منها أولاً. يستخدم أول صورة في محتوى markdown كبديل.',
+                placeholder: 'thumbnail, featureResized, feature'
+            },
+            featureImageExcludeProperties: {
+                name: 'استبعاد الملاحظات ذات الخصائص',
+                desc: 'قائمة مفصولة بفاصلة من خصائص البيانات الأمامية. الملاحظات التي تحتوي على أي من هذه الخصائص لا تخزن الصور المميزة.',
+                placeholder: 'private, confidential'
+            },
+            featureImageDisplaySize: {
+                name: 'حجم عرض الصورة المميزة',
+                desc: 'الحجم الأقصى المعروض للصور المميزة في قوائم الملاحظات.',
+                options: {
+                    '64': '64 px',
+                    '96': '96 px',
+                    '128': '128 px'
+                }
+            },
+            featureImagePixelSize: {
+                name: 'دقة بكسل الصورة المميزة',
+                desc: 'الدقة المستخدمة عند إنشاء صور مصغرة محفوظة للصور المميزة. قم بزيادتها إذا بدت المعاينات الأكبر ضبابية.',
+                options: {
+                    '256x144': '256 x 144 px',
+                    '384x216': '384 x 216 px',
+                    '512x288': '512 x 288 px'
+                }
+            },
+
+            downloadExternalFeatureImages: {
+                name: 'تنزيل الصور الخارجية',
+                desc: 'تنزيل الصور عن بُعد والصور المصغرة من YouTube للصور المميزة.'
+            },
+            hideExportedPreviewImages: {
+                name: 'إخفاء صور المعاينة المُصدَّرة',
+                desc: 'إخفاء ملفات PNG لمعاينة الرسومات المُصدَّرة. فعِّل "إظهار العناصر المخفية" لعرضها.'
+            },
+            drawingIntegrationInfo: {
+                intro: 'يعرض Notebook Navigator ملفات PNG المُصدَّرة من Excalidraw كمعاينات للرسومات.',
+                items: [
+                    'في **إعدادات Excalidraw**، افتح **Embedding Excalidraw into your Notes and Exporting**، ثم **Export Settings**، ثم **Auto-export Settings**.',
+                    'فعِّل **Auto-export PNG**. اختياريًا فعِّل **Export both dark- and light-themed image**.',
+                    'يبحث Notebook Navigator عن **Drawing.excalidraw.png** أو **Drawing.excalidraw.dark.png** أو **Drawing.excalidraw.light.png**.',
+                    'عند تفعيل **إخفاء صور المعاينة المُصدَّرة**، تظهر ملفات PNG فقط عند تفعيل **إظهار العناصر المخفية** أيضًا.'
+                ]
+            },
+            showRootFolder: {
+                name: 'إظهار المجلد الجذري',
+                desc: 'عرض اسم الخزنة كمجلد جذري في الشجرة.'
+            },
+            showFolderIcons: {
+                name: 'إظهار أيقونات المجلدات',
+                desc: 'عرض الأيقونات بجانب المجلدات في لوحة التنقل.'
+            },
+            inheritFolderColors: {
+                name: 'توريث ألوان المجلدات',
+                desc: 'المجلدات الفرعية ترث الألوان من المجلدات الأصلية.'
+            },
+            folderSortOrder: {
+                name: 'ترتيب فرز المجلدات',
+                desc: 'انقر بزر الماوس الأيمن على أي مجلد لتعيين ترتيب فرز مختلف لمحتوياته.',
+                options: {
+                    alphaAsc: 'من أ إلى ي',
+                    alphaDesc: 'من ي إلى أ'
+                }
+            },
+            showFileCount: {
+                name: 'إظهار عدد الملفات',
+                desc: 'عرض عدد الملفات بجانب المجلدات والوسوم والخصائص.'
+            },
+            showShortcutAndRecentItemIcons: {
+                name: 'إظهار أيقونات للاختصارات والعناصر الحديثة',
+                desc: 'عرض أيقونات بجانب العناصر في قسمَي الاختصارات والحديثة.'
+            },
+            interfaceIcons: {
+                name: 'أيقونات الواجهة',
+                desc: 'تحرير أيقونات شريط الأدوات والمجلدات والوسوم والخصائص والعناصر المثبتة والبحث والفرز.',
+                buttonText: 'تحرير الأيقونات'
+            },
+            applyColorToIconsOnly: {
+                name: 'تطبيق اللون على الأيقونات فقط',
+                desc: 'عند التمكين، تطبق الألوان المخصصة على الأيقونات فقط. عند التعطيل، تطبق الألوان على الأيقونات وتسميات النص.'
+            },
+            navRainbowMode: {
+                name: 'وضع ألوان قوس قزح (ملف تعريف الخزنة)',
+                desc: 'تطبيق ألوان قوس قزح في لوحة التنقل.',
+                options: {
+                    off: 'إيقاف',
+                    textColor: 'لون النص',
+                    backgroundColor: 'لون الخلفية'
+                }
+            },
+            navRainbowFirstColor: {
+                name: 'اللون الأول',
+                desc: 'اللون الأول في تدرج قوس قزح.'
+            },
+            navRainbowLastColor: {
+                name: 'اللون الأخير',
+                desc: 'اللون الأخير في تدرج قوس قزح.'
+            },
+            navRainbowTransitionStyle: {
+                name: 'نمط الانتقال',
+                desc: 'الاستيفاء المستخدم بين اللون الأول والأخير.',
+                options: {
+                    hue: 'درجة اللون',
+                    rgb: 'RGB'
+                }
+            },
+            navRainbowApplyToShortcuts: {
+                name: 'تطبيق على الاختصارات',
+                desc: 'تطبيق ألوان قوس قزح على الاختصارات.'
+            },
+            navRainbowApplyToRecentItems: {
+                name: 'تطبيق على العناصر الأخيرة',
+                desc: 'تطبيق ألوان قوس قزح على العناصر الأخيرة.'
+            },
+            navRainbowApplyToFolders: {
+                name: 'تطبيق على المجلدات',
+                desc: 'تطبيق ألوان قوس قزح على المجلدات.'
+            },
+            navRainbowFolderScope: {
+                name: 'نطاق المجلدات',
+                desc: 'تحديد مستويات المجلدات التي تبدأ تعيينات الألوان.',
+                options: {
+                    root: 'المستوى الجذر',
+                    child: 'المستوى الفرعي',
+                    all: 'كل مستوى'
+                }
+            },
+            navRainbowApplyToTags: {
+                name: 'تطبيق على الوسوم',
+                desc: 'تطبيق ألوان قوس قزح على الوسوم.'
+            },
+            navRainbowTagScope: {
+                name: 'نطاق الوسوم',
+                desc: 'تحديد مستويات الوسوم التي تبدأ تعيينات الألوان.',
+                options: {
+                    root: 'المستوى الجذر',
+                    child: 'المستوى الفرعي',
+                    all: 'كل مستوى'
+                }
+            },
+            navRainbowApplyToProperties: {
+                name: 'تطبيق على الخصائص',
+                desc: 'تطبيق ألوان قوس قزح على الخصائص.'
+            },
+            navRainbowConsistentBrightness: {
+                name: 'سطوع متسق عبر الألوان', // (English: Consistent brightness across hues)
+                desc: 'استيفاء السطوع بين لون البداية ولون النهاية أثناء انتقالات درجة اللون.' // (English: Interpolates brightness between the start and end colors during hue transitions.)
+            },
+            navRainbowSeparateThemeColors: {
+                name: 'فصل ألوان الوضع الفاتح والداكن', // (English: Separate light and dark mode colors)
+                desc: 'استخدام ألوان قوس قزح مختلفة للوضع الفاتح والوضع الداكن.' // (English: Use different rainbow colors for light mode and dark mode.)
+            },
+            navRainbowCopyLightToDark: 'نسخ لون الوضع الفاتح إلى الوضع الداكن', // (English: Copy light mode color to dark mode)
+            navRainbowPropertyScope: {
+                name: 'نطاق الخصائص',
+                desc: 'تحديد مستويات الخصائص التي تبدأ تعيينات الألوان.',
+                options: {
+                    root: 'المستوى الجذر',
+                    child: 'المستوى الفرعي',
+                    all: 'كل مستوى'
+                }
+            },
+            collapseItems: {
+                name: 'طي العناصر',
+                desc: 'اختر ما يؤثر عليه زر توسيع/طي الكل.',
+                options: {
+                    all: 'الكل',
+                    foldersOnly: 'المجلدات فقط',
+                    tagsOnly: 'الوسوم فقط',
+                    propertiesOnly: 'الخصائص فقط'
+                }
+            },
+            keepSelectedItemExpanded: {
+                name: 'إبقاء العنصر المحدد موسعًا',
+                desc: 'عند الطي، إبقاء العنصر المحدد وآبائه موسعين.'
+            },
+            excludeVaultRootFromCollapse: {
+                name: 'تخطي جذر الخزنة عند الطي',
+                desc: 'عند طي كل العناصر، اترك مجلد جذر الخزنة في حالته الحالية.'
+            },
+            treeIndentation: {
+                name: 'مسافة بادئة الشجرة',
+                desc: 'ضبط عرض المسافة البادئة للمجلدات والوسوم والخصائص المتداخلة (بالبكسل).'
+            },
+            navItemHeight: {
+                name: 'ارتفاع العنصر',
+                desc: 'ضبط ارتفاع المجلدات والوسوم والخصائص في لوحة التنقل (بالبكسل).'
+            },
+            navItemHeightScaleText: {
+                name: 'تحجيم النص مع ارتفاع العنصر',
+                desc: 'تقليل حجم نص التنقل عند تقليل ارتفاع العنصر.'
+            },
+            showIndentGuides: {
+                name: 'إظهار خطوط المسافة البادئة',
+                desc: 'عرض خطوط المسافة البادئة للمجلدات والوسوم والخصائص المتداخلة.'
+            },
+            navCountLeaderStyle: {
+                name: 'إظهار علامات التوصيل',
+                desc: 'عرض نقاط أو شرطات أو خط بين أسماء العناصر وعدد الملفات.',
+                options: {
+                    none: 'بدون',
+                    dots: 'نقاط (...)',
+                    dashes: 'شرطات (---)',
+                    line: 'خط'
+                }
+            },
+            rootItemSpacing: {
+                name: 'تباعد العناصر الجذرية',
+                desc: 'التباعد بين المجلدات والوسوم والخصائص على مستوى الجذر (بالبكسل).'
+            },
+            showTags: {
+                name: 'إظهار الوسوم',
+                desc: 'عرض قسم الوسوم في المتصفح.'
+            },
+            showTagIcons: {
+                name: 'إظهار أيقونات الوسوم',
+                desc: 'عرض الأيقونات بجانب الوسوم في لوحة التنقل.'
+            },
+            inheritTagColors: {
+                name: 'وراثة ألوان الوسوم',
+                desc: 'تَرِث الوسوم الفرعية اللون من الوسوم الأصلية.'
+            },
+            tagSortOrder: {
+                name: 'ترتيب فرز الوسوم',
+                desc: 'انقر بزر الماوس الأيمن على أي وسم لتعيين ترتيب فرز مختلف لمحتوياته.',
+                options: {
+                    alphaAsc: 'من أ إلى ي',
+                    alphaDesc: 'من ي إلى أ',
+                    frequency: 'التكرار',
+                    lowToHigh: 'من الأقل إلى الأعلى',
+                    highToLow: 'من الأعلى إلى الأقل'
+                }
+            },
+            showTagsFolder: {
+                name: 'إظهار مجلد الوسوم',
+                desc: 'عرض "الوسوم" كمجلد قابل للطي.'
+            },
+            showUntaggedNotes: {
+                name: 'إظهار الملاحظات بدون وسوم',
+                desc: 'عرض عنصر "بدون وسم" للملاحظات التي ليس لها أي وسوم.'
+            },
+            filterTagsBySelection: {
+                name: 'تصفية الوسوم حسب التحديد',
+                desc: 'إظهار الوسوم التي تظهر في الملاحظات ضمن المجلد أو الخاصية المحددة فقط.'
+            },
+            keepEmptyTagsProperty: {
+                name: 'الاحتفاظ بخاصية الوسوم بعد إزالة آخر وسم',
+                desc: 'الاحتفاظ بخاصية الوسوم في البيانات الأمامية عند إزالة جميع الوسوم. عند التعطيل، يتم حذف خاصية الوسوم من البيانات الأمامية.'
+            },
+            showProperties: {
+                name: 'إظهار الخصائص',
+                desc: 'عرض قسم الخصائص في المتصفح.',
+                propertyKeysInfoPrefix: 'تكوين الخصائص في ',
+                propertyKeysInfoLinkText: 'عام > مفاتيح الخصائص',
+                propertyKeysInfoSuffix: ''
+            },
+            showPropertyIcons: {
+                name: 'إظهار أيقونات الخصائص',
+                desc: 'عرض الأيقونات بجانب الخصائص في لوحة التنقل.'
+            },
+            inheritPropertyColors: {
+                name: 'وراثة ألوان الخصائص',
+                desc: 'قيم الخصائص ترث اللون والخلفية من مفتاح الخاصية.'
+            },
+            propertySortOrder: {
+                name: 'ترتيب فرز الخصائص',
+                desc: 'انقر بزر الماوس الأيمن على أي خاصية لتعيين ترتيب فرز مختلف لقيمها.',
+                options: {
+                    alphaAsc: 'أ إلى ي',
+                    alphaDesc: 'ي إلى أ',
+                    frequency: 'التكرار',
+                    lowToHigh: 'من الأقل إلى الأعلى',
+                    highToLow: 'من الأعلى إلى الأقل'
+                }
+            },
+            showPropertiesFolder: {
+                name: 'إظهار مجلد الخصائص',
+                desc: 'عرض "الخصائص" كمجلد قابل للطي.'
+            },
+            filterPropertiesBySelection: {
+                name: 'تصفية الخصائص حسب التحديد',
+                desc: 'إظهار الخصائص التي تظهر في الملاحظات ضمن المجلد أو الوسم المحدد فقط.'
+            },
+            hideTags: {
+                name: 'إخفاء الوسوم (ملف تعريف الخزنة)',
+                desc: 'قائمة مفصولة بفاصلة من أنماط الوسوم. أنماط الأسماء: وسم* (تبدأ بـ)، *وسم (تنتهي بـ). أنماط المسارات: أرشيف (الوسم وفروعه)، أرشيف/* (الفروع فقط)، مشاريع/*/مسودات (حرف بدل وسطي).',
+                placeholder: 'أرشيف*, *مسودة, مشاريع/*/قديم'
+            },
+            hideNotesWithTags: {
+                name: 'إخفاء الملاحظات ذات الوسوم (ملف تعريف الخزنة)',
+                desc: 'قائمة مفصولة بفاصلة من أنماط الوسوم. تُخفى الملاحظات التي تحتوي على وسوم مطابقة. أنماط الأسماء: وسم* (تبدأ بـ)، *وسم (تنتهي بـ). أنماط المسارات: أرشيف (الوسم وفروعه)، أرشيف/* (الفروع فقط)، مشاريع/*/مسودات (حرف بدل وسطي).',
+                placeholder: 'أرشيف*, *مسودة, مشاريع/*/قديم'
+            },
+            enableFolderNotes: {
+                name: 'تمكين ملاحظات المجلدات',
+                desc: 'المجلدات التي تحتوي على ملف ملاحظات مطابق تُعرض كروابط قابلة للنقر.'
+            },
+            folderNoteType: {
+                name: 'نوع ملاحظة المجلد الافتراضي',
+                desc: 'نوع ملاحظة المجلد المنشأة من قائمة السياق.',
+                options: {
+                    ask: 'السؤال عند الإنشاء',
+                    markdown: 'Markdown',
+                    canvas: 'لوحة بصرية',
+                    base: 'قاعدة'
+                }
+            },
+            folderNoteName: {
+                name: 'اسم ملاحظة المجلد',
+                desc: 'اسم ملاحظة المجلد بدون امتداد. استخدم {{folder}} لإدراج اسم المجلد، أو أدخل اسمًا ثابتًا مثل index.'
+            },
+            folderNoteTemplate: {
+                name: 'قالب ملاحظة المجلد',
+                desc: 'ملف قالب يُستخدم عند إنشاء ملاحظات المجلد. يمكن لقوالب Markdown استخدام Templater. تُنسخ قوالب Canvas وBase كمحتوى للملف. حدد موقع مجلد القوالب في عمليات الملفات والقوالب > قوالب.',
+                formatWarning: 'يجب أن يتطابق تنسيق القالب مع نوع ملاحظة المجلد المحدد: .md أو .canvas أو .base.'
+            },
+            folderNamesOpenFolderNotes: {
+                name: 'أسماء المجلدات تفتح ملاحظات المجلد',
+                desc: 'يؤدي النقر على اسم مجلد إلى فتح ملاحظة المجلد الخاصة به. عند الإيقاف، توفر ملاحظات المجلد بيانات وصفية للمجلد فقط مثل الاسم والأيقونة واللون.'
+            },
+            hideFolderNoteInList: {
+                name: 'إخفاء ملاحظات المجلدات في القائمة',
+                desc: 'إخفاء ملاحظات المجلدات من الظهور في قائمة الملفات.'
+            },
+            pinCreatedFolderNote: {
+                name: 'تثبيت ملاحظات المجلدات المنشأة',
+                desc: 'تثبيت ملاحظات المجلدات عند إنشائها من قائمة السياق.'
+            },
+            folderNoteOpenLocation: {
+                name: 'فتح ملاحظات المجلد في',
+                desc: 'اختر مكان فتح ملاحظات المجلد عند النقر على روابط ملاحظات المجلد.',
+                options: {
+                    currentTab: 'علامة التبويب الحالية',
+                    newTab: 'علامة تبويب جديدة',
+                    rightSidebar: 'الشريط الجانبي الأيمن'
+                }
+            },
+            showClosestFolderNoteInRightSidebar: {
+                name: 'الشريط الجانبي الأيمن: عرض أقرب ملاحظة مجلد',
+                desc: 'عند تحديد مجلد، يعرض الشريط الجانبي الأيمن تلقائيًا أقرب ملاحظة مجلد أصلية.'
+            },
+            confirmBeforeDelete: {
+                name: 'التأكيد قبل الحذف',
+                desc: 'إظهار مربع حوار تأكيد عند حذف الملاحظات أو المجلدات'
+            },
+            deleteAttachments: {
+                name: 'حذف المرفقات عند حذف الملفات',
+                desc: 'إزالة المرفقات المرتبطة ومعاينات الرسومات المُنشأة تلقائيًا إذا لم تكن مستخدمة في مكان آخر',
+                options: {
+                    ask: 'السؤال في كل مرة',
+                    always: 'دائمًا',
+                    never: 'أبدًا'
+                }
+            },
+            moveFileConflicts: {
+                name: 'تعارضات النقل',
+                desc: 'عند نقل ملف إلى مجلد يحتوي بالفعل على ملف بنفس الاسم. السؤال في كل مرة (إعادة تسمية، الكتابة فوق، إلغاء) أو إعادة التسمية دائمًا.',
+                options: {
+                    ask: 'السؤال في كل مرة',
+                    rename: 'إعادة التسمية دائمًا'
+                }
+            },
+            metadataCleanup: {
+                name: 'تنظيف البيانات الوصفية',
+                desc: 'إزالة البيانات الوصفية اليتيمة المتبقية عند حذف الملفات أو المجلدات أو الوسوم أو الخصائص أو نقلها أو إعادة تسميتها خارج Obsidian. يؤثر هذا فقط على ملف إعدادات Notebook Navigator.',
+                buttonText: 'تنظيف البيانات الوصفية',
+                error: 'فشل تنظيف الإعدادات',
+                loading: 'جارٍ فحص البيانات الوصفية...',
+                statusClean: 'لا توجد بيانات وصفية لتنظيفها',
+                statusCounts:
+                    'عناصر يتيمة: {folders} من المجلدات، {tags} من الوسوم، {properties} من الخصائص، {files} من الملفات، {pinned} من التثبيتات، {separators} من الفواصل'
+            },
+            rebuildCache: {
+                name: 'إعادة بناء الذاكرة المؤقتة',
+                desc: 'استخدم هذا إذا واجهت وسومًا مفقودة أو معاينات غير صحيحة أو صورًا مميزة مفقودة. يمكن أن يحدث هذا بعد تعارضات المزامنة أو الإغلاق غير المتوقع.',
+                buttonText: 'إعادة بناء الذاكرة المؤقتة',
+                error: 'فشل إعادة بناء الذاكرة المؤقتة',
+                indexingTitle: 'جارٍ فهرسة الخزنة...',
+                progress: 'جارٍ تحديث ذاكرة التخزين المؤقت لـ Notebook Navigator.'
+            },
+            iconPackManagement: {
+                downloadButton: 'تنزيل',
+                downloadingLabel: 'جارٍ التنزيل...',
+                removeButton: 'إزالة',
+                statusInstalled: 'تم التنزيل (الإصدار {version})',
+                statusNotInstalled: 'غير منزل',
+                versionUnknown: 'غير معروف',
+                downloadFailed: 'فشل تنزيل {name}. تحقق من الاتصال وحاول مرة أخرى.',
+                removeFailed: 'فشل إزالة {name}.',
+                infoNote:
+                    'حزم الأيقونات المنزلة تزامن حالة التثبيت عبر الأجهزة. تبقى حزم الأيقونات في قاعدة البيانات المحلية على كل جهاز؛ المزامنة تتبع فقط ما إذا كان يجب تنزيلها أو إزالتها. حزم الأيقونات تنزل من مستودع Notebook Navigator (https://github.com/johansan/notebook-navigator/tree/main/icon-assets).'
+            },
+            useFrontmatterMetadata: {
+                name: 'استخدام البيانات الأمامية',
+                desc: 'استخدام البيانات الأمامية لاسم الملاحظة والطوابع الزمنية والأيقونات والألوان'
+            },
+            frontmatterIconField: {
+                name: 'حقل الأيقونة',
+                desc: 'حقل البيانات الأمامية لأيقونات الملفات. اتركه فارغًا لاستخدام الأيقونات المخزنة في الإعدادات.',
+                placeholder: 'icon'
+            },
+            frontmatterColorField: {
+                name: 'حقل اللون',
+                desc: 'حقل البيانات الأمامية لألوان الملفات. اتركه فارغًا لاستخدام الألوان المخزنة في الإعدادات.',
+                placeholder: 'color'
+            },
+            frontmatterBackgroundField: {
+                name: 'حقل الخلفية',
+                desc: 'حقل البيانات الأمامية لألوان الخلفية. اتركه فارغًا لاستخدام ألوان الخلفية المخزنة في الإعدادات.',
+                placeholder: 'background'
+            },
+            migrateIconsAndColorsFromSettings: {
+                name: 'ترحيل الأيقونات والألوان من الإعدادات',
+                desc: 'مخزنة في الإعدادات: {icons} من الأيقونات، {colors} من الألوان.',
+                button: 'ترحيل',
+                buttonWorking: 'جارٍ الترحيل...',
+                noticeNone: 'لا توجد أيقونات أو ألوان ملفات مخزنة في الإعدادات.',
+                noticeDone: 'تم ترحيل {migratedIcons}/{icons} من الأيقونات، {migratedColors}/{colors} من الألوان.',
+                noticeFailures: 'إدخالات فاشلة: {failures}.',
+                noticeError: 'فشل الترحيل. تحقق من وحدة التحكم للتفاصيل.'
+            },
+            frontmatterNameFields: {
+                name: 'حقول الاسم',
+                desc: 'قائمة حقول البيانات الأمامية مفصولة بفواصل. يُستخدم أول قيمة غير فارغة. يعود لاسم الملف.',
+                placeholder: 'title, name'
+            },
+            frontmatterCreatedField: {
+                name: 'حقل طابع وقت الإنشاء',
+                desc: 'اسم حقل البيانات الأمامية لطابع وقت الإنشاء. اتركه فارغًا لاستخدام تاريخ نظام الملفات فقط.',
+                placeholder: 'created'
+            },
+            frontmatterModifiedField: {
+                name: 'حقل طابع وقت التعديل',
+                desc: 'اسم حقل البيانات الأمامية لطابع وقت التعديل. اتركه فارغًا لاستخدام تاريخ نظام الملفات فقط.',
+                placeholder: 'modified'
+            },
+            frontmatterTimestampFormat: {
+                name: 'تنسيق الطابع الزمني',
+                desc: 'التنسيق المستخدم لتحليل الطوابع الزمنية في البيانات الأمامية. اتركه فارغًا لاستخدام تحليل ISO 8601.',
+                helpTooltip: 'تنسيق باستخدام Moment',
+                momentLinkText: 'تنسيق Moment',
+                help: 'التنسيقات الشائعة:\nYYYY-MM-DD[T]HH:mm:ss → 2025-01-04T14:30:45\nYYYY-MM-DD[T]HH:mm:ssZ → 2025-08-07T16:53:39+02:00\nDD/MM/YYYY HH:mm:ss → 04/01/2025 14:30:45\nMM/DD/YYYY h:mm:ss a → 01/04/2025 2:30:45 PM'
+            },
+            supportDevelopment: {
+                name: 'دعم التطوير',
+                desc: 'إذا أحببت استخدام Notebook Navigator، يرجى التفكير في دعم تطويره المستمر.',
+                buttonText: '❤️ رعاية',
+                coffeeButton: '☕️ اشترِ لي قهوة'
+            },
+            markdownPointBanner: {
+                heading: 'هل تستخدم Canva أو Keynote أو PowerPoint؟',
+                atTop: {
+                    name: 'إظهار لافتة MarkdownPoint في الأعلى',
+                    desc: 'عند الإيقاف، تظهر اللافتة في موضع أدنى من صفحة الإعدادات.'
+                },
+                credit: 'من تطوير Johan Sanneblad',
+                messages: [
+                    { headline: 'اكتب شرائحك بـ Markdown.', subtext: 'اسحب النصوص والصور إلى حيث تريد.' },
+                    { headline: 'بديل مجاني لـ PowerPoint.', subtext: 'المشاركة والتعاون مجانيان أيضًا.' },
+                    { headline: 'أضف الحركة كما في Apple Motion.', subtext: 'استخدم الإطارات المفتاحية والمسارات والتحويلات.' },
+                    { headline: 'تعاون كما في Google Slides.', subtext: 'مع مؤشرات وتعليقات في الوقت الفعلي.' },
+                    { headline: 'شاهد نصوص كل الشرائح في مكان واحد.', subtext: 'افتح View > Outline وحرّرها بـ Markdown.' },
+                    { headline: 'حاذِ العناصر كما في Figma.', subtext: 'تصطف حسب المسافات والأحجام والزوايا.' },
+                    { headline: 'ميّز الكلمات بـ ==علامات التساوي==.', subtext: '**الغامق** و*المائل* يعملان تمامًا كما في Obsidian.' },
+                    { headline: 'صدّر عرضك فيديو بدقة 4K.', subtext: 'لا تحتاج إلى After Effects لتحريكه.' },
+                    { headline: 'ملاحظات المتحدث بـ Markdown أيضًا.', subtext: 'تُحفظ في ملف الشرائح نفسه.' },
+                    { headline: 'كل عرض تقديمي مجلد على حاسوبك.', subtext: 'لا تحتاج إلى حساب لإنشاء الشرائح.' },
+                    { headline: 'ضع الكود على شرائحك.', subtext: 'كتل الكود ملوّنة لـ 21 لغة برمجة.' },
+                    { headline: 'شارك عرضك برابط.', subtext: 'انشره على الإنترنت بحساب مجاني.' },
+                    { headline: 'تتبّع عروضك في Git.', subtext: 'العروض ملفات نصية بصيغة Markdown وYAML.' },
+                    { headline: 'أنشئ مخططات انسيابية من النص.', subtext: 'اكتب كود Mermaid واحصل على مخطط.' },
+                    { headline: 'احفظ عروضك في مجلد متزامن.', subtext: 'تعمل مع Dropbox وiCloud Drive وOneDrive.' },
+                    { headline: 'تصفّح السمات كما في Obsidian.', subtext: 'كل السمات مجانية وتُثبَّت بنقرة واحدة.' },
+                    { headline: 'مجاني للاستخدام الشخصي والتجاري.', subtext: 'نزّله لـ Mac أو Windows.' }
+                ]
+            },
+            checkForNewVersionOnStart: {
+                name: 'التحقق من إصدار جديد عند البدء',
+                desc: 'التحقق من إصدارات الإضافة الجديدة عند البدء وإظهار إشعار عند توفر تحديث. التحقق يحدث مرة واحدة يوميًا على الأكثر.',
+                status: 'إصدار جديد متاح: {version}'
+            },
+            startupDebugLogging: {
+                name: 'تسجيل تصحيح أخطاء بدء التشغيل',
+                desc: 'يكتب تشخيصات بدء التشغيل في ملف Markdown يحمل طابعًا زمنيًا في جذر الخزنة، ثم يتوقف بعد استقرار بدء التشغيل. قد تتم مزامنة الملف وقد يتضمن مسارات ملفات.'
+            },
+            whatsNew: {
+                name: 'الجديد في Notebook Navigator {version}',
+                desc: 'شاهد التحديثات والتحسينات الأخيرة',
+                buttonText: 'عرض التحديثات الأخيرة'
+            },
+            showReleaseNotes: {
+                name: 'عرض الجديد بعد التحديث',
+                desc: 'عطّل هذا الخيار لمنع فتح مربع حوار «الجديد» تلقائيًا بعد التحديثات.'
+            },
+            masteringVideo: {
+                name: 'إتقان Notebook Navigator (فيديو)',
+                desc: 'يغطي هذا الفيديو كل ما تحتاجه لتكون منتجاً في Notebook Navigator، بما في ذلك اختصارات لوحة المفاتيح والبحث والوسوم والتخصيص المتقدم.'
+            },
+            cacheStatistics: {
+                localCache: 'الذاكرة المؤقتة المحلية',
+                items: 'عناصر',
+                withTags: 'مع وسوم',
+                withPreviewText: 'مع نص معاينة',
+                withFeatureImage: 'مع صورة مميزة',
+                withMetadata: 'مع بيانات وصفية'
+            },
+            metadataInfo: {
+                successfullyParsed: 'تم التحليل بنجاح',
+                itemsWithName: 'عناصر مع اسم',
+                withCreatedDate: 'مع تاريخ الإنشاء',
+                withModifiedDate: 'مع تاريخ التعديل',
+                withIcon: 'مع أيقونة',
+                withColor: 'مع لون',
+                failedToParse: 'فشل التحليل',
+                createdDates: 'تواريخ الإنشاء',
+                modifiedDates: 'تواريخ التعديل',
+                checkTimestampFormat: 'تحقق من تنسيق الطابع الزمني.',
+                exportFailed: 'تصدير الأخطاء'
+            }
+        }
+    },
+    whatsNew: {
+        title: 'الجديد في Notebook Navigator',
+        openBannerImage: 'فتح صورة لافتة الإصدار',
+        supportMessage: 'إذا وجدت Notebook Navigator مفيدًا، يرجى التفكير في دعم تطويره.',
+        supportButton: 'اشترِ لي قهوة',
+        thanksButton: 'شكرًا!'
+    }
+};

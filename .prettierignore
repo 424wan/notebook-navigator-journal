@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+main.js
+*.js.map
+
+# Documentation
+docs/
+README.md
+
+# Obsidian
+.obsidian/
+*.obsidian/
+
+# Version control
+.git/
+.github/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+
+# Cache
+.cache/
+.eslintcache
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+
+# Large generated files
+package-lock.json
+yarn.lock
+
+# Minified files
+*.min.js
+*.min.css
+# Generated release language pack
+languages.json

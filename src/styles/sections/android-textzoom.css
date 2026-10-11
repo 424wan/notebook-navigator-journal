@@ -1,0 +1,78 @@
+/* Source: src/styles/sections/android-textzoom.css */
+
+/* ========================================================================
+   Android textZoom Compensation
+
+   Android WebView scales text via textZoom property. This affects font-size
+   and line-height at the rendering level. We detect the scale factor in JS
+   and set --nn-android-font-scale, then CSS compensates by dividing values
+   by that factor so Android scaling produces correct final sizes.
+
+   Font-size compensation is handled via inline styles in androidFontScale.ts.
+   Line-height compensation is handled here in CSS because the .nn-mobile class
+   redefines variables and would override inline styles on the outer container.
+   ======================================================================== */
+
+/* Override line-height variables with compensated values
+   Note: We use a reciprocal variable for division since calc(x / var) can have issues */
+.notebook-navigator-android .nn-mobile {
+    --nn-android-font-scale-reciprocal: calc(1 / var(--nn-android-font-scale, 1));
+    --nn-file-title-line-height: calc(var(--nn-file-title-line-height-mobile) * var(--nn-android-font-scale-reciprocal, 1));
+    --nn-file-single-text-line-height: calc(var(--nn-file-single-text-line-height-mobile) * var(--nn-android-font-scale-reciprocal, 1));
+    --nn-file-multiline-text-line-height: calc(
+        var(--nn-file-multiline-text-line-height-mobile) * var(--nn-android-font-scale-reciprocal, 1)
+    );
+    /* Note: Do NOT compensate icon size variables - they're used for SVG width/height
+       which Android doesn't scale. Only compensate font-size on emoji elements directly. */
+}
+
+/* Note counts in navigation pane */
+.notebook-navigator-android .nn-mobile .nn-navitem-count {
+    font-size: calc(
+        var(--nn-navitem-count-font-size-mobile, var(--nn-navitem-count-font-size)) * var(--nn-android-font-scale-reciprocal, 1)
+    );
+}
+
+/* Root reorder panel text */
+.notebook-navigator-android .nn-mobile .nn-root-reorder-hint {
+    font-size: calc(
+        var(--nn-root-reorder-hint-font-size-mobile, var(--nn-root-reorder-hint-font-size)) * var(--nn-android-font-scale-reciprocal, 1)
+    );
+}
+
+/* Emoji and webfont icons - Android scales font-size but not SVG dimensions.
+   Only apply to .nn-emoji-icon and .nn-iconfont to avoid breaking Lucide SVG icons. */
+.notebook-navigator-android .nn-mobile .nn-emoji-icon,
+.notebook-navigator-android .nn-mobile .nn-iconfont {
+    font-size: calc(var(--nn-file-icon-size-mobile, var(--nn-file-icon-size)) * var(--nn-android-font-scale-reciprocal, 1));
+}
+
+/* Task indicators are smaller than file icons, so preserve their 80% size while compensating
+   for Android textZoom. Without this override, the general icon rule above enlarges them. */
+.notebook-navigator-android .nn-mobile .nn-file-task-progress-icon.nn-emoji-icon,
+.notebook-navigator-android .nn-mobile .nn-file-task-progress-icon.nn-iconfont {
+    font-size: calc(var(--icon-size) * 0.8 * var(--nn-android-font-scale-reciprocal, 1));
+}
+
+/* Clamp height compensation - Android doesn't scale max-height, so match the compensated line-height after textZoom applies. */
+.notebook-navigator-android .nn-file-name {
+    max-height: calc(var(--nn-file-title-line-height) * var(--filename-rows, 1) * var(--nn-android-font-scale, 1));
+}
+
+.notebook-navigator-android .nn-file-preview {
+    max-height: calc(var(--nn-file-multiline-text-line-height) * var(--preview-rows, 1) * var(--nn-android-font-scale, 1));
+}
+
+/* Icon vertical centering - line-height is pre-compensated, icon size is not */
+.notebook-navigator-android .nn-file-icon-slot {
+    margin-top: max(
+        0px,
+        calc(
+            (
+                    var(--nn-file-title-line-height) * var(--nn-android-font-scale, 1) -
+                        var(--nn-file-icon-size-mobile, var(--nn-file-icon-size))
+                ) /
+                2
+        )
+    );
+}

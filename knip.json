@@ -1,0 +1,25 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": ["src/i18n/locales/*.ts"],
+  "project": ["src/**/*.{ts,tsx}"],
+  "ignoreDependencies": ["tsx"],
+  "ignoreIssues": {
+    "src/i18n/locales/{ar,de,es,fa,fr,id,it,ja,ko,nl,pl,pt,pt_br,ru,th,tr,uk,vi,zh_cn,zh_tw}.ts": ["exports"],
+    "src/view/FolderNoteSidebarPlaceholderView.ts": ["exports"]
+  },
+  "ignoreExportsUsedInFile": {
+    "interface": true,
+    "type": true,
+    "enum": true
+  },
+  "rules": {
+    "files": "error",
+    "exports": "error",
+    "types": "off",
+    "nsTypes": "off",
+    "enumMembers": "off",
+    "duplicates": "off",
+    "unlisted": "error",
+    "unresolved": "error"
+  }
+}

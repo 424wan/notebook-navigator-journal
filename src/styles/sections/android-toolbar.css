@@ -1,0 +1,25 @@
+/* Source: src/styles/sections/android-toolbar.css */
+
+/* ========================================================================
+   Android Toolbar Positioning
+   Android displays toolbar at top, iOS at bottom
+   ======================================================================== */
+
+/* Android: toolbar at top with reduced height */
+.notebook-navigator-mobile.notebook-navigator-android .nn-mobile-toolbar {
+    background-color: var(--nn-theme-list-bg);
+    border: none;
+    padding-bottom: 0;
+    justify-content: center;
+    gap: 16px;
+    height: 44px;
+    min-height: 44px;
+}
+
+/* Android: smaller toolbar buttons */
+.notebook-navigator-android .nn-mobile-toolbar-button {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+}
