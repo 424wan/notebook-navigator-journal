@@ -10,9 +10,33 @@ import type { CommandQueueService } from '../services/CommandQueueService';
 import type { NotebookNavigatorSettings } from '../settings/types';
 import type { MomentApi, MomentInstance } from './moment';
 import { showNotice } from './noticeUtils';
+import { NOTEBOOK_NAVIGATOR_VIEW } from '../types';
 
 type JournalSettings = Pick<NotebookNavigatorSettings, 'calendarSingleFilePath'>;
 const pendingWrites = new WeakMap<App, Map<string, Promise<unknown>>>();
+const openedListeners = new WeakMap<App, Set<(iso: string) => void>>();
+
+export function subscribeSingleFileDailyNoteOpened(app: App, listener: (iso: string) => void): () => void {
+    const listeners = openedListeners.get(app) ?? new Set();
+    openedListeners.set(app, listeners);
+    listeners.add(listener);
+    return () => {
+        listeners.delete(listener);
+    };
+}
+
+export interface SingleFileDailyNoteEntry {
+    iso: string;
+    line: number;
+    content: string;
+}
+
+interface JournalSection {
+    iso: string;
+    line: number;
+    offset: number;
+    bodyOffset: number;
+}
 
 export function getSingleFileDailyNotePath(settings: JournalSettings): string {
     const raw = (settings.calendarSingleFilePath.trim() || '日记.md').replace(/\\/g, '/');
@@ -47,13 +71,19 @@ export function isSingleFileDailyNoteDate(value: string): boolean {
     return year > 0 && date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
 }
 
-function scanJournal(content: string): { headings: Map<string, number>; canAppend: boolean } {
+function scanJournal(content: string): { headings: Map<string, number>; sections: JournalSection[]; canAppend: boolean } {
     const headings = new Map<string, number>();
-    const lines = content.replace(/^\uFEFF/u, '').split(/\r?\n/u);
-    let frontmatter = lines[0] === '---';
+    const sections: JournalSection[] = [];
+    const lines = content.split('\n');
+    let frontmatter = lines[0].replace(/^\uFEFF/u, '').replace(/\r$/u, '') === '---';
     let fence: { character: string; length: number } | null = null;
     let comment = false;
-    for (const [index, line] of lines.entries()) {
+    let offset = 0;
+    for (const [index, rawLine] of lines.entries()) {
+        const lineOffset = offset;
+        offset += rawLine.length + 1;
+        const normalizedLine = rawLine.replace(/\r$/u, '');
+        const line = index === 0 ? normalizedLine.replace(/^\uFEFF/u, '') : normalizedLine;
         if (frontmatter) {
             if (index > 0 && /^(---|\.\.\.)\s*$/u.test(line)) frontmatter = false;
             continue;
@@ -74,21 +104,63 @@ function scanJournal(content: string): { headings: Map<string, number>; canAppen
         }
         if (fence) continue;
         const match = /^ {0,3}#[\t ]+(\d{4}-\d{2}-\d{2})(?:[\t ]+#+)?[\t ]*$/u.exec(line);
-        if (match && isSingleFileDailyNoteDate(match[1]) && !headings.has(match[1])) headings.set(match[1], index);
+        if (match && isSingleFileDailyNoteDate(match[1])) {
+            if (!headings.has(match[1])) headings.set(match[1], index);
+            sections.push({
+                iso: match[1],
+                line: index,
+                offset: lineOffset + (index === 0 && rawLine.startsWith('\uFEFF') ? 1 : 0),
+                bodyOffset: Math.min(offset, content.length)
+            });
+        }
     }
-    return { headings, canAppend: !frontmatter && !fence && !comment };
+    return { headings, sections, canAppend: !frontmatter && !fence && !comment };
+}
+
+/** Date sections keep their complete Markdown bodies; the preamble stays at the beginning. */
+export function getSingleFileDailyNoteEntries(content: string): SingleFileDailyNoteEntry[] {
+    const { sections } = scanJournal(content);
+    return sections.map((section, index) => ({
+        iso: section.iso,
+        line: section.line,
+        content: content.slice(section.bodyOffset, sections[index + 1]?.offset ?? content.length)
+    }));
+}
+
+export function sortSingleFileDailyNotes(content: string): string {
+    const { sections, canAppend } = scanJournal(content);
+    if (!canAppend) throw new Error(strings.settings.items.singleFileDailyNotes.incompleteMarkdown);
+    const sorted = [...sections].sort((a, b) => a.iso.localeCompare(b.iso));
+    if (sorted.every((section, index) => section === sections[index])) return content;
+    const newline = content.includes('\r\n') ? '\r\n' : '\n';
+    const blocks = new Map(
+        sections.map((section, index) => [section, content.slice(section.offset, sections[index + 1]?.offset ?? content.length)])
+    );
+    return (
+        content.slice(0, sections[0].offset) +
+        sorted
+            .map((section, index) => {
+                const block = blocks.get(section) ?? '';
+                return index < sorted.length - 1 && !block.endsWith('\n') ? block + newline.repeat(2) : block;
+            })
+            .join('')
+    );
 }
 
 export function appendSingleFileDailyNote(content: string, iso: string): { content: string; line: number } {
     if (!isSingleFileDailyNoteDate(iso)) throw new Error('Invalid journal date');
     const scan = scanJournal(content);
     const existingLine = scan.headings.get(iso);
-    if (existingLine !== undefined) return { content, line: existingLine };
+    if (existingLine !== undefined) {
+        const sorted = scan.canAppend ? sortSingleFileDailyNotes(content) : content;
+        return { content: sorted, line: parseSingleFileDailyNoteHeadings(sorted).get(iso) ?? existingLine };
+    }
     if (!scan.canAppend) throw new Error(strings.settings.items.singleFileDailyNotes.incompleteMarkdown);
     const newline = content.includes('\r\n') ? '\r\n' : '\n';
     const separator = !content || content.endsWith(`${newline}${newline}`) ? '' : content.endsWith(newline) ? newline : newline.repeat(2);
     const prefix = content + separator;
-    return { content: `${prefix}# ${iso}${newline}${newline}`, line: prefix.split(/\r?\n/u).length - 1 };
+    const sorted = sortSingleFileDailyNotes(`${prefix}# ${iso}${newline}${newline}`);
+    return { content: sorted, line: parseSingleFileDailyNoteHeadings(sorted).get(iso) ?? 0 };
 }
 
 /** Serializes creation as well as atomic vault.process writes, including rapid clicks on different dates. */
@@ -192,6 +264,25 @@ export async function openSingleFileDailyNote(
                     leaf.view.editor.setCursor(cursor);
                     leaf.view.editor.scrollIntoView({ from: cursor, to: cursor }, true);
                 }
+                if (!Platform.isMobile) {
+                    try {
+                        let navigatorLeaf = app.workspace.getLeavesOfType(NOTEBOOK_NAVIGATOR_VIEW)[0];
+                        if (!navigatorLeaf) {
+                            const newLeaf = app.workspace.getLeftLeaf(false);
+                            if (newLeaf) {
+                                await newLeaf.setViewState({ type: NOTEBOOK_NAVIGATOR_VIEW, active: false });
+                                navigatorLeaf = newLeaf;
+                            }
+                        }
+                        if (navigatorLeaf) {
+                            await app.workspace.revealLeaf(navigatorLeaf);
+                            app.workspace.setActiveLeaf(leaf, { focus: true });
+                        }
+                    } catch (error) {
+                        console.error('Failed to reveal journal previews', error);
+                    }
+                }
+                openedListeners.get(app)?.forEach(listener => listener(entry.iso));
                 options.onOpened?.();
             };
             if (options.commandQueue && context) {

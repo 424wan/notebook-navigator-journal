@@ -1730,13 +1730,21 @@ export const STRINGS_ZH_TW = {
                 }
             },
             singleFileDailyNotes: {
+                backToFiles: '返回檔案清單',
+                searchEntries: '搜尋日期或日記內容',
+                noEntryContent: '這一天還沒有內容',
+                entryCount: '{count} 天',
+                newestFirst: '最新在前',
+                oldestFirst: '最早在前',
+                emptyEntries: '點選日曆日期，開始記錄。',
+                noSearchResults: '沒有符合的日記。',
                 name: '单文件日记路径',
-                desc: '填写仓库内的 Markdown 文件路径。每天使用一级日期标题；没有的日期会追加到文末，已有内容保持不变。',
+                desc: '填写仓库内的 Markdown 文件路径。每天使用一级日期标题；日期标题按从早到晚排列，左侧按天显示内容预览。',
                 placeholder: '日记.md',
                 createTitle: '添加日记日期',
                 createMessage: '在「{path}」中添加一级标题 # {date}？已有记录会保留。',
                 invalidPath: '请填写仓库内的 Markdown 文件路径，不能包含隐藏文件夹、上级目录或文件名禁用字符。',
-                incompleteMarkdown: '请先补全日记中尚未闭合的 YAML 属性区域或代码块，再添加日期。',
+                incompleteMarkdown: '请先补全日记中尚未闭合的 YAML 属性区域、代码块或注释，再添加日期。',
                 failed: '无法打开日记日期。',
                 periodNotesDisabled: '单文件模式使用每日标题，不会创建周记、月记、季记或年记文件。'
             },

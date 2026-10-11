@@ -78,6 +78,8 @@ import { openMergeNotesModal } from '../utils/mergeNotesModal';
 import { getMarkdownFilesInOrder } from '../utils/noteMerge';
 import { useNavigatorScale } from '../hooks/useNavigatorScale';
 import { ListPane } from './ListPane';
+import { SingleFileJournalPane } from './SingleFileJournalPane';
+import { useSingleFileJournalNavigation } from '../hooks/useSingleFileJournalNavigation';
 import type { ListPaneHandle } from './ListPane';
 import { NavigationPane } from './NavigationPane';
 import type { NavigationPaneHandle } from './NavigationPane';
@@ -207,6 +209,10 @@ export const NotebookNavigatorComponent = React.memo(
         const uxPreferences = useUXPreferences();
         const uiState = useUIState();
         const uiDispatch = useUIDispatch();
+        const journalNavigation = useSingleFileJournalNavigation(app, settings);
+        useEffect(() => {
+            if (journalNavigation.visible) uiDispatch({ type: 'ACTIVATE_PANE', target: 'files' });
+        }, [journalNavigation.visible, uiDispatch]);
         const uxRef = useRef(uxPreferences);
         useEffect(() => {
             uxRef.current = uxPreferences;
@@ -1578,27 +1584,43 @@ export const NotebookNavigatorComponent = React.memo(
                         navRainbowState={navRainbowState}
                         searchNavFilters={searchNavFilters}
                         onExecuteSearchShortcut={handleSearchShortcutExecution}
-                        onNavigateToFolder={navigateToFolder}
-                        onRevealTag={revealTag}
-                        onRevealProperty={revealProperty}
+                        onNavigateToFolder={(path, options) => {
+                            journalNavigation.close();
+                            navigateToFolder(path, options);
+                        }}
+                        onRevealTag={(path, options) => {
+                            journalNavigation.close();
+                            revealTag(path, options);
+                        }}
+                        onRevealProperty={(path, options) => {
+                            journalNavigation.close();
+                            return revealProperty(path, options);
+                        }}
                         onRevealFile={revealFileInNearestFolder}
                         onRevealShortcutFile={handleShortcutNoteReveal}
                         onModifySearchWithTag={handleModifySearchWithTag}
                         onModifySearchWithProperty={handleModifySearchWithProperty}
                         onModifySearchWithDateFilter={handleModifySearchWithDateFilter}
                     />
-                    <ListPane
-                        ref={listPaneRef}
-                        rootContainerRef={containerRef}
-                        folderDecorationModel={folderDecorationModel}
-                        fileItemPillDecorationModel={fileItemPillDecorationModel}
-                        fileItemPillOrderModel={fileItemPillOrderModel}
-                        onSearchTokensChange={handleSearchTokensChange}
-                        onNavigateToFolder={navigateToFolder}
-                        onRevealTag={revealTag}
-                        onRevealProperty={revealProperty}
-                        resizeHandleProps={!uiState.singlePane ? resizeHandleProps : undefined}
-                    />
+                    {journalNavigation.visible ? (
+                        <SingleFileJournalPane
+                            onClose={journalNavigation.close}
+                            resizeHandleProps={!uiState.singlePane ? resizeHandleProps : undefined}
+                        />
+                    ) : (
+                        <ListPane
+                            ref={listPaneRef}
+                            rootContainerRef={containerRef}
+                            folderDecorationModel={folderDecorationModel}
+                            fileItemPillDecorationModel={fileItemPillDecorationModel}
+                            fileItemPillOrderModel={fileItemPillOrderModel}
+                            onSearchTokensChange={handleSearchTokensChange}
+                            onNavigateToFolder={navigateToFolder}
+                            onRevealTag={revealTag}
+                            onRevealProperty={revealProperty}
+                            resizeHandleProps={!uiState.singlePane ? resizeHandleProps : undefined}
+                        />
+                    )}
                     {shouldRenderSinglePaneCalendar ? (
                         <div className="nn-single-pane-calendar">
                             <Calendar

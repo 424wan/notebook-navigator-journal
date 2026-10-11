@@ -156,5 +156,7 @@ Keep this list ordered: later files override earlier ones.
 @import './sections/settings-metadata-info.css';
 
 /* Style settings */
+/* Single-file journal date cards and live content previews. */
+@import './sections/single-file-journal.css';
 /* settings-style-settings.css: Style Settings metadata block (`@settings`) for variables and class toggles. */
 @import './sections/settings-style-settings.css';

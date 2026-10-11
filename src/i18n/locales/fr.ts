@@ -1749,14 +1749,22 @@ export const STRINGS_FR = {
                 }
             },
             singleFileDailyNotes: {
+                backToFiles: 'Back to files',
+                searchEntries: 'Search dates or journal content',
+                noEntryContent: 'No content yet',
+                entryCount: '{count} days',
+                newestFirst: 'Newest first',
+                oldestFirst: 'Oldest first',
+                emptyEntries: 'Click a calendar date to start writing.',
+                noSearchResults: 'No matching journal entries.',
                 name: 'Single journal file',
-                desc: 'Vault-relative Markdown path. Every day is a level-one date heading in this file; missing dates are appended at the end.',
+                desc: 'Vault-relative Markdown path. Every day is a level-one date heading in this file; date sections are sorted from oldest to newest, with per-day previews in the sidebar.',
                 placeholder: 'Journal/Diary.md',
                 createTitle: 'Add journal date',
                 createMessage: 'Add # {date} to {path}? Existing entries are kept.',
                 invalidPath:
                     'Enter a Markdown file path inside the vault, without hidden folders, parent segments or invalid filename characters.',
-                incompleteMarkdown: 'Close the unfinished YAML frontmatter or fenced code block before adding a journal date.',
+                incompleteMarkdown: 'Close unfinished YAML frontmatter, fenced code blocks or comments before adding a journal date.',
                 failed: 'Could not open the journal date.',
                 periodNotesDisabled: 'Single-file mode uses daily headings. Weekly, monthly, quarterly and yearly files are disabled.'
             },

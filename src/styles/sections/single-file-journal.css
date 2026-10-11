@@ -1,0 +1,114 @@
+/* Local modification, 2026-10-11. GNU GPL version 3 or later. */
+.nn-journal-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    color: var(--nn-theme-list-heading-color);
+}
+
+.nn-journal-title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nn-journal-count {
+    color: var(--nn-theme-foreground-muted);
+    font-size: 0.85em;
+}
+
+.nn-journal-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 12px 12px;
+}
+
+.nn-journal-controls input {
+    flex: 1;
+    min-width: 100px;
+    width: 100%;
+}
+
+.nn-journal-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 0 12px 12px;
+}
+
+.nn-journal-cards {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nn-journal-cards li {
+    margin: 0 0 6px;
+    padding: 0;
+}
+
+.nn-journal-pane .nn-journal-entry {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    width: 100%;
+    height: auto;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--nn-theme-file-border-radius);
+    box-shadow: none;
+    font-family: inherit;
+    text-align: start;
+    white-space: normal;
+    cursor: pointer;
+}
+
+.nn-journal-pane .nn-journal-entry:hover {
+    background: var(--background-modifier-hover);
+}
+
+.nn-journal-pane .nn-journal-entry.is-selected {
+    background: var(--nn-selected-file-bg-color);
+    border-color: var(--nn-selected-file-border-color);
+}
+
+.nn-journal-entry:focus-visible {
+    outline: 2px solid var(--interactive-accent);
+    outline-offset: -2px;
+}
+
+.nn-journal-entry-date {
+    color: var(--nn-theme-file-name-color);
+    font-size: var(--nn-file-name-size);
+    font-weight: var(--nn-theme-file-name-font-weight);
+}
+
+.nn-journal-entry-preview {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--nn-theme-file-preview-color);
+    font-size: var(--font-ui-small);
+    line-height: 1.5;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.nn-journal-entry.is-selected .nn-journal-entry-date {
+    color: var(--nn-selected-file-name-color);
+}
+
+.nn-journal-entry.is-selected .nn-journal-entry-preview {
+    color: var(--nn-selected-file-preview-color);
+}
+
+.nn-journal-empty {
+    padding: 12px;
+    color: var(--nn-theme-foreground-muted);
+    text-align: center;
+}
