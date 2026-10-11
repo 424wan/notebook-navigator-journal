@@ -213,6 +213,30 @@ describe('language startup and downloads', () => {
         expect(strings.common.cancel).toBe(choice === 'download' ? 'Annuler' : 'Cancel');
     });
 
+    it('loads the matching bundled Chinese pack without a network request', async () => {
+        mocks.locale = 'zh';
+        const cache = new MemoryCache();
+        const service = new LanguageService('test-version', cache, async () => JSON.stringify(pack()));
+        services.push(service);
+        await service.initialize();
+        await service.ready;
+        expect(service.getSnapshot()).toEqual({ ready: true, downloading: false, failed: false });
+        expect(strings.settings.items.dailyNoteSource.options.singleFile).toBe('单文件日记（一级日期标题）');
+        expect(mocks.request).not.toHaveBeenCalled();
+    });
+
+    it('rejects a mismatched bundled pack and falls back to a matching cached locale', async () => {
+        const cache = new MemoryCache();
+        await cache.put(`test-version/${LANGUAGE_DATA_ID}`, data);
+        const service = new LanguageService('test-version', cache, async () => JSON.stringify(pack('wrong-version')));
+        services.push(service);
+        await service.initialize();
+        await service.ready;
+        expect(service.getSnapshot().ready).toBe(true);
+        expect(strings.common.cancel).toBe('Abbrechen');
+        expect(mocks.request).not.toHaveBeenCalled();
+    });
+
     it('downloads all languages, then activates the selected language once', async () => {
         const cache = new MemoryCache();
         let resolveDownload: (value: unknown) => void = () => {};

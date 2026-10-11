@@ -1734,11 +1734,24 @@ export const STRINGS_UK = {
                 desc: 'Джерело для нотаток календаря.',
                 options: {
                     dailyNotes: 'Щоденні нотатки (основний плагін)',
-                    notebookNavigator: 'Notebook Navigator'
+                    notebookNavigator: 'Notebook Navigator',
+                    singleFile: 'Single-file journal (H1 dates)'
                 },
                 info: {
                     dailyNotes: 'Тека та формат дати налаштовуються в плагіні Daily Notes.'
                 }
+            },
+            singleFileDailyNotes: {
+                name: 'Single journal file',
+                desc: 'Vault-relative Markdown path. Every day is a level-one date heading in this file; missing dates are appended at the end.',
+                placeholder: 'Journal/Diary.md',
+                createTitle: 'Add journal date',
+                createMessage: 'Add # {date} to {path}? Existing entries are kept.',
+                invalidPath:
+                    'Enter a Markdown file path inside the vault, without hidden folders, parent segments or invalid filename characters.',
+                incompleteMarkdown: 'Close the unfinished YAML frontmatter or fenced code block before adding a journal date.',
+                failed: 'Could not open the journal date.',
+                periodNotesDisabled: 'Single-file mode uses daily headings. Weekly, monthly, quarterly and yearly files are disabled.'
             },
             calendarPeriodicNotesLocale: {
                 name: 'Мова періодичних нотаток',

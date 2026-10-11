@@ -399,7 +399,7 @@ export function isCalendarMonthHeadingFormat(value: unknown): value is CalendarM
 }
 
 /** Source used for calendar notes in the navigation pane */
-export type CalendarIntegrationMode = 'daily-notes' | 'notebook-navigator';
+export type CalendarIntegrationMode = 'daily-notes' | 'notebook-navigator' | 'single-file';
 
 /** Locale source used when Notebook Navigator formats periodic note paths */
 export type CalendarPeriodicNotesLocaleSource = 'calendar' | 'obsidian';
@@ -991,6 +991,7 @@ export interface NotebookNavigatorSettings {
 
     // Calendar tab - Calendar integration
     calendarIntegrationMode: CalendarIntegrationMode;
+    calendarSingleFilePath: string;
     calendarPeriodicNotesLocaleSource: CalendarPeriodicNotesLocaleSource;
     calendarCustomFilePattern: string;
     calendarCustomWeekPattern: string;

@@ -1721,11 +1721,23 @@ export const STRINGS_ZH_CN = {
                 desc: '日历笔记的来源。',
                 options: {
                     dailyNotes: '日记（核心插件）',
-                    notebookNavigator: 'Notebook Navigator'
+                    notebookNavigator: 'Notebook Navigator',
+                    singleFile: '单文件日记（一级日期标题）'
                 },
                 info: {
                     dailyNotes: '文件夹和日期格式在日记核心插件中配置。'
                 }
+            },
+            singleFileDailyNotes: {
+                name: '单文件日记路径',
+                desc: '填写仓库内的 Markdown 文件路径。每天使用一级日期标题；没有的日期会追加到文末，已有内容保持不变。',
+                placeholder: '日记.md',
+                createTitle: '添加日记日期',
+                createMessage: '在「{path}」中添加一级标题 # {date}？已有记录会保留。',
+                invalidPath: '请填写仓库内的 Markdown 文件路径，不能包含隐藏文件夹、上级目录或文件名禁用字符。',
+                incompleteMarkdown: '请先补全日记中尚未闭合的 YAML 属性区域或代码块，再添加日期。',
+                failed: '无法打开日记日期。',
+                periodNotesDisabled: '单文件模式使用每日标题，不会创建周记、月记、季记或年记文件。'
             },
             calendarPeriodicNotesLocale: {
                 name: '周期笔记语言',

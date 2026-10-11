@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { getActiveSingleFileDailyNoteDate, getSingleFileDailyNotePath, openSingleFileDailyNote } from '../../utils/singleFileDailyNotes';
 import { FileView, Platform, TFile, TFolder, View, type WorkspaceLeaf } from 'obsidian';
 import type NotebookNavigatorPlugin from '../../main';
 import { getCurrentLanguage, strings } from '../../i18n';
@@ -650,6 +651,15 @@ async function openCalendarNote(plugin: NotebookNavigatorPlugin, kind: CalendarN
     }
     const { momentApi, periodicNotesLocale } = localeContext;
 
+    if (plugin.settings.calendarIntegrationMode === 'single-file') {
+        if (kind === 'day') {
+            await openSingleFileDailyNote(plugin.app, date, plugin.settings, { commandQueue: plugin.commandQueue });
+        } else {
+            showNotice(strings.settings.items.singleFileDailyNotes.periodNotesDisabled);
+        }
+        return;
+    }
+
     if (kind === 'day' && plugin.settings.calendarIntegrationMode === 'daily-notes') {
         const dailyNoteSettings = getCoreDailyNoteSettings(plugin.app);
         if (!dailyNoteSettings) {
@@ -744,6 +754,14 @@ function createPeriodicNotePathParser(
     localeContext: PeriodicNoteLocaleContext
 ): PeriodicNotePathParser | null {
     const { momentApi, periodicNotesLocale } = localeContext;
+
+    if (plugin.settings.calendarIntegrationMode === 'single-file') {
+        if (kind !== 'day') return null;
+        return filePath =>
+            filePath === getSingleFileDailyNotePath(plugin.settings)
+                ? getActiveSingleFileDailyNoteDate(plugin.app, plugin.settings, momentApi)
+                : null;
+    }
 
     if (plugin.settings.calendarIntegrationMode === 'daily-notes') {
         const dailyNoteSettings = kind === 'day' ? getCoreDailyNoteSettings(plugin.app) : null;

@@ -100,7 +100,7 @@ const CalendarDayCell = React.memo(function CalendarDayCell({
         title: tooltipTitle || ariaLabel,
         dateTimestamp,
         previewPath: visibleFile?.path ?? null,
-        previewEnabled: Boolean(visibleFile && visibleFile.extension === 'md'),
+        previewEnabled: Boolean(visibleFile && visibleFile.extension === 'md' && !day.note.sectionDateIso),
         showDate
     };
 
@@ -127,6 +127,7 @@ const CalendarDayCell = React.memo(function CalendarDayCell({
 
 interface CalendarGridProps {
     activeEditorFilePath: string | null;
+    activeEditorDayIso?: string | null;
     showWeekNumbers: boolean;
     weekdays: string[];
     weekStartsOn: number;
@@ -159,6 +160,7 @@ interface CalendarGridProps {
 
 export const CalendarGrid = React.memo(function CalendarGrid({
     activeEditorFilePath,
+    activeEditorDayIso,
     showWeekNumbers,
     weekdays,
     weekStartsOn,
@@ -284,7 +286,11 @@ export const CalendarGrid = React.memo(function CalendarGrid({
                                 const featureImageUrl = visibleFile ? (featureImageUrls[day.iso] ?? null) : null;
                                 const hasFeatureImageKey = Boolean(visibleFile && featureImageKeysByIso.has(day.iso));
                                 const isToday = todayIso === day.iso;
-                                const isActiveEditorDay = Boolean(visibleFile && activeEditorFilePath === visibleFile.path);
+                                const isActiveEditorDay = Boolean(
+                                    visibleFile &&
+                                    activeEditorFilePath === visibleFile.path &&
+                                    (!day.note.sectionDateIso || day.note.sectionDateIso === activeEditorDayIso)
+                                );
                                 const isWeekend = weekendCells[dayIndex] ?? false;
                                 const hasWeekendBefore = isWeekend && dayIndex > 0 && Boolean(weekendCells[dayIndex - 1]);
                                 const hasWeekendAfter = isWeekend && dayIndex < week.days.length - 1 && Boolean(weekendCells[dayIndex + 1]);
@@ -323,7 +329,8 @@ export const CalendarGrid = React.memo(function CalendarGrid({
                                     .filter(Boolean)
                                     .join(' ');
 
-                                const frontmatterTitle = visibleFile ? (frontmatterTitlesByPath.get(visibleFile.path) ?? '') : '';
+                                const frontmatterTitle =
+                                    visibleFile && !day.note.sectionDateIso ? (frontmatterTitlesByPath.get(visibleFile.path) ?? '') : '';
 
                                 return (
                                     <CalendarDayCell

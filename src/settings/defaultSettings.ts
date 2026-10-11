@@ -431,6 +431,7 @@ export const DEFAULT_SETTINGS: NotebookNavigatorSettings = {
 
     // Calendar tab - Calendar integration
     calendarIntegrationMode: 'notebook-navigator',
+    calendarSingleFilePath: '日记.md',
     calendarPeriodicNotesLocaleSource: 'calendar',
     calendarCustomFilePattern: DEFAULT_CALENDAR_CUSTOM_FILE_PATTERN,
     calendarCustomWeekPattern: DEFAULT_CALENDAR_CUSTOM_WEEK_PATTERN,

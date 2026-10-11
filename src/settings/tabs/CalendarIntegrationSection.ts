@@ -99,13 +99,30 @@ function renderCalendarIntegrationModeSetting(setting: Setting, context: Setting
             dropdown
                 .addOption('daily-notes', strings.settings.items.dailyNoteSource.options.dailyNotes)
                 .addOption('notebook-navigator', strings.settings.items.dailyNoteSource.options.notebookNavigator)
+                .addOption('single-file', strings.settings.items.dailyNoteSource.options.singleFile)
                 .setValue(plugin.settings.calendarIntegrationMode)
                 .onChange(async value => {
-                    if (value !== 'daily-notes' && value !== 'notebook-navigator') {
+                    if (value !== 'daily-notes' && value !== 'notebook-navigator' && value !== 'single-file') {
                         return;
                     }
                     plugin.settings.calendarIntegrationMode = value;
                     onChange();
+                    await plugin.saveSettingsAndUpdate();
+                })
+        );
+}
+
+function renderSingleFilePathSetting(setting: Setting, context: SettingsTabContext): void {
+    const { plugin } = context;
+    setting
+        .setName(strings.settings.items.singleFileDailyNotes.name)
+        .setDesc(strings.settings.items.singleFileDailyNotes.desc)
+        .addText(text =>
+            text
+                .setPlaceholder(strings.settings.items.singleFileDailyNotes.placeholder)
+                .setValue(plugin.settings.calendarSingleFilePath)
+                .onChange(async value => {
+                    plugin.settings.calendarSingleFilePath = value;
                     await plugin.saveSettingsAndUpdate();
                 })
         );
@@ -232,6 +249,12 @@ export function createCalendarIntegrationSettingDefinitions(
                         refresh: refreshCalendarIntegrationContent
                     })
             }),
+            createRenderDefinition({
+                name: strings.settings.items.singleFileDailyNotes.name,
+                desc: strings.settings.items.singleFileDailyNotes.desc,
+                visible: () => plugin.settings.calendarIntegrationMode === 'single-file',
+                render: setting => renderSingleFilePathSetting(setting, context)
+            }),
             ...createCalendarCustomPatternSettingDefinitions(customPatternRenderers, isNotebookNavigatorIntegration)
         ])
     ];
@@ -256,6 +279,8 @@ export function renderCalendarIntegrationSection(
 
     const dailyNotesInfoSettingsEl = createDependentSettingsSection(calendarIntegrationSetting);
     const customCalendarSettingsEl = createDependentSettingsSection(calendarIntegrationSetting);
+    const singleFileSettingsEl = createDependentSettingsSection(calendarIntegrationSetting);
+    renderSingleFilePathSetting(new Setting(singleFileSettingsEl), context);
 
     renderDailyNotesInfoSetting(new Setting(dailyNotesInfoSettingsEl));
 
@@ -288,6 +313,7 @@ export function renderCalendarIntegrationSection(
         refreshCalendarPeriodicNotesLocaleOptions();
         setElementVisible(dailyNotesInfoSettingsEl, isDailyNotes);
         setElementVisible(customCalendarSettingsEl, isCustom);
+        setElementVisible(singleFileSettingsEl, plugin.settings.calendarIntegrationMode === 'single-file');
 
         if (!isCustom) {
             customPatternController.hideMessages();

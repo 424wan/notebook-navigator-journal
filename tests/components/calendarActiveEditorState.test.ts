@@ -58,6 +58,64 @@ function createCalendarDayMoment(): MomentInstance {
 }
 
 describe('calendar active editor state', () => {
+    it('highlights only the active date section when several calendar days share a journal file', () => {
+        const journal = createTestTFile('日记.md');
+        const html = renderToStaticMarkup(
+            React.createElement(CalendarGrid, {
+                activeEditorFilePath: journal.path,
+                activeEditorDayIso: '2026-06-14',
+                showWeekNumbers: false,
+                weekdays: [],
+                weekStartsOn: 1,
+                trailingSpacerWeekCount: 0,
+                weeks: [
+                    {
+                        key: 'journal-week',
+                        weekNumber: 24,
+                        days: ['2026-06-14', '2026-06-15'].map(iso => ({
+                            date: createCalendarDayMoment(),
+                            iso,
+                            inMonth: true,
+                            note: {
+                                existingFile: journal,
+                                visibleFile: journal,
+                                isHidden: false,
+                                targetPath: journal.path,
+                                sectionDateIso: iso
+                            }
+                        }))
+                    }
+                ],
+                hideOutsideMonthDays: false,
+                weekNotesEnabled: false,
+                weekNoteTargetsByKey: new Map(),
+                weekUnfinishedTaskCountByKey: new Map(),
+                displayLocale: 'en',
+                calendarWeekendDays: 'sat-sun',
+                todayIso: null,
+                unfinishedTaskCountByIso: new Map(),
+                featureImageUrls: {},
+                featureImageKeysByIso: new Map(),
+                frontmatterTitlesByPath: new Map([[journal.path, 'Whole journal title']]),
+                dateFormat: 'YYYY-MM-DD',
+                isMobile: false,
+                canCreateDayNotes: true,
+                onShowTooltip: () => {},
+                onHideTooltip: () => {},
+                onDayClick: () => {},
+                onDayMouseDown: () => {},
+                onDayContextMenu: () => {},
+                onWeekClick: () => {},
+                onWeekMouseDown: () => {},
+                onWeekLabelClick: () => {},
+                onWeekContextMenu: () => {}
+            })
+        );
+        expect(html.match(/has-daily-note/g)).toHaveLength(2);
+        expect(html.match(/is-active-editor-file/g)).toHaveLength(1);
+        expect(html).not.toContain('Whole journal title');
+    });
+
     it('renders active outlines on month, quarter, and year period buttons', () => {
         const html = renderToStaticMarkup(
             React.createElement(CalendarHeader, {

@@ -47,6 +47,8 @@ export interface CalendarNoteTarget {
     visibleFile: TFile | null;
     isHidden: boolean;
     targetPath: string | null;
+    /** Date section inside a shared journal; never treat the whole file as one day. */
+    sectionDateIso?: string;
 }
 
 export interface CalendarDay {

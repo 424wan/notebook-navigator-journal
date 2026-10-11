@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { getActiveSingleFileDailyNoteDate, getSingleFileDailyNotePath, isSingleFileDailyNoteDate } from '../../utils/singleFileDailyNotes';
 import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { FileView, TFile, normalizePath, type Workspace, type WorkspaceLeaf } from 'obsidian';
 import { getCurrentLanguage, strings } from '../../i18n';
@@ -653,6 +654,32 @@ export function Calendar({
         return ordered.map(label => Array.from(label.trim())[0] ?? '');
     }, [displayLocale, momentApi, weekStartsOn]);
 
+    const singleFileJournal = useMemo(() => {
+        void vaultVersion;
+        if (settings.calendarIntegrationMode !== 'single-file') return null;
+        try {
+            const path = getSingleFileDailyNotePath({ calendarSingleFilePath: settings.calendarSingleFilePath });
+            const entry = app.vault.getAbstractFileByPath(path);
+            const file = entry instanceof TFile ? entry : null;
+            const headings = new Set(
+                (file ? app.metadataCache.getFileCache(file)?.headings : undefined)
+                    ?.filter(heading => heading.level === 1 && isSingleFileDailyNoteDate(heading.heading))
+                    .map(heading => heading.heading) ?? []
+            );
+            return { path, file, headings };
+        } catch {
+            return null;
+        }
+    }, [app, settings.calendarIntegrationMode, settings.calendarSingleFilePath, vaultVersion]);
+
+    useEffect(() => {
+        if (settings.calendarIntegrationMode !== 'single-file') return;
+        const ref = app.metadataCache.on('changed', file => {
+            if (file.path === singleFileJournal?.path) scheduleVaultVersionUpdate();
+        });
+        return () => app.metadataCache.offref(ref);
+    }, [app.metadataCache, scheduleVaultVersionUpdate, settings.calendarIntegrationMode, singleFileJournal?.path]);
+
     const dailyNoteSettings = useMemo(() => {
         // Force refresh when vault contents change so `getDailyNoteFile()` reflects created/renamed/deleted daily notes.
         void vaultVersion;
@@ -701,6 +728,17 @@ export function Calendar({
     const resolveExistingDayNoteTarget = useCallback(
         (date: MomentInstance): CalendarNoteTarget => {
             let target: CalendarNoteTarget;
+            if (settings.calendarIntegrationMode === 'single-file' && singleFileJournal) {
+                const target = resolveNoteTarget(singleFileJournal.path, singleFileJournal.file);
+                const iso = date.clone().locale('en').format('YYYY-MM-DD');
+                const hasEntry = singleFileJournal.headings.has(iso);
+                return {
+                    ...target,
+                    existingFile: hasEntry ? target.existingFile : null,
+                    visibleFile: hasEntry ? target.visibleFile : null,
+                    sectionDateIso: iso
+                };
+            }
             if (canResolveCustomDayNotes) {
                 target = getExistingCustomCalendarNoteTarget('day', date);
             } else if (settings.calendarIntegrationMode === 'daily-notes' && dailyNoteSettings) {
@@ -720,6 +758,7 @@ export function Calendar({
             dailyNoteSettings,
             dailyNoteLocale,
             getExistingCustomCalendarNoteTarget,
+            singleFileJournal,
             resolveNoteTarget,
             settings.calendarIntegrationMode
         ]
@@ -951,8 +990,14 @@ export function Calendar({
         weekStartsOn
     ]);
     const activeEditorCalendarTarget = useMemo<ActiveEditorCalendarTarget | null>(() => {
+        void vaultVersion;
         if (!activeEditorFilePath) {
             return null;
+        }
+
+        if (settings.calendarIntegrationMode === 'single-file') {
+            const date = momentApi ? getActiveSingleFileDailyNoteDate(app, settings, momentApi) : null;
+            return date ? { date, shouldAutoReveal: true } : null;
         }
 
         for (const week of weeks) {
@@ -975,7 +1020,17 @@ export function Calendar({
         }
 
         return resolveActiveEditorCustomNoteTarget(activeEditorFilePath);
-    }, [activeEditorFilePath, displayLocale, resolveActiveEditorCalendarDayDate, resolveActiveEditorCustomNoteTarget, weeks]);
+    }, [
+        activeEditorFilePath,
+        displayLocale,
+        resolveActiveEditorCalendarDayDate,
+        resolveActiveEditorCustomNoteTarget,
+        weeks,
+        app,
+        settings,
+        momentApi,
+        vaultVersion
+    ]);
     const activeEditorDateKey =
         activeEditorFilePath && activeEditorCalendarTarget
             ? `${activeEditorFilePath}::${formatIsoDate(activeEditorCalendarTarget.date)}`
@@ -1031,7 +1086,7 @@ export function Calendar({
 
         const featureKeys = new Map<string, string>();
 
-        if (!db || !settings.calendarShowFeatureImage) {
+        if (!db || !settings.calendarShowFeatureImage || settings.calendarIntegrationMode === 'single-file') {
             return featureKeys;
         }
 
@@ -1052,7 +1107,7 @@ export function Calendar({
         }
 
         return featureKeys;
-    }, [db, featureImageVersion, settings.calendarShowFeatureImage, weeks]);
+    }, [db, featureImageVersion, settings.calendarShowFeatureImage, settings.calendarIntegrationMode, weeks]);
 
     const dayFeatureImageTargets = useMemo<CalendarFeatureImageTarget[]>(() => {
         const targets: CalendarFeatureImageTarget[] = [];
@@ -1090,7 +1145,7 @@ export function Calendar({
 
         const unfinishedTaskCounts = new Map<string, number>();
 
-        if (!db || !settings.calendarShowTasks) {
+        if (!db || !settings.calendarShowTasks || settings.calendarIntegrationMode === 'single-file') {
             return unfinishedTaskCounts;
         }
 
@@ -1101,7 +1156,7 @@ export function Calendar({
         }
 
         return unfinishedTaskCounts;
-    }, [db, settings.calendarShowTasks, taskIndicatorVersion, weeks]);
+    }, [db, settings.calendarShowTasks, settings.calendarIntegrationMode, taskIndicatorVersion, weeks]);
 
     const showYearCalendar = isRightSidebar && settings.calendarShowYearCalendar;
     const renderedWeekRowCount = useMemo(() => {
@@ -1196,7 +1251,7 @@ export function Calendar({
 
     const handleDateFilterModifiedClick = useCallback(
         (event: React.MouseEvent<HTMLElement>, kind: CalendarNoteKind, date: MomentInstance): boolean => {
-            if (!onAddDateFilter) {
+            if (!onAddDateFilter || settings.calendarIntegrationMode === 'single-file') {
                 return false;
             }
 
@@ -1215,7 +1270,7 @@ export function Calendar({
             onAddDateFilter(dateToken);
             return true;
         },
-        [clearHoverTooltip, onAddDateFilter, settings.multiSelectModifier]
+        [clearHoverTooltip, onAddDateFilter, settings.multiSelectModifier, settings.calendarIntegrationMode]
     );
 
     const handleSelectYearMonth = useCallback(
@@ -1386,17 +1441,19 @@ export function Calendar({
             fullLabel: entry.fullLabel,
             hasDailyNote: entry.hasDailyNote,
             hasUnfinishedTasks:
-                db && settings.calendarShowTasks ? entry.dayFiles.some(file => (db.getFile(file.path)?.taskUnfinished ?? 0) > 0) : false,
+                db && settings.calendarShowTasks && settings.calendarIntegrationMode !== 'single-file'
+                    ? entry.dayFiles.some(file => (db.getFile(file.path)?.taskUnfinished ?? 0) > 0)
+                    : false,
             key: entry.key,
             monthIndex: entry.monthIndex,
             shortLabel: entry.shortLabel
         }));
-    }, [db, settings.calendarShowTasks, taskIndicatorVersion, yearMonthBaseEntries]);
+    }, [db, settings.calendarShowTasks, settings.calendarIntegrationMode, taskIndicatorVersion, yearMonthBaseEntries]);
 
     const highlightedMonthFilesByKey = useMemo(() => {
         const filesByKey = new Map<string, TFile>();
 
-        if (!momentApi || !showYearCalendar) {
+        if (!momentApi || !showYearCalendar || settings.calendarIntegrationMode === 'single-file') {
             return filesByKey;
         }
 
@@ -1443,6 +1500,7 @@ export function Calendar({
         getExistingDayNoteTarget,
         momentApi,
         settings.calendarMonthHighlights,
+        settings.calendarIntegrationMode,
         showYearCalendar,
         yearMonthBaseEntries
     ]);
@@ -2021,6 +2079,7 @@ export function Calendar({
 
                 <CalendarGrid
                     activeEditorFilePath={activeEditorFilePath}
+                    activeEditorDayIso={activeEditorCalendarTarget ? formatIsoDate(activeEditorCalendarTarget.date) : null}
                     showWeekNumbers={showWeekNumbers}
                     weekdays={weekdays}
                     weekStartsOn={weekStartsOn}

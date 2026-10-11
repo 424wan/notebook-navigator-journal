@@ -67,7 +67,8 @@ export class LanguageService {
 
     constructor(
         private readonly version: string,
-        private readonly cache: LanguageCache
+        private readonly cache: LanguageCache,
+        private readonly loadLocalPack?: () => Promise<string | null>
     ) {
         this.pack = `${version}/${LANGUAGE_DATA_ID}`;
         this.snapshot = { ready: this.locale === 'en', downloading: false, failed: false };
@@ -84,6 +85,23 @@ export class LanguageService {
 
     /** Returns after the bounded cache read. Network work runs separately so settings and workspace restoration can proceed. */
     async initialize(): Promise<void> {
+        // Local builds ship matching translations so they do not depend on an upstream release asset.
+        if (this.loadLocalPack) {
+            try {
+                const contents = await waitFor(this.loadLocalPack(), 2000, this.controller.signal);
+                if (this.controller.signal.aborted) return;
+                if (contents) {
+                    const locales = this.validatePack(JSON.parse(contents));
+                    if (!this.englishForSession) applyLanguage(this.locale, locales[this.locale]);
+                    this.finish(false);
+                    void this.cachePack(locales);
+                    return;
+                }
+            } catch (error) {
+                if (this.controller.signal.aborted) return;
+                console.error('Failed to load bundled language data:', error);
+            }
+        }
         try {
             const cached = await waitFor(this.cache.get(this.pack, this.locale), 2000, this.controller.signal);
             if (this.controller.signal.aborted) return;
@@ -158,20 +176,23 @@ export class LanguageService {
                 url: `https://github.com/johansan/notebook-navigator/releases/download/${encodeURIComponent(this.version)}/languages.json`
             });
             if (this.controller.signal.aborted) return null;
-            const pack: unknown = JSON.parse(response.text);
-            if (!isRecord(pack) || pack.version !== this.version || pack.id !== LANGUAGE_DATA_ID || !isRecord(pack.locales)) {
-                throw new Error('Language pack does not match the installed plugin');
-            }
-            const locales = sanitizeRecord(pack.locales);
-            const codes = Object.keys(LANGUAGE_METADATA);
-            if (Object.keys(locales).length !== codes.length || !codes.every(locale => isLanguageData(locales[locale]))) {
-                throw new Error('Language pack contains invalid translations');
-            }
-            return locales;
+            return this.validatePack(JSON.parse(response.text));
         } catch (error) {
             if (!this.controller.signal.aborted) console.error('Failed to download language data:', error);
             return null;
         }
+    }
+
+    private validatePack(pack: unknown): Record<string, unknown> {
+        if (!isRecord(pack) || pack.version !== this.version || pack.id !== LANGUAGE_DATA_ID || !isRecord(pack.locales)) {
+            throw new Error('Language pack does not match the installed plugin');
+        }
+        const locales = sanitizeRecord(pack.locales);
+        const codes = Object.keys(LANGUAGE_METADATA);
+        if (Object.keys(locales).length !== codes.length || !codes.every(locale => isLanguageData(locales[locale]))) {
+            throw new Error('Language pack contains invalid translations');
+        }
+        return locales;
     }
 
     /** Stores a validated pack with its own bounded wait. Starts no new write after plugin unload and never rejects. */

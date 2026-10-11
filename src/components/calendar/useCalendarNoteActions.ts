@@ -19,6 +19,7 @@
 import React, { useCallback, useRef } from 'react';
 import { App, Menu, TFile, type PaneType } from 'obsidian';
 import { strings } from '../../i18n';
+import { getSingleFileDailyNotePath, openSingleFileDailyNote } from '../../utils/singleFileDailyNotes';
 import { ConfirmModal } from '../../modals/ConfirmModal';
 import type { CommandQueueService } from '../../services/CommandQueueService';
 import type { FileSystemOperations } from '../../services/FileSystemService';
@@ -225,6 +226,26 @@ export function useCalendarNoteActions({
 
     const openOrCreateDailyNote = useCallback(
         (date: MomentInstance, options?: CalendarNoteOpenOptions) => {
+            if (settings.calendarIntegrationMode === 'single-file') {
+                clearHoverTooltip();
+                runAsyncAction(() =>
+                    openSingleFileDailyNote(app, date, settings, {
+                        context: options?.context,
+                        commandQueue,
+                        canOpen: () => {
+                            const target = resolveLatestNoteTarget(getSingleFileDailyNotePath(settings));
+                            if (!target.isHidden) return true;
+                            showNotice(strings.navigationCalendar.noteHiddenByProfile);
+                            return false;
+                        },
+                        onOpened: () => {
+                            onVaultChange();
+                            collapseNavigationIfMobile();
+                        }
+                    })
+                );
+                return;
+            }
             if (settings.calendarIntegrationMode === 'daily-notes') {
                 const resolvedDailySettings = dailyNoteSettings;
                 if (!resolvedDailySettings) {
@@ -294,6 +315,8 @@ export function useCalendarNoteActions({
             collapseNavigationIfMobile,
             dailyNoteLocale,
             dailyNoteSettings,
+            clearHoverTooltip,
+            commandQueue,
             onVaultChange,
             openCalendarNoteFile,
             openOrCreateCustomCalendarNote,
@@ -340,6 +363,24 @@ export function useCalendarNoteActions({
             }
 
             const menu = new Menu();
+            if (settings.calendarIntegrationMode === 'single-file' && target.kind === 'day') {
+                const contexts = [
+                    [strings.commands.open, undefined],
+                    [strings.contextMenu.file.openInNewTab, 'tab'],
+                    [strings.contextMenu.file.openToRight, 'split']
+                ] as const;
+                for (const [title, context] of contexts) {
+                    menu.addItem(item =>
+                        item
+                            .setTitle(title)
+                            .setIcon('lucide-calendar')
+                            .onClick(() => openOrCreateDailyNote(target.date, { context }))
+                    );
+                }
+                // Deleting a calendar day must never delete the shared journal file.
+                menu.showAtMouseEvent(event.nativeEvent);
+                return;
+            }
             const isCurrentMonthHighlight = target.currentMonthHighlightDayIso === target.dayIso;
             const existingFile = target.note.visibleFile;
 
@@ -425,6 +466,7 @@ export function useCalendarNoteActions({
             removeCalendarMonthHighlight,
             setCalendarMonthHighlight,
             showMonthHighlightActions,
+            settings.calendarIntegrationMode,
             settings.confirmBeforeDelete,
             settings.interfaceIcons
         ]

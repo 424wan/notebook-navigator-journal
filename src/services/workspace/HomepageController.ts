@@ -17,6 +17,7 @@
  */
 
 import { FileView, TFile, type WorkspaceLeaf } from 'obsidian';
+import { ensureSingleFileDailyNote, getSingleFileDailyNotePath, openSingleFileDailyNote } from '../../utils/singleFileDailyNotes';
 import type NotebookNavigatorPlugin from '../../main';
 import { isSupportedHomepageFile } from '../../utils/homepageUtils';
 import type { RevealFileOptions } from '../../hooks/useNavigatorReveal';
@@ -159,6 +160,19 @@ export default class HomepageController {
             preserveNavigationFocus: this.plugin.settings.startView === 'navigation' && trigger === 'startup'
         };
 
+        if (this.plugin.settings.calendarIntegrationMode === 'single-file' && this.plugin.settings.homepage.source === 'daily-note') {
+            const momentApi = getMomentApi();
+            if (!momentApi) return false;
+            if (shouldRevealInNavigator) this.workspace.revealFileInNearestFolder(homepageFile, revealOptions);
+            await openSingleFileDailyNote(
+                this.plugin.app,
+                momentApi(),
+                { ...this.plugin.settings, calendarConfirmBeforeCreate: false },
+                { commandQueue: this.plugin.commandQueue }
+            );
+            return true;
+        }
+
         if (trigger === 'startup') {
             const existingLeaf = this.findExistingHomepageLeaf(homepageFile);
             if (existingLeaf) {
@@ -250,6 +264,16 @@ export default class HomepageController {
 
     private async resolveHomepageFileForOpen(): Promise<TFile | null> {
         const existingHomepageFile = this.resolveHomepageFile();
+        if (this.plugin.settings.calendarIntegrationMode === 'single-file' && this.plugin.settings.homepage.source === 'daily-note') {
+            const momentApi = getMomentApi();
+            if (!momentApi || (!existingHomepageFile && !this.plugin.settings.homepage.createMissingPeriodicNote)) return null;
+            try {
+                return (await ensureSingleFileDailyNote(this.plugin.app, momentApi().startOf('day'), this.plugin.settings)).file;
+            } catch (error) {
+                console.error('Failed to prepare journal homepage', error);
+                return null;
+            }
+        }
         if (existingHomepageFile || !this.plugin.settings.homepage.createMissingPeriodicNote) {
             return existingHomepageFile;
         }
@@ -281,6 +305,7 @@ export default class HomepageController {
     }
 
     private canCreatePeriodicHomepageFile(kind: CalendarNoteKind): boolean {
+        if (this.plugin.settings.calendarIntegrationMode === 'single-file') return kind === 'day';
         const momentApi = getMomentApi();
         if (!momentApi) {
             return false;
@@ -296,6 +321,15 @@ export default class HomepageController {
     }
 
     private resolvePeriodicHomepageFile(kind: CalendarNoteKind): TFile | null {
+        if (this.plugin.settings.calendarIntegrationMode === 'single-file') {
+            if (kind !== 'day') return null;
+            try {
+                const file = this.plugin.app.vault.getAbstractFileByPath(getSingleFileDailyNotePath(this.plugin.settings));
+                return file instanceof TFile ? file : null;
+            } catch {
+                return null;
+            }
+        }
         const momentApi = getMomentApi();
         if (!momentApi) {
             return null;
@@ -338,6 +372,11 @@ export default class HomepageController {
     }
 
     private async createPeriodicHomepageFile(kind: CalendarNoteKind): Promise<TFile | null> {
+        if (this.plugin.settings.calendarIntegrationMode === 'single-file') {
+            const momentApi = getMomentApi();
+            if (kind !== 'day' || !momentApi) return null;
+            return (await ensureSingleFileDailyNote(this.plugin.app, momentApi().startOf('day'), this.plugin.settings)).file;
+        }
         const momentApi = getMomentApi();
         if (!momentApi) {
             return null;
